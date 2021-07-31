@@ -27,18 +27,18 @@
 <meta property="og:site_name" content="Azem&#39;s Notes">
 <meta property="og:description" content="flex 布局下利用 margin 实现自动居中在传统 BFC（块格式化上下文）中，若子元素为 margin:auto，子元素只会在水平方向居中。如下所示： HTML 代码： 123&lt;div class&#x3D;&quot;box1&quot;&gt;  &lt;div class&#x3D;&quot;box2&quot;&gt;&lt;&#x2F;div&gt;&lt;&#x2F;div&gt;  CSS 代码： 12345">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png">
-<meta property="og:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png">
-<meta property="og:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172014.png">
-<meta property="og:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172811.png">
-<meta property="og:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720174355.png">
+<meta property="og:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png">
+<meta property="og:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png">
+<meta property="og:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172014.png">
+<meta property="og:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172811.png">
+<meta property="og:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720174355.png">
 <meta property="article:published_time" content="2021-07-20T08:23:43.000Z">
-<meta property="article:modified_time" content="2021-07-31T03:32:28.636Z">
+<meta property="article:modified_time" content="2021-07-31T03:33:10.493Z">
 <meta property="article:author" content="Azem">
 <meta property="article:tag" content="css">
 <meta property="article:tag" content="margin">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png">
+<meta name="twitter:image" content="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png">
 
 <link rel="canonical" href="http://example.com/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/">
 
@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-31 11:32:28" itemprop="dateModified" datetime="2021-07-31T11:32:28+08:00">2021-07-31</time>
+                <time title="修改时间：2021-07-31 11:33:10" itemprop="dateModified" datetime="2021-07-31T11:33:10+08:00">2021-07-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,21 +219,21 @@
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">600px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">600px</span>;</span><br><span class="line">  <span class="attribute">border</span>: black solid <span class="number">1px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box2</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>最终效果如下：</p>
-<p><img src="/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png" alt="img01"></p>
+<p><img src="/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png" alt="img01"></p>
 <p>这是因为，在 BFC 下，如果<code>margin-left</code>与<code>margin-right</code>同时为 auto，即代表二者相等，左右 margin 的计算值为元素剩余可用空间的一半，结果就是子元素在水平方向上居中。<br>而如果<code>margin-top</code>和<code>margin-bottom</code>，则他们的计算值都为 0，因此无法垂直居中</p>
 <h3 id="FFC-下使用margin-auto对元素进行垂直居中"><a href="#FFC-下使用margin-auto对元素进行垂直居中" class="headerlink" title="FFC 下使用margin:auto对元素进行垂直居中"></a>FFC 下使用<code>margin:auto</code>对元素进行垂直居中</h3><p>如果将上文中父元素 box1 设置为<code>display:auto</code></p>
-<p><img src="/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png" alt="img02"></p>
+<p><img src="/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png" alt="img02"></p>
 <p>原因是在于，flex 格式化上下文中，设置了<code>margin: auto</code>的元素，在通过 <code>justify-content</code> 和 <code>align-self</code> 进行对齐之前，任何可供子元素分配的剩余空间都会分配到该方向的 margin 中去，并且，<code>margin: auto</code> 的生效不仅是水平方向，垂直方向也会自动去分配这个剩余空间。</p>
 <h3 id="基于-flex-布局实现导航栏"><a href="#基于-flex-布局实现导航栏" class="headerlink" title="基于 flex 布局实现导航栏"></a>基于 flex 布局实现导航栏</h3><p>假如使用以下代码实现一个网页顶部的导航栏，利用<code>justify-content: space-around</code>来调整导航栏中各元素的间距。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;navigator&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav01<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav02<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav03<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav04<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav05<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">justify-content</span>: space-around;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">li</span> &#123;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172014.png" alt="img03"></p>
+<p><img src="/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172014.png" alt="img03"></p>
 <p>可以看到结果各元素在垂直方向上并没有居中对齐，这时如果在子元素的 css 代码中添加<code>margin: auto;</code>就能达到想要的效果</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">li</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172811.png" alt="img04"></p>
+<p><img src="/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172811.png" alt="img04"></p>
 <blockquote>
 <p><em>若不使用<code>margin: auto;</code>调整垂直居中，也可以设置子元素的<code>line-height</code>等于父元素<code>height</code>，这样也能呈现同样的效果</em></p>
 </blockquote>
@@ -246,7 +246,7 @@
 <p>若想要导航栏中 nav01 至 nav04 在导航栏左侧对齐，而登录和注册按钮在右侧对齐，可以在登录按钮即 Sign Up 的 CSS 样式中添加<code>margin-left: auto</code>，此时 Sign Up 的左侧 margin 的计算值将会自动添加其父元素水平方向剩余的可支配空间，从而实现我们想要的效果</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.signup</span> &#123;</span><br><span class="line">  <span class="attribute">margin-left</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最终的效果如下：</p>
-<p><img src="/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720174355.png" alt="img05"></p>
+<p><img src="/2021/07/20/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720174355.png" alt="img05"></p>
 
     </div>
 
