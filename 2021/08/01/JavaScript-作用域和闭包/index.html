@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JavaScript 作用域和闭包1 闭包 重要概念：自由变量   当一个变量在当前作用域没有定义，但被使用了。 在其被定义的作用域中向上级作用域，一层一层依次寻找，直到找到位置。 如果到全局作用域都没有找到，则报错 ‘xx is not defined’  12345678910&#x2F;&#x2F; 函数作为返回值function create() &amp;#123;  let a &#x3D; 100; &#x2F;&#x2F; 向上查找到函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 作用域和闭包">
+<meta property="og:url" content="http://example.com/2021/08/01/JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="JavaScript 作用域和闭包1 闭包 重要概念：自由变量   当一个变量在当前作用域没有定义，但被使用了。 在其被定义的作用域中向上级作用域，一层一层依次寻找，直到找到位置。 如果到全局作用域都没有找到，则报错 ‘xx is not defined’  12345678910&#x2F;&#x2F; 函数作为返回值function create() &amp;#123;  let a &#x3D; 100; &#x2F;&#x2F; 向上查找到函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-01T08:56:03.000Z">
+<meta property="article:modified_time" content="2021-08-01T09:09:11.295Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="作用域">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/08/01/JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript 作用域和闭包 | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/01/JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript 作用域和闭包
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-01 16:56:03 / 修改时间：17:09:11" itemprop="dateCreated datePublished" datetime="2021-08-01T16:56:03+08:00">2021-08-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JavaScript-作用域和闭包"><a href="#JavaScript-作用域和闭包" class="headerlink" title="JavaScript 作用域和闭包"></a>JavaScript 作用域和闭包</h1><h3 id="1-闭包"><a href="#1-闭包" class="headerlink" title="1 闭包"></a>1 闭包</h3><blockquote>
+<p>重要概念：<strong>自由变量</strong></p>
+</blockquote>
+<ul>
+<li>当一个变量在当前作用域没有定义，但被使用了。</li>
+<li><strong>在其被定义的作用域中</strong>向上级作用域，一层一层依次寻找，直到找到位置。</li>
+<li>如果到全局作用域都没有找到，则报错 ‘xx is not defined’</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数作为返回值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">100</span>; <span class="comment">// 向上查找到函数 create 的作用域中 a = 100</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 自由变量</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> fn = create();</span><br><span class="line"><span class="keyword">let</span> a = <span class="number">200</span>;</span><br><span class="line">fn(); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数作为参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">200</span>;</span><br><span class="line">  fn();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a = <span class="number">100</span>; <span class="comment">// 向上查找到全局作用域 a = 100</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(a);<span class="comment">// 自由变量</span></span><br><span class="line">&#125;</span><br><span class="line">print(fn) <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>自由变量的查找，是函数定义的地方，向上级作用域查找。而不是其被调用的作用域。</strong></p>
+<h1 id="this-的赋值"><a href="#this-的赋值" class="headerlink" title="this 的赋值"></a>this 的赋值</h1><blockquote>
+<p><strong>重要概念：this 的取值是在函数执行时才被确定的</strong></p>
+</blockquote>
+<h3 id="1-作为普通函数"><a href="#1-作为普通函数" class="headerlink" title="1 作为普通函数"></a>1 作为普通函数</h3><p>以函数的形式（包括普通函数、定时器函数、立即执行函数）调用时，this 的指向永远都是 window。比如 <code>fn1</code>();相当于 <code>window.fn1()</code>;</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn1() <span class="comment">// window</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用-call-apply-bind-调用"><a href="#2-使用-call-apply-bind-调用" class="headerlink" title="2 使用 call apply bind 调用"></a>2 使用 call apply bind 调用</h3><ol>
+<li><strong>call</strong></li>
+</ol>
+<blockquote>
+<p>fn1.call(this 指向, 函数实参 1, 函数实参 2)</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn1.call(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;) <span class="comment">// &#123; x: 100 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>call()</code>可以立即调用一个函数，与此同时，他还可以改变这个函数内部的 this 指向。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 call</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myCall = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取传入的对象（执行上下文）</span></span><br><span class="line">  context = context || <span class="built_in">window</span>; <span class="comment">// [...arguments][0]</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 fn1.apply1() 中的 fn1</span></span><br><span class="line">  context.func = <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = [...arguments].slice(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 执行函数并使用 result 存储结果</span></span><br><span class="line">  <span class="keyword">const</span> result = context.func(...args);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 删除函数</span></span><br><span class="line">  <span class="keyword">delete</span> context.func;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">fn1.myCall(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>bind</strong></li>
+</ol>
+<blockquote>
+<p>fn2 = fn1.bind(this 指向, 函数实参 1, 函数实参 2);</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn2 = fn1.bind(&#123; <span class="attr">x</span>: <span class="number">200</span> &#125;)</span><br><span class="line">fn2() <span class="comment">// &#123; x: 200 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>bind()</code> 方法不会调用函数，但是可以改变函数内部的 this 指向，并返回一个新的函数（指定 this 和指定实参的<strong>原函数拷贝</strong>）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 bind</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myBind = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">  <span class="comment">// 获取 this 指向</span></span><br><span class="line">  <span class="keyword">const</span> that = args.shift();</span><br><span class="line">  <span class="comment">// 获取 fn1.myBind() 中的 fn1</span></span><br><span class="line">  <span class="keyword">const</span> self = <span class="built_in">this</span>;</span><br><span class="line">  <span class="comment">// 返回一个函数</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> self.apply(that, args);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bind demo</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fn2 = fn1.myBind(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line"><span class="keyword">const</span> res = fn2();</span><br><span class="line"><span class="built_in">console</span>.log(res);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br><span class="line"><span class="comment">// this is fn1</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>apply</strong></li>
+</ol>
+<blockquote>
+<p>fn1.apply(this 指向, [函数实参 1, 函数实参 2])</p>
+</blockquote>
+<p><code>apply()</code>可以立即调用一个函数，与此同时，他还可以改变这个函数内部的 this 指向。传入的实参<u>必须是一个数组</u>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">3</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">8</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> maxValue = <span class="built_in">Math</span>.max.apply(<span class="built_in">Math</span>, arr1); <span class="comment">// 求数组 arr1 中元素的最大值</span></span><br><span class="line"><span class="built_in">console</span>.log(maxValue); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 apply</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myApply = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取传入的对象（执行上下文）</span></span><br><span class="line">  context = context || <span class="built_in">window</span>;</span><br><span class="line">  <span class="comment">// fn1.apply1() 中的 fn1</span></span><br><span class="line">  context.func = <span class="built_in">this</span>;</span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = <span class="built_in">arguments</span>[<span class="number">1</span>];</span><br><span class="line">  <span class="comment">// 执行函数并使用 result 存储结果</span></span><br><span class="line">  <span class="keyword">const</span> result = context.func(...args);</span><br><span class="line">  <span class="comment">// 删除函数</span></span><br><span class="line">  <span class="keyword">delete</span> context.func;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">fn1.myApply(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-作为对象的方法调用"><a href="#3-作为对象的方法调用" class="headerlink" title="3 作为对象的方法调用"></a>3 作为对象的方法调用</h3><p>以方法的形式调用时，this 指向调用方法的那个对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> monika = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;莫妮卡&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">sayHi</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// this 即当前对象</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">wait</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// this === window</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">waitAgain</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// this 即当前对象</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>monika.sayHi()</code> 调用该方法的对象是 monika，因此 this 指向 monika。</p>
+</li>
+<li><p><code>monika.wait()</code> 内 setTimeout 中为匿名函数，而这个匿名函数不是作为某个对象的方法来调用执行，是在全局执行，因此 this 指向 window。</p>
+</li>
+<li><p><code>monika.waitAgain()</code> 中箭头函数的 this，取其上级作用域的 this。</p>
+</li>
+</ul>
+<h3 id="4-class-中的-this"><a href="#4-class-中的-this" class="headerlink" title="4 class 中的 this"></a>4 class 中的 this</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">name, age</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">sayHi</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Hi, 我是<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> monika = <span class="keyword">new</span> People(<span class="string">&#x27;莫妮卡&#x27;</span>, <span class="number">19</span>);</span><br><span class="line">monika.sayHi(); <span class="comment">// monika 对象</span></span><br></pre></td></tr></table></figure>
+
+<p>在 class 中的 this 指向实例对象。</p>
+<blockquote>
+<p><code>monika.__proto__.sayHi();</code> 通过原型调用 sayHi()时，this 指向隐式原型，打印结果为’Hi, 我是 undefined’。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="tag"># 作用域</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/26/JavaScript-%E5%8E%9F%E5%9E%8B%E4%B8%8E%E5%8E%9F%E5%9E%8B%E9%93%BE/" rel="prev" title="JavaScript 原型与原型链">
+      <i class="fa fa-chevron-left"></i> JavaScript 原型与原型链
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85"><span class="nav-number">1.</span> <span class="nav-text">JavaScript 作用域和闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%97%AD%E5%8C%85"><span class="nav-number">1.0.1.</span> <span class="nav-text">1 闭包</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#this-%E7%9A%84%E8%B5%8B%E5%80%BC"><span class="nav-number">2.</span> <span class="nav-text">this 的赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%9C%E4%B8%BA%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0"><span class="nav-number">2.0.1.</span> <span class="nav-text">1 作为普通函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8-call-apply-bind-%E8%B0%83%E7%94%A8"><span class="nav-number">2.0.2.</span> <span class="nav-text">2 使用 call apply bind 调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%9C%E4%B8%BA%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8"><span class="nav-number">2.0.3.</span> <span class="nav-text">3 作为对象的方法调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-class-%E4%B8%AD%E7%9A%84-this"><span class="nav-number">2.0.4.</span> <span class="nav-text">4 class 中的 this</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
