@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="运行环境 运行环境即浏览器（server 端有 node.js） 下载网页代码，渲染出页面，期间会执行若干 JS 要保证代码在浏览器中：稳定且高效  知识点 网页加载过程 性能优化 安全   网页加载过程知识点 加载资源的形式 加载资源的过程 渲染页面的过程 从输入 url 到渲染出页面的整个过程 window.onload和DOMContentLoaded的区别  资源的形式 html 代码 媒">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端运行环境-学习笔记">
+<meta property="og:url" content="http://example.com/2021/08/06/%E5%89%8D%E7%AB%AF%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="运行环境 运行环境即浏览器（server 端有 node.js） 下载网页代码，渲染出页面，期间会执行若干 JS 要保证代码在浏览器中：稳定且高效  知识点 网页加载过程 性能优化 安全   网页加载过程知识点 加载资源的形式 加载资源的过程 渲染页面的过程 从输入 url 到渲染出页面的整个过程 window.onload和DOMContentLoaded的区别  资源的形式 html 代码 媒">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-06T04:58:38.000Z">
+<meta property="article:modified_time" content="2021-08-10T05:06:32.978Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="运行环境">
+<meta property="article:tag" content="防抖">
+<meta property="article:tag" content="节流">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/08/06/%E5%89%8D%E7%AB%AF%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端运行环境-学习笔记 | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/06/%E5%89%8D%E7%AB%AF%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端运行环境-学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-06 12:58:38" itemprop="dateCreated datePublished" datetime="2021-08-06T12:58:38+08:00">2021-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h1><ul>
+<li>运行环境即浏览器（server 端有 node.js）</li>
+<li>下载网页代码，渲染出页面，期间会执行若干 JS</li>
+<li>要保证代码在浏览器中：稳定且高效</li>
+</ul>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>网页加载过程</li>
+<li>性能优化</li>
+<li>安全</li>
+</ul>
+<hr>
+<h1 id="网页加载过程"><a href="#网页加载过程" class="headerlink" title="网页加载过程"></a>网页加载过程</h1><h2 id="知识点-1"><a href="#知识点-1" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>加载资源的形式</li>
+<li>加载资源的过程</li>
+<li>渲染页面的过程</li>
+<li>从输入 url 到渲染出页面的整个过程</li>
+<li><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</li>
+</ul>
+<h2 id="资源的形式"><a href="#资源的形式" class="headerlink" title="资源的形式"></a>资源的形式</h2><ul>
+<li>html 代码</li>
+<li>媒体文件，如图片、视频等</li>
+<li>JavaScript CSS</li>
+</ul>
+<h2 id="加载过程"><a href="#加载过程" class="headerlink" title="加载过程"></a>加载过程</h2><ul>
+<li>DNS (Domain Name Server)解析：域名 -&gt; IP 地址<blockquote>
+<p>域名相比 ip 地址更容易记忆，大型网站的 ip 地址随用户所在地会不同</p>
+</blockquote>
+</li>
+<li>浏览器根据 IP 地址向服务器发起 http 请求</li>
+<li>服务器处理 http 请求，并返回给浏览器</li>
+</ul>
+<h2 id="渲染过程"><a href="#渲染过程" class="headerlink" title="渲染过程"></a>渲染过程</h2><ul>
+<li>根据 HTML 代码生成 DOM Tree</li>
+<li>根据 CSS 代码生成 CSSOM</li>
+<li>将 DOM Tree 和 CSSOM 整合形成 Render Tree</li>
+<li>浏览器根据 Render Tree 渲染页面</li>
+<li>如果遇到<code>&lt;script&gt;</code>则暂停渲染，优先加载并执行 JS 代码，完成再继续（JS 有可能会改变 DOM 结构，因此需要先暂停渲染）</li>
+<li>直到吧 Render Tree 渲染完成</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>示例 1</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> <span class="attr">href</span>=<span class="string">&quot;style.css&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>先加载 css 代码，生成 CSSOM，在根据 html 生成 DOM Tree。最后整合生成 Render Tree 并渲染页面。</p>
+<blockquote>
+<p>为何建议把 css 放在 head 中：若放在 body 中可能会重复生成 Render Tree 并重复渲染，导致页面加载卡顿。（表现为页面样式突然变化）</p>
+</blockquote>
+<p>示例 2</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">&#x27;container&#x27;</span>).innerHTML = <span class="string">&quot;update by js&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>先生成 DOM 树，遇到<code>&lt;script&gt;</code>后暂停渲染，加载并执行，js 修改了 DOM 内容，重新渲染。</p>
+<blockquote>
+<p>为何建议把 js 放在 body 里面的最后：js 在 body 中间时可能会截断首屏内容，使其只显示上面的一部分。</p>
+</blockquote>
+<p>示例 3</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;test.png&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;img&gt;</code> 标签不会阻塞 DOM 渲染</p>
+<h2 id="window-onload和DOMContentLoaded的区别"><a href="#window-onload和DOMContentLoaded的区别" class="headerlink" title="window.onload和DOMContentLoaded的区别"></a><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;load&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">//  页面的全部资源加载完才会执行，包括图片、视频等</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentLoaded&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// DOM 渲染完即可执行，此时图片、视频可能还没有加载完（推荐）</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>浏览器请求到 HTML 代码后，在生成 DOM 的最开始阶段（应该是 Bytes → characters 后），并行发起 css、图片、js 的请求，无论他们是否在 HEAD 里。<strong>发起 js 文件的下载 request 并不需要 DOM 处理到那个 script 节点</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="从输入-url-到渲染出页面的整个过程"><a href="#从输入-url-到渲染出页面的整个过程" class="headerlink" title="从输入 url 到渲染出页面的整个过程"></a>从输入 url 到渲染出页面的整个过程</h3><ul>
+<li>下载资源：各个资源类型，下载过程</li>
+<li>渲染页面：结合 html css javascript 图片等</li>
+</ul>
+<h3 id="window-onload和DOMContentLoaded的区别-1"><a href="#window-onload和DOMContentLoaded的区别-1" class="headerlink" title="window.onload和DOMContentLoaded的区别"></a><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</h3><ul>
+<li><code>window.onload</code> 资源全部加载完才执行，包括图片等</li>
+<li><code>DOMContentLoaded</code> DOM 渲染完成即可，图片可能尚未下载</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> img1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;img1&#x27;</span>);</span><br><span class="line">img1.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;img loaded&#x27;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;load&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;window loaded&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentloaded&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dom content loaded&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img1&quot;</span> <span class="attr">src</span>=<span class="string">&quot;test.png&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">./index.js</span>&quot;&quot;&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>dom content loaded<br>img loaded<br>window loaded</p>
+</blockquote>
+<hr>
+<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="性能优化原则"><a href="#性能优化原则" class="headerlink" title="性能优化原则"></a>性能优化原则</h2><ul>
+<li>多实用内存、缓存或其他方法</li>
+<li>减少 CPU 计算量，减少网络加载耗时</li>
+<li>（适用于所有编程的性能优化 —— 空间换时间）</li>
+</ul>
+<h2 id="从何入手"><a href="#从何入手" class="headerlink" title="从何入手"></a>从何入手</h2><ul>
+<li>让加载更快</li>
+<li>让渲染更快</li>
+</ul>
+<h3 id="让加载更快"><a href="#让加载更快" class="headerlink" title="让加载更快"></a>让加载更快</h3><ul>
+<li><p>减少资源体积：压缩代码</p>
+<blockquote>
+<p>webpack 压缩打包</p>
+</blockquote>
+</li>
+<li><p>减少访问次数：合并代码，SSR 服务器端渲染，缓存</p>
+<blockquote>
+<p>webpack 打包合并模块</p>
+</blockquote>
+</li>
+<li><p>使用更快的网络：CDN</p>
+</li>
+</ul>
+<h3 id="让渲染更快"><a href="#让渲染更快" class="headerlink" title="让渲染更快"></a>让渲染更快</h3><ul>
+<li>CSS 放在 head，JS 放在 body 最下面</li>
+<li>今早开始执行 JS，用 DOMContentLoaded 触发</li>
+<li>懒加载（图片懒加载，上滑加载更多，何时需要何时加载）</li>
+<li>对 DOM 查询进行缓存</li>
+<li>频繁 DOM 操作，合并到一起插入 DOM 结构</li>
+<li>节流 throttle 防抖 debounce（体验性优化，让<em>渲染更加流畅</em>）</li>
+</ul>
+<h2 id="性能优化示例"><a href="#性能优化示例" class="headerlink" title="性能优化示例"></a>性能优化示例</h2><h3 id="资源合并"><a href="#资源合并" class="headerlink" title="资源合并"></a>资源合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;a.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;b.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;c.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;abc.js&gt;&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
+<li>contenthash</li>
+<li>静态资源加 hash 后缀，根据文件内容计算 hash</li>
+<li>文件内容不变，则 hash 不变，则 url 不变</li>
+<li>url 和文件不变，则会自动触发 http 缓存机制，返回 304</li>
+</ul>
+<h3 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h3><ul>
+<li>Content Delivery Network，内容分发网络</li>
+</ul>
+<h3 id="SSR"><a href="#SSR" class="headerlink" title="SSR"></a>SSR</h3><ul>
+<li>服务端渲染：将网页和数据一起加载，一起渲染</li>
+<li>非 SSR（前后端分离）：先加载网页，再加载数据，再渲染数据</li>
+<li>早先的 JSP ASP PHP，现在的 vue React SSR</li>
+</ul>
+<h3 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h3><p>一种图片懒加载的实现方式，利用自定义属性值存储原始图片的 src，当用户查看原图或下滑至图片漏出屏幕时将 preview 的 src 替换为原始图片的 src。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img1&quot;</span> <span class="attr">src</span>=<span class="string">&quot;preview.png&quot;</span> <span class="attr">data-realsrc</span>=<span class="string">&quot;abc.png&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// 上划露出屏幕或点击时</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> img1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;img1&#x27;</span>);</span></span><br><span class="line"><span class="javascript">  img1.src = img1.getAttribute(<span class="string">&#x27;data-realsrc&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="缓存-DOM-查询"><a href="#缓存-DOM-查询" class="headerlink" title="缓存 DOM 查询"></a>缓存 DOM 查询</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> length = pList.length <span class="comment">// 将查询结果缓存起来</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="DOM-操作一起插入到-DOM-结构"><a href="#DOM-操作一起插入到-DOM-结构" class="headerlink" title="DOM 操作一起插入到 DOM 结构"></a>DOM 操作一起插入到 DOM 结构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment()</span><br></pre></td></tr></table></figure>
+
+<h3 id="尽早开始-JS-执行"><a href="#尽早开始-JS-执行" class="headerlink" title="尽早开始 JS 执行"></a>尽早开始 JS 执行</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentLoaded&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// DOM 渲染完既可执行</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h1><ul>
+<li>问题：常见的 web 前端攻击方式有哪些？<ul>
+<li>XSS 跨站请求攻击</li>
+<li>XSRF 跨站请求伪造</li>
+</ul>
+</li>
+</ul>
+<h2 id="XSS-攻击"><a href="#XSS-攻击" class="headerlink" title="XSS 攻击"></a>XSS 攻击</h2><ul>
+<li>一个博客网站，我发表一篇博客，其中嵌入<code>&lt;script&gt;</code>脚本</li>
+<li>脚本内容：获取 cookie，发送到我的服务器（服务器配合跨域）</li>
+<li>发布这篇博客，有人查看它，就可以收割访问者的 cookie</li>
+</ul>
+<h2 id="XSS-预防"><a href="#XSS-预防" class="headerlink" title="XSS 预防"></a>XSS 预防</h2><ul>
+<li>替换特殊字符，如<code>&lt;</code> 变为 <code>&amp;lt;</code>， <code>&gt;</code>变为<code>&amp;gt;</code></li>
+<li><code>&lt;script&gt;</code>变为 <code>&amp;lt;script&amp;gt;</code>，直接显示，而不会作为脚本执行</li>
+<li>前端需要替换，后端也要替换，都做总不会有错</li>
+</ul>
+<blockquote>
+<p>npm - xss 工具</p>
+</blockquote>
+<h2 id="XSRF-攻击"><a href="#XSRF-攻击" class="headerlink" title="XSRF 攻击"></a>XSRF 攻击</h2><ul>
+<li>你正在购物，看中了某个商品，商品 id 是 100</li>
+<li>付费接口是 <code>xxx.com/pay?id=100</code>，但没有任何验证</li>
+<li>攻击者看中了一个商品，id 是 200</li>
+<li>攻击者发送一封邮件，邮件标题很吸引人</li>
+<li>邮件正文中隐藏着 <code>&lt;img src=xxx.com/pay?id=200 /&gt;</code><blockquote>
+<p>img 请求可以跨域<br>已登录购物网站时，个人信息会随着请求被带过去</p>
+</blockquote>
+</li>
+<li>一查看邮件，就会帮攻击者购买了 id 为 200 的商品</li>
+</ul>
+<h2 id="XSRF-预防"><a href="#XSRF-预防" class="headerlink" title="XSRF 预防"></a>XSRF 预防</h2><ul>
+<li>使用 post 接口</li>
+<li>增加验证，例如密码、短信验证码、指纹、刷脸等</li>
+</ul>
+<hr>
+<h1 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖 debounce"></a>防抖 debounce</h1><ul>
+<li>监听一个输入框，文字变化和触发 change 事件</li>
+<li>直接用 keyup 事件，则会频繁触发 change 事件</li>
+<li>防抖：用户输入结束或暂停时，才会触发 change 事件</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;input1&#x27;</span>);</span><br><span class="line"><span class="comment">// DO NOT do it like this!</span></span><br><span class="line"><span class="comment">// input1.addEventListener(&#x27;keyup&#x27;, function () &#123;</span></span><br><span class="line"><span class="comment">//   console.log(input1.value);</span></span><br><span class="line"><span class="comment">// &#125;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 利用定时器添加一个延迟</span></span><br><span class="line"><span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line">input1.addEventListener(<span class="string">&#x27;keyup&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">  &#125;</span><br><span class="line">  timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟触发 change 事件</span></span><br><span class="line">    <span class="built_in">console</span>.log(input1.value);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清空定时器</span></span><br><span class="line">    timer = <span class="literal">null</span>;</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;input1&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./debounce.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将方法封装之后</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, delay = <span class="number">500</span></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// timer 是在闭包中</span></span><br><span class="line">  <span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input1.addEventListener(</span><br><span class="line">  <span class="string">&#x27;keyup&#x27;</span>,</span><br><span class="line">  debounce(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(input1.value);</span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="节流-throttle"><a href="#节流-throttle" class="headerlink" title="节流 throttle"></a>节流 throttle</h1><ul>
+<li>拖拽一个元素时，要随时拿到该元素被拖拽的位置</li>
+<li>直接用 drag 事件，则会频繁触发，很容易导致卡顿</li>
+<li>节流：无论拖拽速度多块，都会每隔 100ms 触发一次</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./throttle.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line">div1.addEventListener(<span class="string">&#x27;drag&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.offsetX, e.offsetY);</span><br><span class="line"></span><br><span class="line">    timer = <span class="literal">null</span>;</span><br><span class="line">  &#125;, <span class="number">100</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将方法封装之后</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, delay = <span class="number">100</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// event 参数会传给返回的函数</span></span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>); <span class="comment">// 将 event 参数传入 fn</span></span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">div1.addEventListener(</span><br><span class="line">  <span class="string">&#x27;drag&#x27;</span>,</span><br><span class="line">  throttle(<span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.offsetX, event.offsetY);</span><br><span class="line">  &#125;,<span class="number">150</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/" rel="tag"># 运行环境</a>
+              <a href="/tags/%E9%98%B2%E6%8A%96/" rel="tag"># 防抖</a>
+              <a href="/tags/%E8%8A%82%E6%B5%81/" rel="tag"># 节流</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="HTTP 学习笔记">
+      <i class="fa fa-chevron-left"></i> HTTP 学习笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">运行环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">知识点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">网页加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-number">2.1.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">资源的形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="nav-number">2.3.</span> <span class="nav-text">加载过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E8%BF%87%E7%A8%8B"><span class="nav-number">2.4.</span> <span class="nav-text">渲染过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#window-onload%E5%92%8CDOMContentLoaded%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.5.</span> <span class="nav-text">window.onload和DOMContentLoaded的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">2.6.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E8%BE%93%E5%85%A5-url-%E5%88%B0%E6%B8%B2%E6%9F%93%E5%87%BA%E9%A1%B5%E9%9D%A2%E7%9A%84%E6%95%B4%E4%B8%AA%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.1.</span> <span class="nav-text">从输入 url 到渲染出页面的整个过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#window-onload%E5%92%8CDOMContentLoaded%E7%9A%84%E5%8C%BA%E5%88%AB-1"><span class="nav-number">2.6.2.</span> <span class="nav-text">window.onload和DOMContentLoaded的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">性能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8E%9F%E5%88%99"><span class="nav-number">3.1.</span> <span class="nav-text">性能优化原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E4%BD%95%E5%85%A5%E6%89%8B"><span class="nav-number">3.2.</span> <span class="nav-text">从何入手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A9%E5%8A%A0%E8%BD%BD%E6%9B%B4%E5%BF%AB"><span class="nav-number">3.2.1.</span> <span class="nav-text">让加载更快</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A9%E6%B8%B2%E6%9F%93%E6%9B%B4%E5%BF%AB"><span class="nav-number">3.2.2.</span> <span class="nav-text">让渲染更快</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.3.</span> <span class="nav-text">性能优化示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E5%90%88%E5%B9%B6"><span class="nav-number">3.3.1.</span> <span class="nav-text">资源合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">3.3.2.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN"><span class="nav-number">3.3.3.</span> <span class="nav-text">CDN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSR"><span class="nav-number">3.3.4.</span> <span class="nav-text">SSR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-number">3.3.5.</span> <span class="nav-text">懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98-DOM-%E6%9F%A5%E8%AF%A2"><span class="nav-number">3.3.6.</span> <span class="nav-text">缓存 DOM 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM-%E6%93%8D%E4%BD%9C%E4%B8%80%E8%B5%B7%E6%8F%92%E5%85%A5%E5%88%B0-DOM-%E7%BB%93%E6%9E%84"><span class="nav-number">3.3.7.</span> <span class="nav-text">DOM 操作一起插入到 DOM 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BD%E6%97%A9%E5%BC%80%E5%A7%8B-JS-%E6%89%A7%E8%A1%8C"><span class="nav-number">3.3.8.</span> <span class="nav-text">尽早开始 JS 执行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">安全性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS-%E6%94%BB%E5%87%BB"><span class="nav-number">4.1.</span> <span class="nav-text">XSS 攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS-%E9%A2%84%E9%98%B2"><span class="nav-number">4.2.</span> <span class="nav-text">XSS 预防</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSRF-%E6%94%BB%E5%87%BB"><span class="nav-number">4.3.</span> <span class="nav-text">XSRF 攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSRF-%E9%A2%84%E9%98%B2"><span class="nav-number">4.4.</span> <span class="nav-text">XSRF 预防</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%98%B2%E6%8A%96-debounce"><span class="nav-number">5.</span> <span class="nav-text">防抖 debounce</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8A%82%E6%B5%81-throttle"><span class="nav-number">6.</span> <span class="nav-text">节流 throttle</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

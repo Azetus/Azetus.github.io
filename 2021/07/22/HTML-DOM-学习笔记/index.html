@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="知识点DOM 操作 （Document Object Module)  DOM 属于那种数据结构  DOM 操作的常用 API  attribute 和 property 的区别  一次性插入多个 DOM 节点，考虑性能  DOM 的本质  DOM 节点的操作  DOM 结构的操作  DOM 性能    DOM 的本质1234567891011&lt;?xml version&#x3D;&quot;1.0&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML DOM 学习笔记">
+<meta property="og:url" content="http://example.com/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="知识点DOM 操作 （Document Object Module)  DOM 属于那种数据结构  DOM 操作的常用 API  attribute 和 property 的区别  一次性插入多个 DOM 节点，考虑性能  DOM 的本质  DOM 节点的操作  DOM 结构的操作  DOM 性能    DOM 的本质1234567891011&lt;?xml version&#x3D;&quot;1.0&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-22T04:30:52.000Z">
+<meta property="article:modified_time" content="2021-08-10T05:02:38.082Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="DOM">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>HTML DOM 学习笔记 | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML DOM 学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-22 12:30:52" itemprop="dateCreated datePublished" datetime="2021-07-22T12:30:52+08:00">2021-07-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><p><strong>DOM 操作 （Document Object Module)</strong></p>
+<ul>
+<li><p>DOM 属于那种数据结构</p>
+</li>
+<li><p>DOM 操作的常用 API</p>
+</li>
+<li><p>attribute 和 property 的区别</p>
+</li>
+<li><p>一次性插入多个 DOM 节点，考虑性能</p>
+</li>
+<li><p>DOM 的本质</p>
+</li>
+<li><p>DOM 节点的操作</p>
+</li>
+<li><p>DOM 结构的操作</p>
+</li>
+<li><p>DOM 性能</p>
+</li>
+</ul>
+<hr>
+<h1 id="DOM-的本质"><a href="#DOM-的本质" class="headerlink" title="DOM 的本质"></a>DOM 的本质</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">other</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">other</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>this is p<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>HTML 是一种特定的 XML，规定了可以使用的各个标签。</p>
+</blockquote>
+<p><strong>DOM 的本质是一棵树</strong><br>浏览器从 HTML 文件解析出的一棵树</p>
+<hr>
+<h1 id="DOM-节点操作"><a href="#DOM-节点操作" class="headerlink" title="DOM 节点操作"></a>DOM 节点操作</h1><ul>
+<li>获取 DOM 节点</li>
+<li>attribute</li>
+<li>property</li>
+</ul>
+<h2 id="获取-DOM-节点"><a href="#获取-DOM-节点" class="headerlink" title="获取 DOM 节点"></a>获取 DOM 节点</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>) <span class="comment">// 元素</span></span><br><span class="line"><span class="keyword">const</span> divList = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"><span class="built_in">console</span>.log(divList.length)</span><br><span class="line"><span class="built_in">console</span>.log(divList[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> containerList = <span class="built_in">document</span>.getElementsByClassName(<span class="string">&#x27;container&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DOM-节点的-property"><a href="#DOM-节点的-property" class="headerlink" title="DOM 节点的 property"></a>DOM 节点的 property</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = pList[<span class="number">0</span>]</span><br><span class="line">p.style.width = <span class="string">&#x27;100px&#x27;</span>     <span class="comment">// 修改样式</span></span><br><span class="line"><span class="built_in">console</span>.log(p.style.width)  <span class="comment">// 获取样式</span></span><br><span class="line">p.className = <span class="string">&#x27;red&#x27;</span>         <span class="comment">// 修改class</span></span><br><span class="line"><span class="built_in">console</span>.log(p.className)    <span class="comment">// 获取 class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取 nodeName 和 nodeType</span></span><br><span class="line"><span class="built_in">console</span>.log(p.nodeName)</span><br><span class="line"><span class="built_in">console</span>.log(p.nodeType)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取 DOM 元素通过 JS 属性的方式进行操作</p>
+</blockquote>
+<h2 id="DOM-节点的-attribute"><a href="#DOM-节点的-attribute" class="headerlink" title="DOM 节点的 attribute"></a>DOM 节点的 attribute</h2><blockquote>
+<p>修改的是 DON 节点的属性</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>property：修改对象属性，不会提现到 html 结构中（尽量用此种方式）</li>
+<li>attribute：修改 html 属性，会改变 html 结构</li>
+<li>两者都有可能引起 DOM 重新渲染</li>
+</ul>
+<hr>
+<h1 id="DOM-结构操作"><a href="#DOM-结构操作" class="headerlink" title="DOM 结构操作"></a>DOM 结构操作</h1><ul>
+<li>新增/插入节点</li>
+<li>获取子元素列表，获取父元素</li>
+<li>删除子元素</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p2&quot;</span>&gt;</span>一段文字 2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div2&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;./w8h09ebV24.png&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> div2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div2&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加新节点</span></span><br><span class="line"><span class="keyword">const</span> p1 = <span class="built_in">document</span>.createElement(<span class="string">&#x27;p&#x27;</span>);</span><br><span class="line">p1.innerHTML = <span class="string">&#x27;this is p1&#x27;</span>;</span><br><span class="line">div1.appendChild(p1); <span class="comment">// 添加新创建的元素</span></span><br><span class="line"><span class="comment">// 移动已有节点</span></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;p2&#x27;</span>);</span><br><span class="line">div2.appendChild(p2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取父元素</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.parentNode);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取子元素列表</span></span><br><span class="line"><span class="keyword">const</span> div1ChildNodes = div1.childNodes;</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">0</span>].nodeName, div1ChildNodes[<span class="number">0</span>].nodeType);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">1</span>].nodeName, div1ChildNodes[<span class="number">1</span>].nodeType);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> div1ChildNodesP = <span class="built_in">Array</span>.from(div1.childNodes).filter(<span class="function">(<span class="params">child</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (child.nodeType === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodesP);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除节点</span></span><br><span class="line">div1.removeChild(div1ChildNodesP[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="DOM-性能"><a href="#DOM-性能" class="headerlink" title="DOM 性能"></a>DOM 性能</h1><ul>
+<li>DOM 操作非常”昂贵”，避免频繁的 DOM 操作。</li>
+<li>对 DOM 查询做缓存。</li>
+<li>将频繁操作改为一次性操作。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">&quot;list&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> list = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;list&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个文档片段，此时还没要插入到 DOM 树种</span></span><br><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行插入</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> li = <span class="built_in">document</span>.createElement(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line">  li.innerHTML = <span class="string">`List item <span class="subst">$&#123;i + <span class="number">1</span>&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 先插入文档片段中</span></span><br><span class="line">  frag.appendChild(li);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 都完成之后，再统一插入到 DOM 结构中</span></span><br><span class="line">list.appendChild(frag);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>DOM 是哪种数据结构</strong></p>
+<ul>
+<li>树（DOM 树）</li>
+</ul>
+<p><strong>DOM 操作常用 API</strong></p>
+<ul>
+<li>DOM 节点操作</li>
+<li>DOM 结构操作</li>
+<li>attribute 和 property</li>
+</ul>
+<p><strong>attribute 和 property 的区别</strong></p>
+<ul>
+<li>property：修改对象属性，不会体现到 html 结构中</li>
+<li>attribute：修改 html 属性，会改变 html 结构</li>
+<li>二者都有可能引起 DOM 重新渲染</li>
+</ul>
+<p><strong>一次性插入多个节点，考虑性能</strong></p>
+<ul>
+<li>使用文档片段，一次性插入 DOM 树种。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment()</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DOM/" rel="tag"># DOM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/" rel="prev" title="学习笔记：JavaScript 异步(2)">
+      <i class="fa fa-chevron-left"></i> 学习笔记：JavaScript 异步(2)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/23/HTML-%E4%BA%8B%E4%BB%B6/" rel="next" title="HTML 事件">
+      HTML 事件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">2.</span> <span class="nav-text">DOM 的本质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-%E8%8A%82%E7%82%B9%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">DOM 节点操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-DOM-%E8%8A%82%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">获取 DOM 节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-%E8%8A%82%E7%82%B9%E7%9A%84-property"><span class="nav-number">3.2.</span> <span class="nav-text">DOM 节点的 property</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM-%E8%8A%82%E7%82%B9%E7%9A%84-attribute"><span class="nav-number">3.3.</span> <span class="nav-text">DOM 节点的 attribute</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">3.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-%E7%BB%93%E6%9E%84%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">DOM 结构操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-%E6%80%A7%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">DOM 性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

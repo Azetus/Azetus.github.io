@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Ajax 核心 API一个简易的 ajax12345678910111213function myAjax(url, successFn) &amp;#123;  const xhr &#x3D; new XMLHttpRequest();  xhr.open(&amp;#x27;GET&amp;#x27;, url, true);  xhr.onreadystatechange &#x3D; function () &amp;#123;    &#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ajax 学习笔记">
+<meta property="og:url" content="http://example.com/2021/07/27/Ajax-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="Ajax 核心 API一个简易的 ajax12345678910111213function myAjax(url, successFn) &amp;#123;  const xhr &#x3D; new XMLHttpRequest();  xhr.open(&amp;#x27;GET&amp;#x27;, url, true);  xhr.onreadystatechange &#x3D; function () &amp;#123;    &#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-27T04:38:17.000Z">
+<meta property="article:modified_time" content="2021-08-10T05:02:12.709Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="Ajax">
+<meta property="article:tag" content="跨域">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/07/27/Ajax-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Ajax 学习笔记 | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/27/Ajax-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ajax 学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-27 12:38:17" itemprop="dateCreated datePublished" datetime="2021-07-27T12:38:17+08:00">2021-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Ajax-核心-API"><a href="#Ajax-核心-API" class="headerlink" title="Ajax 核心 API"></a>Ajax 核心 API</h1><h2 id="一个简易的-ajax"><a href="#一个简易的-ajax" class="headerlink" title="一个简易的 ajax"></a>一个简易的 ajax</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myAjax</span>(<span class="params">url, successFn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  xhr.open(<span class="string">&#x27;GET&#x27;</span>, url, <span class="literal">true</span>);</span><br><span class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 这里的函数异步执行，可参考之前JS基础中的异步模块</span></span><br><span class="line">    <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (xhr.status === <span class="number">200</span>) &#123;</span><br><span class="line">        successFn(xhr.responseText);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  xhr.send(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用 Promise 实现的情况</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myAjax02</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.open(<span class="string">&#x27;GET&#x27;</span>, url, <span class="literal">true</span>);</span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.status === <span class="number">200</span>) &#123;</span><br><span class="line">          resolve(<span class="built_in">JSON</span>.parse(xhr.responseText));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (xhr.status === <span class="number">404</span>) &#123;</span><br><span class="line">          reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;404 not found&#x27;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    xhr.send(<span class="literal">null</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> p;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> url = <span class="string">&#x27;xxxxxx&#x27;</span></span><br><span class="line">myAjax02(url)</span><br><span class="line">    .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res))</span><br><span class="line">    .catch(<span class="function"><span class="params">err</span> =&gt;</span> <span class="built_in">console</span>.error(err))</span><br></pre></td></tr></table></figure>
+
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>XMLHttpRequest</li>
+<li>状态码</li>
+<li>跨域：同源策略，跨域解决方案</li>
+</ul>
+<h2 id="xhr-readyState"><a href="#xhr-readyState" class="headerlink" title="xhr.readyState"></a>xhr.readyState</h2><ul>
+<li>0 - (未初始化) 还没有调用 send()方法</li>
+<li>1 - （载入）已调用 send()方法，正在发送请求</li>
+<li>2 - （载入完成）send()方法执行完成，已经接收到全部响应内容</li>
+<li>3 - （交互）正在解析响应内容</li>
+<li>4 - （完成）响应内容解析完成，可以在客户端调用了</li>
+</ul>
+<h2 id="xhr-status-http-状态码"><a href="#xhr-status-http-状态码" class="headerlink" title="xhr.status(http 状态码)"></a>xhr.status(http 状态码)</h2><ul>
+<li>2xx - 成功处理请求，如 200</li>
+<li>3xx - 需要重定向，浏览器直接转跳。如 301： 资源（网页等）被永久转移到其它 URL</li>
+<li>4xx - 客户端请求错误，请求包含语法错误或无法完成请求。如 404：请求的资源（网页等）不存在</li>
+<li>5xx - 服务器错误，如 500：内部服务器错误</li>
+</ul>
+<h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><ol>
+<li>jQuery (适用于简单的请求，比如不存在链式调用的情况)</li>
+<li>fetch (一个新的 API，要考虑兼容性)</li>
+<li>axios</li>
+</ol>
+<h3 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a>fetch</h3><p>默认返回 Promise</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fetch(url)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> response.json();</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="keyword">function</span> (<span class="params">myJson</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(myJson);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当接收到一个代表错误的 HTTP 状态码时，从 fetch() 返回的 Promise 不会被标记为 reject， 即使响应的 HTTP 状态码是 404 或 500。相反，它会将 Promise 状态标记为 resolve （但是会将 resolve 的返回值的 ok 属性设置为 false ），仅当网络故障时或请求被阻止时，才会标记为 reject。<br>fetch() 可以不会接受跨域 cookies；你也可以使用 fetch() 建立起跨域会话。<br>fetch 不会发送 cookies。除非你使用了 credentials 的初始化选项。（自 2017 年 8 月 25 日以后，默认的 credentials 政策变更为 same-origin。Firefox 也在 61.0b13 版本中进行了修改）</p>
+</blockquote>
+<hr>
+<h1 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h1><h2 id="知识点-1"><a href="#知识点-1" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>什么是跨域（同源策略）</li>
+</ul>
+<p>实现方式：</p>
+<ul>
+<li>JSONP</li>
+<li>CORS（服务端支持）</li>
+</ul>
+<p>核心知识点：</p>
+<ul>
+<li>XMLHTTPRequest</li>
+<li>状态码：readyState status</li>
+<li>跨域：同源策略（如何绕过），JSONP，CORS</li>
+</ul>
+<h2 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h2><ul>
+<li>ajax 请求时，浏览器要求当前网页和 server 必须同源（安全）</li>
+<li>同源：协议、域名、端口，三者必须一致</li>
+<li>前端：<code>http://a.com:8080/</code>; server: <code>https://b.com/api/xxx</code></li>
+</ul>
+<p><strong>加载图片 css js 可无视同源策略</strong></p>
+<ul>
+<li><code>&lt;img /&gt;</code>可以用于统计打点，可使用第三方统计服务</li>
+<li><code>&lt;link /&gt;</code> <code>&lt;script&gt;</code> 可使用 CDN，CDN 一般都是外域</li>
+<li><code>&lt;script&gt;</code> 可实现 JSONP</li>
+</ul>
+<h2 id="跨域-1"><a href="#跨域-1" class="headerlink" title="跨域"></a>跨域</h2><ul>
+<li>所有的跨域，都<strong>必须</strong>经过 server 端的允许和配合</li>
+<li>未经 server 端允许就实现跨域，说明浏览器有漏洞，危险信号</li>
+</ul>
+<h2 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h2><ul>
+<li><code>&lt;script&gt;</code> 可以绕过跨域限制</li>
+<li>服务器可以任意动态拼接数据返回</li>
+<li>所以，<code>&lt;script&gt;</code>就可以获得跨域的数据，只要服务端愿意返回</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="built_in">window</span>.abc = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(data);</span></span><br><span class="line"><span class="javascript">  &#125;;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./data/jsonp.js?callback=abc&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// jquery实现</span></span><br><span class="line">$.ajax(&#123;</span><br><span class="line">  <span class="attr">url</span>: <span class="string">&#x27;./data/jsonp.js?callback=abc&#x27;</span>,</span><br><span class="line">  <span class="attr">dataType</span>: <span class="string">&#x27;jsonp&#x27;</span>,</span><br><span class="line">  <span class="attr">jsonpCallback</span>: <span class="string">&#x27;abc&#x27;</span>,</span><br><span class="line">  <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="CORS-服务器设置-http-header"><a href="#CORS-服务器设置-http-header" class="headerlink" title="CORS - 服务器设置 http header"></a>CORS - 服务器设置 http header</h2><ul>
+<li>需要服务端去做</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Ajax/" rel="tag"># Ajax</a>
+              <a href="/tags/%E8%B7%A8%E5%9F%9F/" rel="tag"># 跨域</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/23/HTML-%E4%BA%8B%E4%BB%B6/" rel="prev" title="HTML 事件">
+      <i class="fa fa-chevron-left"></i> HTML 事件
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/28/JS-Web-API-%E5%AD%98%E5%82%A8/" rel="next" title="JS-Web-API 存储">
+      JS-Web-API 存储 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ajax-%E6%A0%B8%E5%BF%83-API"><span class="nav-number">1.</span> <span class="nav-text">Ajax 核心 API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E6%98%93%E7%9A%84-ajax"><span class="nav-number">1.1.</span> <span class="nav-text">一个简易的 ajax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xhr-readyState"><span class="nav-number">1.3.</span> <span class="nav-text">xhr.readyState</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xhr-status-http-%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">xhr.status(http 状态码)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="nav-number">1.5.</span> <span class="nav-text">常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fetch"><span class="nav-number">1.5.1.</span> <span class="nav-text">fetch</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">跨域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9-1"><span class="nav-number">2.1.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.</span> <span class="nav-text">同源策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E5%9F%9F-1"><span class="nav-number">2.3.</span> <span class="nav-text">跨域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSONP"><span class="nav-number">2.4.</span> <span class="nav-text">JSONP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CORS-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AE%BE%E7%BD%AE-http-header"><span class="nav-number">2.5.</span> <span class="nav-text">CORS - 服务器设置 http header</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
