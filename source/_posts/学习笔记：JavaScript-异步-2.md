@@ -1,6 +1,6 @@
 ---
 title: 学习笔记：JavaScript 异步(2)
-date: 2021-06-12 14:57:48
+date: 2021-07-21 14:57:48
 tags:
   - JavaScript
   - 异步

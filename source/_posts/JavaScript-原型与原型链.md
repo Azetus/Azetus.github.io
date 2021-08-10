@@ -1,6 +1,6 @@
 ---
 title: JavaScript 原型与原型链
-date: 2021-05-07 16:38:13
+date: 2021-07-14 16:38:13
 tags:
   - JavaScript
   - 原型链
