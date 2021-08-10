@@ -167,7 +167,7 @@ Restful API 设计：
 - 控制强制缓存的逻辑
 - 例如 `Cache-Control: max-age = 3153600`(单位是秒)
 
-![img01](img01.png)
+![http_image_01](http_image_01.png)
 
 > 浏览器初次向服务端请求资源时，如果服务端判断该资源可以使用缓存存储则会在 Response Header 中添加 Cache-Control。  
 > 当浏览器再次请求该资源时，则从缓存中直接查找。（若未失效的情况下）  
@@ -195,7 +195,7 @@ Restful API 设计：
 - 服务器判断客户端缓存资源，是否和服务端资源一致
 - 一致则返回 304 (资源未被修改)，否则返回 200 和最新的资源
 
-![img02](img02.png)
+![http_image_02](http_image_02.png)
 
 ## 资源标识
 
@@ -209,7 +209,7 @@ Restful API 设计：
 - `Last-Modified`只能精确到秒级
 - 如果资源被重复生成，而内容不变，则 `Etag` 更精确(Etag 不会变)
 
-![img03](img03.png)
+![http_image_03](http_image_03.png)
 
 ---
 
