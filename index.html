@@ -147,6 +147,194 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/20/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AComposition-API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/20/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AComposition-API/" class="post-title-link" itemprop="url">学习笔记：Composition API</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-20 19:37:04" itemprop="dateCreated datePublished" datetime="2021-08-20T19:37:04+08:00">2021-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Vue 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Composition-API"><a href="#Composition-API" class="headerlink" title="Composition API"></a>Composition API</h1><ul>
+<li>更好的代码组织</li>
+<li>更好的逻辑复用</li>
+<li>更好的类型推导</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// 将原本的功能进行拆分：</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// 将list相关功能进行封装</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> listRelativeEffect = <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">    <span class="comment">// ...</span></span></span><br><span class="line"><span class="javascript">  &#125;;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// 将inputValue相关功能进行封装</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> inputRelativeEffect = <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">    <span class="comment">// ...</span></span></span><br><span class="line"><span class="javascript">  &#125;;</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> app = Vue.createApp(&#123;</span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="comment">// 流程的调度中转</span></span></span><br><span class="line"><span class="javascript">      <span class="comment">// 从不同的地方找到需要的东西</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> &#123; list, addItemToList &#125; = listRelativeEffect();</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> &#123; inputValue, handleInputValueChange &#125; = inputRelativeEffect();</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">        list,</span></span><br><span class="line"><span class="javascript">        addItemToList,</span></span><br><span class="line"><span class="javascript">        inputValue,</span></span><br><span class="line"><span class="javascript">        handleInputValueChange</span></span><br><span class="line"><span class="javascript">      &#125;;</span></span><br><span class="line"><span class="javascript">    &#125;,</span></span><br><span class="line"><span class="javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="javascript">            &lt;div&gt;</span></span></span><br><span class="line"><span class="string"><span class="javascript">                &lt;!-- ... --&gt;</span></span></span><br><span class="line"><span class="string"><span class="javascript">            &lt;/div&gt;</span></span></span><br><span class="line"><span class="string"><span class="javascript">        `</span></span></span><br><span class="line"><span class="javascript">  &#125;);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> vm = app.mount(<span class="string">&#x27;#root&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>如何选择</strong></p>
+<ul>
+<li>不建议共用，会引起混乱</li>
+<li>小型项目、业务逻辑简单，用 Options API</li>
+<li>中大型项目、逻辑复杂，用 Composition API</li>
+</ul>
+<blockquote>
+<p>Composition API 是为了解决复杂业务逻辑而设计<br>Composition API 就像 Hooks 在 React 中的地位</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>Composition API 带来了什么？<ul>
+<li>更好的代码组织</li>
+<li>更好的逻辑复用</li>
+<li>更好的类型推导</li>
+</ul>
+</li>
+<li>Composition API 和 Options API 如何选择？<ul>
+<li>不建议共用，会引起混乱</li>
+<li>小型项目、业务逻辑简单，用 Options API</li>
+<li>中大型项目、逻辑复杂，用 Composition API</li>
+</ul>
+</li>
+</ul>
+<h1 id="Composition-API-如何实现逻辑复用"><a href="#Composition-API-如何实现逻辑复用" class="headerlink" title="Composition API 如何实现逻辑复用"></a>Composition API 如何实现逻辑复用</h1><ul>
+<li>抽离逻辑代码到一个函数</li>
+<li>函数命名约定为 useXxxx 格式（React Hooks 也是）</li>
+<li>在 setup 中引用 useXxxx 函数</li>
+</ul>
+<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><p>获取光标在页面的位置。可以将逻辑抽离出去，并放到一个 js 文件中，在使用时<code>import xxxx form &#39;./xxx&#39;</code>引入。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; reactive, ref, onMounted, onUnmounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useMousePosition</span>(<span class="params">params</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> xRef = ref(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> yRef = ref(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ref 修改值时使用 .value</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    xRef.value = e.pageX;</span><br><span class="line">    yRef.value = e.pageY;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  onMounted(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;useMousePosition mounted&#x27;</span>);</span><br><span class="line">    <span class="built_in">window</span>.addEventListener(<span class="string">&#x27;mousemove&#x27;</span>, update);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  onUnmounted(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;useMousePosition unMounted&#x27;</span>);</span><br><span class="line">    <span class="built_in">window</span>.removeEventListener(<span class="string">&#x27;mousemove&#x27;</span>, update);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用 ref 实现响应式的写法</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    xRef,</span><br><span class="line">    yRef</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">    // 直接返回一个 reactive 对象的写法</span></span><br><span class="line"><span class="comment">    const state = reactive(&#123;</span></span><br><span class="line"><span class="comment">      x: 0,</span></span><br><span class="line"><span class="comment">      y: 0</span></span><br><span class="line"><span class="comment">    &#125;);</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    function update(e) &#123;</span></span><br><span class="line"><span class="comment">      state.x = e.pageX;</span></span><br><span class="line"><span class="comment">      state.y = e.pageY;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    return &#123;</span></span><br><span class="line"><span class="comment">      state</span></span><br><span class="line"><span class="comment">    &#125;;</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>mouse position &#123;&#123;xRef&#125;&#125; &#123;&#123;yRef&#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// import &#123; reactive &#125; from &quot;vue&quot;;</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> useMousePosition <span class="keyword">from</span> <span class="string">&#x27;./useMousePosition&#x27;</span></span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">    <span class="attr">name</span>: <span class="string">&#x27;MousePosition&#x27;</span></span></span><br><span class="line"><span class="javascript">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="keyword">const</span> &#123; xRef, yRef &#125; = useMousePosition()</span></span><br><span class="line"><span class="javascript">      <span class="comment">/*</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        // 若方法返回一个 reactive 对象时的写法</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        // 模板应改为 state.x 和 state.y</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        const state = useMousePosition2()</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        return &#123;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">            state</span></span></span><br><span class="line"><span class="comment"><span class="javascript">        &#125;</span></span></span><br><span class="line"><span class="comment"><span class="javascript">      */</span></span></span><br><span class="line"><span class="javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="javascript">        xRef,</span></span><br><span class="line"><span class="javascript">        yRef</span></span><br><span class="line"><span class="javascript">      &#125;</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/20/Vue3-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/20/Vue3-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="post-title-link" itemprop="url">Vue3 的生命周期</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-20 19:28:13" itemprop="dateCreated datePublished" datetime="2021-08-20T19:28:13+08:00">2021-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Vue 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Vue3-生命周期"><a href="#Vue3-生命周期" class="headerlink" title="Vue3 生命周期"></a>Vue3 生命周期</h1><ul>
+<li>Options APT 生命周期</li>
+<li>Composition API 生命周期</li>
+</ul>
+<h2 id="Options-APT-生命周期"><a href="#Options-APT-生命周期" class="headerlink" title="Options APT 生命周期"></a>Options APT 生命周期</h2><ul>
+<li><code>beforeDestory</code> 改为 <code>beforeUnmount</code></li>
+<li><code>destoryed</code> 改为 <code>unmounted</code></li>
+<li>其他沿用 Vue2 的生命周期</li>
+</ul>
+<h2 id="Composition-API-生命周期"><a href="#Composition-API-生命周期" class="headerlink" title="Composition API 生命周期"></a>Composition API 生命周期</h2><p><code>setup</code> 是围绕 <code>beforeCreate</code> 和 <code>created</code> 生命周期钩子运行的。原来在 Vue 2 中的 <code>beforeCreate</code> 和 <code>created</code> 中编写的代码可以直接写在 <code>setup</code>函数中。</p>
+<blockquote>
+<ol>
+<li>在执行 <code>setup</code> 时，组件实例其实尚未被创建。因此在<code>setup</code>中是无法通过 this 获取到组件实例。  </li>
+<li><code>data</code> <code>computed</code> <code>methods</code>等选项也无法在<code>setup</code>函数中获取到（可以在<code>onMounted</code>生命周期中获取）</li>
+</ol>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">import</span> &#123;</span></span><br><span class="line"><span class="javascript">    onBeforeMount,</span></span><br><span class="line"><span class="javascript">    onMounted,</span></span><br><span class="line"><span class="javascript">    onBeforeUpdate,</span></span><br><span class="line"><span class="javascript">    onUpdated,</span></span><br><span class="line"><span class="javascript">    onBeforeUnmount,</span></span><br><span class="line"><span class="javascript">    onUnmounted</span></span><br><span class="line"><span class="javascript">  &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span></span><br><span class="line"><span class="javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="javascript">    <span class="comment">// 等于 beforeCreate 和 created</span></span></span><br><span class="line"><span class="javascript">    <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span></span><br><span class="line"><span class="javascript">      <span class="built_in">console</span>.log(<span class="string">&#x27;setup&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">      onBeforeMount(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeMount&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">      onMounted(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onMounted&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">      onBeforeUpdate(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeUpdate&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">      onUpdated(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onUpdated&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">      onBeforeUnmount(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onBeforeUnmount&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">      onUnmounted(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">&#x27;onUnmounted&#x27;</span>);</span></span><br><span class="line"><span class="javascript">      &#125;);</span></span><br><span class="line"><span class="javascript">    &#125;</span></span><br><span class="line"><span class="javascript">  &#125;;</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -212,6 +400,26 @@
 
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">tag</span>: <span class="string">&#x27;div&#x27;</span>,</span><br><span class="line">  <span class="attr">props</span>:&#123;</span><br><span class="line">    <span class="attr">className</span>: <span class="string">&#x27;container&#x27;</span>,</span><br><span class="line">    <span class="attr">id</span>: <span class="string">&#x27;div1&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">children</span>:[</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">tag</span>: <span class="string">&#x27;p&#x27;</span>,</span><br><span class="line">      <span class="attr">children</span>: <span class="string">&#x27;vdom&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">tag</span>: <span class="string">&#x27;ul&#x27;</span>,</span><br><span class="line">      <span class="attr">props</span>: &#123;<span class="attr">style</span>: <span class="string">&#x27;font-size: 20px&#x27;</span>&#125;,</span><br><span class="line">      <span class="attr">children</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">tag</span>: <span class="string">&#x27;li&#x27;</span>,</span><br><span class="line">          <span class="attr">children</span>: <span class="string">&#x27;a&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h2 id="Vue2-的-vue-template-compiler"><a href="#Vue2-的-vue-template-compiler" class="headerlink" title="Vue2 的 vue-template-compiler"></a>Vue2 的 vue-template-compiler</h2><h3 id="with-语法"><a href="#with-语法" class="headerlink" title="with 语法"></a>with 语法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">a</span>: <span class="number">100</span>, <span class="attr">b</span>: <span class="number">200</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(obj.a); <span class="comment">// 100</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.b); <span class="comment">// 200</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.c); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 with，能改变 &#123;&#125; 内自由变量的查找方式</span></span><br><span class="line"><span class="comment">// 将 &#123;&#125; 内的自由变量，当做 obj 的属性来查找</span></span><br><span class="line"><span class="keyword">with</span> (obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(a); <span class="comment">// 100</span></span><br><span class="line">  <span class="built_in">console</span>.log(b); <span class="comment">// 200</span></span><br><span class="line">  <span class="built_in">console</span>.log(c); <span class="comment">// 会报错！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>改变 {} 内自由变量的查找方式，当做 obj 的属性来查找</li>
+<li>如果找不到匹配的 obj 属性，就会报错</li>
+</ul>
+<h3 id="vue-template-compiler-的模板编译"><a href="#vue-template-compiler-的模板编译" class="headerlink" title="vue-template-compiler 的模板编译"></a>vue-template-compiler 的模板编译</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compiler = <span class="built_in">require</span>(<span class="string">&#x27;vue-template-compiler&#x27;</span>);</span><br><span class="line"><span class="comment">// 插值</span></span><br><span class="line"><span class="keyword">const</span> template = <span class="string">`&lt;p&gt;&#123;&#123;message&#125;&#125;&lt;/p&gt;`</span>;</span><br><span class="line"><span class="comment">// with(this)&#123;return createElement(&#x27;p&#x27;,[createTextVNode(toString(message))])&#125;</span></span><br><span class="line"><span class="comment">// 编译</span></span><br><span class="line"><span class="keyword">const</span> res = compiler.compile(template);</span><br><span class="line"><span class="built_in">console</span>.log(res.render);</span><br><span class="line"><span class="comment">// with(this)&#123;return _c(&#x27;p&#x27;,[_v(_s(message))])&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>this</code> -&gt; <code>new Vue(&#123;...&#125;)</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> template = <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div id=&quot;div1&quot; class=&quot;container&quot;&gt;</span></span><br><span class="line"><span class="string">        &lt;img :src=&quot;imgUrl&quot;/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"><span class="comment">// with (this) &#123;</span></span><br><span class="line"><span class="comment">//   return _c(&#x27;div&#x27;, &#123; staticClass: &#x27;container&#x27;, attrs: &#123; id: &#x27;div1&#x27; &#125; &#125;, [</span></span><br><span class="line"><span class="comment">//     _c(&#x27;img&#x27;, &#123; attrs: &#123; src: imgUrl &#125; &#125;)</span></span><br><span class="line"><span class="comment">//   ]);</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> _c(</span><br><span class="line">    <span class="string">&#x27;tag-name&#x27;</span>,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">// class-name, attrs ....</span></span><br><span class="line">    &#125;,</span><br><span class="line">    [</span><br><span class="line">      <span class="comment">// childrenNodes1, childrenNodes2</span></span><br><span class="line">    ]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>模板编译为 render 函数，执行 render 函数返回 vnode</li>
+<li>基于 vnode 再执行 patch 和 diff</li>
+<li>使用 webpack vue-loader 会在开发环境下编译模板</li>
+</ul>
 <hr>
 <h1 id="vdom-diff"><a href="#vdom-diff" class="headerlink" title="vdom diff"></a>vdom diff</h1><p><img src="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/diff_tree.png" alt="diff_tree"></p>
 <h2 id="树结构-diff-的时间复杂度-O-n-3"><a href="#树结构-diff-的时间复杂度-O-n-3" class="headerlink" title="树结构 diff 的时间复杂度 O(n^3)"></a>树结构 diff 的时间复杂度 O(n^3)</h2><ul>
@@ -1450,309 +1658,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">HTML DOM 学习笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-22 12:30:52" itemprop="dateCreated datePublished" datetime="2021-07-22T12:30:52+08:00">2021-07-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><p><strong>DOM 操作 （Document Object Module)</strong></p>
-<ul>
-<li><p>DOM 属于那种数据结构</p>
-</li>
-<li><p>DOM 操作的常用 API</p>
-</li>
-<li><p>attribute 和 property 的区别</p>
-</li>
-<li><p>一次性插入多个 DOM 节点，考虑性能</p>
-</li>
-<li><p>DOM 的本质</p>
-</li>
-<li><p>DOM 节点的操作</p>
-</li>
-<li><p>DOM 结构的操作</p>
-</li>
-<li><p>DOM 性能</p>
-</li>
-</ul>
-<hr>
-<h1 id="DOM-的本质"><a href="#DOM-的本质" class="headerlink" title="DOM 的本质"></a>DOM 的本质</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">other</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">other</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>this is p<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>HTML 是一种特定的 XML，规定了可以使用的各个标签。</p>
-</blockquote>
-<p><strong>DOM 的本质是一棵树</strong><br>浏览器从 HTML 文件解析出的一棵树</p>
-<hr>
-<h1 id="DOM-节点操作"><a href="#DOM-节点操作" class="headerlink" title="DOM 节点操作"></a>DOM 节点操作</h1><ul>
-<li>获取 DOM 节点</li>
-<li>attribute</li>
-<li>property</li>
-</ul>
-<h2 id="获取-DOM-节点"><a href="#获取-DOM-节点" class="headerlink" title="获取 DOM 节点"></a>获取 DOM 节点</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>) <span class="comment">// 元素</span></span><br><span class="line"><span class="keyword">const</span> divList = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"><span class="built_in">console</span>.log(divList.length)</span><br><span class="line"><span class="built_in">console</span>.log(divList[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> containerList = <span class="built_in">document</span>.getElementsByClassName(<span class="string">&#x27;container&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="DOM-节点的-property"><a href="#DOM-节点的-property" class="headerlink" title="DOM 节点的 property"></a>DOM 节点的 property</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = pList[<span class="number">0</span>]</span><br><span class="line">p.style.width = <span class="string">&#x27;100px&#x27;</span>     <span class="comment">// 修改样式</span></span><br><span class="line"><span class="built_in">console</span>.log(p.style.width)  <span class="comment">// 获取样式</span></span><br><span class="line">p.className = <span class="string">&#x27;red&#x27;</span>         <span class="comment">// 修改class</span></span><br><span class="line"><span class="built_in">console</span>.log(p.className)    <span class="comment">// 获取 class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取 nodeName 和 nodeType</span></span><br><span class="line"><span class="built_in">console</span>.log(p.nodeName)</span><br><span class="line"><span class="built_in">console</span>.log(p.nodeType)</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>获取 DOM 元素通过 JS 属性的方式进行操作</p>
-</blockquote>
-<h2 id="DOM-节点的-attribute"><a href="#DOM-节点的-attribute" class="headerlink" title="DOM 节点的 attribute"></a>DOM 节点的 attribute</h2><blockquote>
-<p>修改的是 DON 节点的属性</p>
-</blockquote>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
-<li>property：修改对象属性，不会提现到 html 结构中（尽量用此种方式）</li>
-<li>attribute：修改 html 属性，会改变 html 结构</li>
-<li>两者都有可能引起 DOM 重新渲染</li>
-</ul>
-<hr>
-<h1 id="DOM-结构操作"><a href="#DOM-结构操作" class="headerlink" title="DOM 结构操作"></a>DOM 结构操作</h1><ul>
-<li>新增/插入节点</li>
-<li>获取子元素列表，获取父元素</li>
-<li>删除子元素</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p2&quot;</span>&gt;</span>一段文字 2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div2&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;./w8h09ebV24.png&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> div2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div2&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加新节点</span></span><br><span class="line"><span class="keyword">const</span> p1 = <span class="built_in">document</span>.createElement(<span class="string">&#x27;p&#x27;</span>);</span><br><span class="line">p1.innerHTML = <span class="string">&#x27;this is p1&#x27;</span>;</span><br><span class="line">div1.appendChild(p1); <span class="comment">// 添加新创建的元素</span></span><br><span class="line"><span class="comment">// 移动已有节点</span></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;p2&#x27;</span>);</span><br><span class="line">div2.appendChild(p2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取父元素</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.parentNode);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取子元素列表</span></span><br><span class="line"><span class="keyword">const</span> div1ChildNodes = div1.childNodes;</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">0</span>].nodeName, div1ChildNodes[<span class="number">0</span>].nodeType);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">1</span>].nodeName, div1ChildNodes[<span class="number">1</span>].nodeType);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> div1ChildNodesP = <span class="built_in">Array</span>.from(div1.childNodes).filter(<span class="function">(<span class="params">child</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (child.nodeType === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodesP);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除节点</span></span><br><span class="line">div1.removeChild(div1ChildNodesP[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="DOM-性能"><a href="#DOM-性能" class="headerlink" title="DOM 性能"></a>DOM 性能</h1><ul>
-<li>DOM 操作非常”昂贵”，避免频繁的 DOM 操作。</li>
-<li>对 DOM 查询做缓存。</li>
-<li>将频繁操作改为一次性操作。</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">&quot;list&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> list = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;list&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个文档片段，此时还没要插入到 DOM 树种</span></span><br><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行插入</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> li = <span class="built_in">document</span>.createElement(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line">  li.innerHTML = <span class="string">`List item <span class="subst">$&#123;i + <span class="number">1</span>&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 先插入文档片段中</span></span><br><span class="line">  frag.appendChild(li);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 都完成之后，再统一插入到 DOM 结构中</span></span><br><span class="line">list.appendChild(frag);</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>DOM 是哪种数据结构</strong></p>
-<ul>
-<li>树（DOM 树）</li>
-</ul>
-<p><strong>DOM 操作常用 API</strong></p>
-<ul>
-<li>DOM 节点操作</li>
-<li>DOM 结构操作</li>
-<li>attribute 和 property</li>
-</ul>
-<p><strong>attribute 和 property 的区别</strong></p>
-<ul>
-<li>property：修改对象属性，不会体现到 html 结构中</li>
-<li>attribute：修改 html 属性，会改变 html 结构</li>
-<li>二者都有可能引起 DOM 重新渲染</li>
-</ul>
-<p><strong>一次性插入多个节点，考虑性能</strong></p>
-<ul>
-<li>使用文档片段，一次性插入 DOM 树种。</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment()</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/" class="post-title-link" itemprop="url">学习笔记：JavaScript 异步(2)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-21 14:57:48" itemprop="dateCreated datePublished" datetime="2021-07-21T14:57:48+08:00">2021-07-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="学习笔记：JavaScript-异步-2"><a href="#学习笔记：JavaScript-异步-2" class="headerlink" title="学习笔记：JavaScript 异步(2)"></a>学习笔记：JavaScript 异步(2)</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;callback&#x27;</span>)</span><br><span class="line">&#125;, <span class="number">5000</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;end&#x27;</span>)</span><br><span class="line"><span class="comment">//  start -&gt; end -&gt; callback</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/8-4.gif" alt="img01"></p>
-<h2 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h2><ul>
-<li>async/await 依旧是基于异步与 event loop</li>
-<li>async/await 本质是语法糖（Generator 的语法糖）</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 start&#x27;</span>); <span class="comment">// 2</span></span><br><span class="line">  <span class="keyword">await</span> async2();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// await 的后面，都可以看做是 异步回调(callback) 的内容</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 end&#x27;</span>); <span class="comment">// 5</span></span><br><span class="line">  <span class="keyword">await</span> async3();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 下面是第二个异步回调的内容</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;async1 end 2&#x27;</span>); <span class="comment">// 7</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async2&#x27;</span>); <span class="comment">// 3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async3</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async3&#x27;</span>); <span class="comment">// 6</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script start&#x27;</span>); <span class="comment">// 1</span></span><br><span class="line">async1();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script end&#x27;</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 同步代码执行完 开始 event loop，执行await async2()后面的代码</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/20210802201325.png" alt="img02"></p>
-<h2 id="宏任务-macroTask-和微任务-microTask"><a href="#宏任务-macroTask-和微任务-microTask" class="headerlink" title="宏任务 macroTask 和微任务 microTask"></a>宏任务 macroTask 和微任务 microTask</h2><h3 id="什么是宏任务，什么是微任务"><a href="#什么是宏任务，什么是微任务" class="headerlink" title="什么是宏任务，什么是微任务"></a>什么是宏任务，什么是微任务</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">100</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">200</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">300</span>)</span><br><span class="line">  resolve()</span><br><span class="line">&#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">400</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">500</span>);</span><br><span class="line"><span class="comment">// 100 300 500 400 200</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/img001.png" alt="img06"></p>
-<ul>
-<li>宏任务：setTimeout, setInterval, Ajax, DOM 事件</li>
-<li>微任务：Promise async/await</li>
-</ul>
-<blockquote>
-<p>微任务的执行时机比宏任务要早。<br>任务的一般执行顺序：同步任务 -&gt; 微任务 -&gt; 宏任务。<br>在执行一个 Promise 对象的时候，当走完 resolve();之后，就会立刻把 .then()里面的代码加入到微任务队列当中。</p>
-</blockquote>
-<h3 id="二者相互嵌套的情况下"><a href="#二者相互嵌套的情况下" class="headerlink" title="二者相互嵌套的情况下"></a>二者相互嵌套的情况下</h3><h4 id="例-1"><a href="#例-1" class="headerlink" title="例 1"></a>例 1</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    resolve();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">100</span>);</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">200</span>);</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 微任务</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">300</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">400</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">500</span>);</span><br><span class="line"><span class="comment">// 200 500 100 300 400</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/img002.png" alt="img07"></p>
-<p>在执行宏任务的过程中，创建了一个微任务。但是需要先把当前这个宏任务执行完，再去轮询异步任务的队列，进而执行微任务。</p>
-<h4 id="例-2"><a href="#例-2" class="headerlink" title="例 2"></a>例 2</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123; </span><br><span class="line">    <span class="comment">// 第一个进入队列的宏任务</span></span><br><span class="line">    resolve();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 微任务</span></span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123; </span><br><span class="line">    <span class="comment">// 第三个进入队列的宏任务</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123; </span><br><span class="line">  <span class="comment">// 第二个进入队列的宏任务</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">6</span>);</span><br><span class="line"><span class="comment">// 2 6 1 4 5 3</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/img003.png" alt="img08"></p>
-<ol>
-<li> 首先浏览器执行 js 进入第一个宏任务进入主线程, 遇到 setTimeout(1) 分发到宏任务 Event Queue 中</li>
-<li> 遇到 console.log(2) 直接执行，并输出 <strong>2</strong></li>
-<li> 遇到第二个 setTimeout(5) 分发到宏任务 Event Queue 中</li>
-<li> 遇到 console.log(6) 直接执行，并输出 <strong>6</strong></li>
-<li> 从宏任务队列中取出第一个 setTimeout 并执行 console.log(1) 输出 <strong>1</strong></li>
-<li> resolve 执行完毕，将 .then() 中的内容分发到微任务 Event Queue 中</li>
-<li> 当前有微任务，执行微任务，将宏任务 第三个 setTimeout(3) 加入宏任务队列，执行 console.log(4) 输出 <strong>4</strong></li>
-<li> 从宏任务队列中取出第二个 setTimeout 执行 console.log(5) 输出 <strong>5</strong></li>
-<li> 从宏任务队列中取出第三个 setTimeout 执行 console.log(3) 输出 <strong>3</strong></li>
-</ol>
-<h2 id="event-loop-和-DOM-渲染"><a href="#event-loop-和-DOM-渲染" class="headerlink" title="event loop 和 DOM 渲染"></a>event loop 和 DOM 渲染</h2><ul>
-<li>JS 是单线程的，而且和 DOM 渲染共用一个线程。</li>
-</ul>
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/20210803135224.png" alt="img03"></p>
-<ul>
-<li>每次 Call Stack 清空（即每次轮询结束），即同步任务执行完。</li>
-<li>都是 DOM 重新渲染的机会，DOM 结构如有改变则重新渲染。</li>
-<li>然后再去触发下一次 event loop</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;container&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> $p1 = $(<span class="string">&#x27;&lt;p&gt;第一段文字&lt;/p&gt;&#x27;</span>);</span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> $p2 = $(<span class="string">&#x27;&lt;p&gt;第二段文字&lt;/p&gt;&#x27;</span>);</span></span><br><span class="line"><span class="javascript">  <span class="keyword">const</span> $p3 = $(<span class="string">&#x27;&lt;p&gt;第三段文字&lt;/p&gt;&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  $(<span class="string">&#x27;#container&#x27;</span>).append($p1).append($p2).append($p3);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="built_in">console</span>.log(<span class="string">&#x27;length&#x27;</span>, $(<span class="string">&#x27;#container&#x27;</span>).children().length);</span></span><br><span class="line"><span class="javascript"></span></span><br><span class="line"><span class="javascript">  alert(<span class="string">&#x27;本次 call stack 结束，DOM结构已更新，但尚未触发渲染&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">// alert 会阻断 js 执行，也会阻断 DOM 渲染</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>控制台会先输出<code>length 3</code>然后弹窗显示 alert 内容，关闭弹窗后网页才会显示添加的 3 个 <code>&lt;p&gt;</code> 标签及其内容。</p>
-</blockquote>
-<h2 id="微任务和宏任务的区别"><a href="#微任务和宏任务的区别" class="headerlink" title="微任务和宏任务的区别"></a>微任务和宏任务的区别</h2><ul>
-<li>宏任务：DOM 渲染<font color='red'>后</font>触发，如 setTimeout</li>
-<li>微任务：DOM 渲染<font color='red'>前</font>触发，如 Promise</li>
-</ul>
-<p>若将上方代码修改为</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 宏任务 DOM 渲染后触发</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;length_2&#x27;</span>, $(<span class="string">&#x27;#container&#x27;</span>).children().length); <span class="comment">//3</span></span><br><span class="line">  alert(<span class="string">&#x27;setTimeout&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 微任务 DOM 渲染前触发</span></span><br><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;length_1&#x27;</span>, $(<span class="string">&#x27;#container&#x27;</span>).children().length); <span class="comment">//3</span></span><br><span class="line">  alert(<span class="string">&#x27;Promise then&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>页面空白，控制台先输出<code>length_1 3</code>,然后 alert 弹窗显示 ‘Promise then’。<br>页面显示出 3 个<code>&lt;p&gt;</code> 标签的内容。<br>之后控制台输出<code>length_2 3</code>，最后 alert 弹窗显示 ‘setTimeout’。</p>
-</blockquote>
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/20210803135541.png" alt="img04"></p>
-<ul>
-<li>微任务是 ES6 语法规定的</li>
-<li>宏任务是由浏览器规定的</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li>执行全局代码，这些同步代码有一些是同步语句，有一些是异步语句（比如 setTimeout 等），异步代码移入队列中；</li>
-<li>全局代码执行完毕后，调用栈 (Call Stack) 会清空；</li>
-<li>从微队列 (microtask queue) 中取出位于队首的回调任务，放入调用栈 (Call Stack) 中执行，执行完后 (microtask queue) 长度减 1；</li>
-<li>继续取出位于微队列 (microtask queue) 队首的任务，放入调用栈 (Call Stack) 中执行，以此类推，直到把微队列 (microtask queue) 中的所有任务都执行完毕。**如果在执行微任务 (microtask) 的过程中，又产生了微任务 (microtask)，那么会加入到队列的末尾，也会在这个周期被调用执行，<font color='red'>直至微任务队列为空</font>**；</li>
-<li>微队列 (microtask queue) 中的所有任务都执行完毕，此时微队列 (microtask queue) 为空队列，调用栈 (Call Stack) 也为空；</li>
-<li>尝试触发 DOM 渲染，如果 DOM 结果有改变则触发 DOM 渲染；</li>
-<li>取出宏队列 (macrotask queue) 中位于队首的任务，放入 Stack 中执行；</li>
-<li><strong>宏队列 (macrotask queue) <font color='red'>一次</font>只从队列中取<font color='red'>一个</font>任务执行，若产生新的宏任务，则加入到宏任务队列的队尾</strong>；</li>
-<li>执行完毕后，调用栈 Stack 为空；</li>
-<li>重复第 3-9 个步骤；</li>
-</ol>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 start&#x27;</span>); <span class="comment">// 同步 -2-</span></span><br><span class="line">  <span class="keyword">await</span> async2(); <span class="comment">// 同步</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async1 end&#x27;</span>); <span class="comment">// 第 1 个 微任务 -6-</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">async2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;async2&#x27;</span>); <span class="comment">// 同步 -3-</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script start&#x27;</span>); <span class="comment">// 同步 -1-</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 宏任务</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout&#x27;</span>); <span class="comment">// -8-</span></span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">async1();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化 Promise 时，传入的函数会立即被执行</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise1&#x27;</span>); <span class="comment">// 同步 -4-</span></span><br><span class="line">  resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;promise2&#x27;</span>); <span class="comment">// 第 2 个 微任务 -7-</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;script end&#x27;</span>); <span class="comment">// 同步 -5-</span></span><br><span class="line"><span class="comment">// 1. 同步代码执行完毕（event loop - call stack 被清空）</span></span><br><span class="line"><span class="comment">// 2. 执行微任务 （微任务队列中所有的任务都会被依次取出来执行，直至微任务队列为空）</span></span><br><span class="line"><span class="comment">// 3. 尝试触发 DOM 渲染</span></span><br><span class="line"><span class="comment">// 4. 触发 event loop，执行宏任务 （宏队列一次只从队列中取一个任务执行，执行完后就去执行微任务队列中的任务）</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/20210803142340.png" alt="img05"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1824,7 +1729,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1835,7 +1740,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
