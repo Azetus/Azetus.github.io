@@ -60,6 +60,75 @@ categories:
 }
 ```
 
+## Vue2 的 vue-template-compiler
+
+### with 语法
+
+```javascript
+const obj = { a: 100, b: 200 };
+
+console.log(obj.a); // 100
+console.log(obj.b); // 200
+console.log(obj.c); // undefined
+
+// 使用 with，能改变 {} 内自由变量的查找方式
+// 将 {} 内的自由变量，当做 obj 的属性来查找
+with (obj) {
+  console.log(a); // 100
+  console.log(b); // 200
+  console.log(c); // 会报错！
+}
+```
+
+- 改变 {} 内自由变量的查找方式，当做 obj 的属性来查找
+- 如果找不到匹配的 obj 属性，就会报错
+
+### vue-template-compiler 的模板编译
+
+```javascript
+const compiler = require('vue-template-compiler');
+// 插值
+const template = `<p>{{message}}</p>`;
+// with(this){return createElement('p',[createTextVNode(toString(message))])}
+// 编译
+const res = compiler.compile(template);
+console.log(res.render);
+// with(this){return _c('p',[_v(_s(message))])}
+```
+
+> `this` -> `new Vue({...})`
+
+```javascript
+const template = `
+    <div id="div1" class="container">
+        <img :src="imgUrl"/>
+    </div>
+`;
+// with (this) {
+//   return _c('div', { staticClass: 'container', attrs: { id: 'div1' } }, [
+//     _c('img', { attrs: { src: imgUrl } })
+//   ]);
+// }
+```
+
+```javascript
+with (this) {
+  return _c(
+    'tag-name',
+    {
+      // class-name, attrs ....
+    },
+    [
+      // childrenNodes1, childrenNodes2
+    ]
+  );
+}
+```
+
+- 模板编译为 render 函数，执行 render 函数返回 vnode
+- 基于 vnode 再执行 patch 和 diff
+- 使用 webpack vue-loader 会在开发环境下编译模板
+
 ---
 
 # vdom diff
