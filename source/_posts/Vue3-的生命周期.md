@@ -10,10 +10,10 @@ categories:
 
 # Vue3 生命周期
 
-- Options APT 生命周期
+- Options API 生命周期
 - Composition API 生命周期
 
-## Options APT 生命周期
+## Options API 生命周期
 
 - `beforeDestory` 改为 `beforeUnmount`
 - `destoryed` 改为 `unmounted`
