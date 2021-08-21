@@ -16,7 +16,7 @@ categories:
 - 可用于模板和 reactive
 - 通过`.value`修改值
 
-### 使用示例：
+## 使用示例：
 
 ```html
 <template>
@@ -52,7 +52,7 @@ categories:
 </script>
 ```
 
-### 利用 ref 获取 dom 元素
+## 利用 ref 获取 dom 元素
 
 > 由于`setup()`函数在创建组件之前执行（等于 beforeCreate 和 created），因此如要执行 dom 操作，应将相关代码写在生命周期函数内。
 
@@ -182,7 +182,7 @@ categories:
 
 # ref toRef 和 toRefs 的使用场景
 
-### 合成函数返回响应式对象
+## 合成函数返回响应式对象
 
 ```javascript
 function useFeatureX() {
@@ -212,7 +212,7 @@ export default {
 };
 ```
 
-### 使用场景
+## 使用场景
 
 - 用 reactive 做对象的响应式，用 ref 做值类型的响应式
 - `setup()`中返回 `toRefs(state)` ，或者 `toRef(state, 'xxx')`
