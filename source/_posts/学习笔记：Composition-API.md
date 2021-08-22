@@ -158,3 +158,43 @@ function useMousePosition(params) {
   }
 </script>
 ```
+
+# Setup 中如何获取组件实例
+
+- 在 setup 和其他 Composition API 中没有 this
+- 通过 `getCurrentInstance` 获取当前实例
+- 若使用 Options API 可照常使用 this
+
+```javascript
+export default {
+  name: 'GetInstance',
+  data() {
+    return {
+      x: 1,
+      y: 2
+    };
+  },
+  setup() {
+    // created beforeCreate
+    console.log('this1', this); // undefined
+
+    onMounted(() => {
+      console.log('this in onMounted', this); // undefined
+      console.log('x', instance.data.x); // 1
+    });
+
+    console.log('x', instance.data.x); // undefined
+
+    const instance = getCurrentInstance();
+    console.log('instance', instance);
+  },
+  mounted() {
+    // 在 setup 外可以使用this
+    console.log('this2', this);
+    console.log('y', this.y);
+  }
+};
+```
+
+> 若使用 instance 获取 data 应写在 onMounted 生命周期内。  
+> 因为 setup 相当于 created beforeCreate 此时组件尚未完成初始化。
