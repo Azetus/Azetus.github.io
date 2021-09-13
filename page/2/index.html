@@ -147,6 +147,213 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/15/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%84%E4%BB%B6%E5%8C%96%E4%B8%8E%E5%93%8D%E5%BA%94%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/15/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E7%BB%84%E4%BB%B6%E5%8C%96%E4%B8%8E%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-title-link" itemprop="url">学习笔记：Vue 基础知识 - 组件化与响应式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-15 19:53:32" itemprop="dateCreated datePublished" datetime="2021-08-15T19:53:32+08:00">2021-08-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Vue 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Vue-的组件化与响应式"><a href="#Vue-的组件化与响应式" class="headerlink" title="Vue 的组件化与响应式"></a>Vue 的组件化与响应式</h1><h2 id="组件化基础"><a href="#组件化基础" class="headerlink" title="组件化基础"></a>组件化基础</h2><ul>
+<li>传统组件，只是静态渲染，更新还要依赖于操作 DOM</li>
+<li>数据驱动视图<ul>
+<li>Vue - MVVM</li>
+<li>React - setState</li>
+</ul>
+</li>
+</ul>
+<h2 id="Vue-MVVM"><a href="#Vue-MVVM" class="headerlink" title="Vue MVVM"></a>Vue MVVM</h2><blockquote>
+<p>Model View ViewModel</p>
+</blockquote>
+<p><img src="https://012.vuejs.org/images/mvvm.png" alt="vue_mvvm"></p>
+<blockquote>
+<p>图片引用自 vue 官方文档</p>
+</blockquote>
+<p>通过 VM 将视图(view)和数据(model)连接起来，通过修改 Model 中的数据可以直接修改视图。</p>
+<h1 id="Vue-2-x-的响应式"><a href="#Vue-2-x-的响应式" class="headerlink" title="Vue 2.x 的响应式"></a>Vue 2.x 的响应式</h1><blockquote>
+<p>组件 data 的数据一旦发生变化，立刻触发视图的更新<br>实现数据驱动视图的第一步</p>
+</blockquote>
+<ul>
+<li>核心 API - <code>Object.defineProperty</code></li>
+<li>如何实现响应式</li>
+<li><code>Object.defineProperty</code> 的一些缺点（Vue3.0 启用 Proxy）</li>
+</ul>
+<h2 id="Proxy-有兼容性问题"><a href="#Proxy-有兼容性问题" class="headerlink" title="Proxy 有兼容性问题"></a>Proxy 有兼容性问题</h2><ul>
+<li>Proxy 兼容性不好，且无法 polyfill</li>
+</ul>
+<h2 id="Object-defineProperty-基本用法"><a href="#Object-defineProperty-基本用法" class="headerlink" title="Object.defineProperty 基本用法"></a>Object.defineProperty 基本用法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> name = <span class="string">&#x27;Aliza&#x27;</span>;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;get&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span> name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">set</span>: <span class="function"><span class="keyword">function</span> (<span class="params">newVal</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;set&#x27;</span>);</span><br><span class="line">    name = newVal;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(data.name);</span><br><span class="line">data.name = <span class="string">&#x27;Monika&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>get:属性的 getter 函数，当访问该属性时，会调用此函数。<br>set:属性的 setter 函数，当属性值被修改时，会调用此函数。</p>
+</blockquote>
+<ul>
+<li>监听对象，如何监听数组？</li>
+<li>复杂对象，深度监听</li>
+<li>几个缺点</li>
+</ul>
+<h2 id="如何深度监听-data-变化"><a href="#如何深度监听-data-变化" class="headerlink" title="如何深度监听 data 变化"></a>如何深度监听 data 变化</h2><p>实现深度监听</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 触发更新视图</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateView</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;视图更新&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 准备数据</span></span><br><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;zhangsan&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">20</span>,</span><br><span class="line">  <span class="attr">info</span>: &#123;</span><br><span class="line">    <span class="attr">address</span>: <span class="string">&#x27;北京&#x27;</span> <span class="comment">// 需要深度监听</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">nums</span>: [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听数据</span></span><br><span class="line">observer(data);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听对象属性</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&#x27;object&#x27;</span> || target === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 不是对象或数组</span></span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 重新定义各个属性（for in 也可以遍历数组）</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> target) &#123;</span><br><span class="line">    defineReactive(target, key, target[key]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 重新定义属性，监听起来</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span>(<span class="params">target, key, value</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 深度监听</span></span><br><span class="line">  observer(value);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 核心 API</span></span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(target, key, &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> value;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">newValue</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (newValue !== value) &#123;</span><br><span class="line">        <span class="comment">// 深度监听</span></span><br><span class="line">        observer(newValue);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 设置新值</span></span><br><span class="line">        <span class="comment">// 注意，value 一直在闭包中，此处设置完之后，再 get 时也是会获取最新的值</span></span><br><span class="line">        value = newValue;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 触发更新视图</span></span><br><span class="line">        updateView();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Object.defineProperty</code>的缺点</p>
+<ul>
+<li>深度监听，需要递归到底，一次性计算量大</li>
+<li><code>Object.defineProperty</code>API 无法监听新增属性/删除属性，例如<code>data.x=100</code>（所以 Vue2.0 需要 Vue.set Vue.delete）</li>
+</ul>
+<h2 id="如何监听数组变化"><a href="#如何监听数组变化" class="headerlink" title="如何监听数组变化"></a>如何监听数组变化</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 重新定义数组原型</span></span><br><span class="line"><span class="keyword">const</span> oldArrayProperty = <span class="built_in">Array</span>.prototype;</span><br><span class="line"><span class="comment">// 创建新对象，原型指向 oldArrayProperty ，再扩展新的方法不会影响原型</span></span><br><span class="line"><span class="keyword">const</span> arrProto = <span class="built_in">Object</span>.create(oldArrayProperty);</span><br><span class="line"><span class="comment">// 对新数组扩展方法</span></span><br><span class="line">[<span class="string">&#x27;push&#x27;</span>, <span class="string">&#x27;pop&#x27;</span>, <span class="string">&#x27;shift&#x27;</span>, <span class="string">&#x27;unshift&#x27;</span>, <span class="string">&#x27;splice&#x27;</span>].forEach(<span class="function">(<span class="params">methodName</span>) =&gt;</span> &#123;</span><br><span class="line">  arrProto[methodName] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    updateView(); <span class="comment">// 触发视图更新</span></span><br><span class="line"></span><br><span class="line">    oldArrayProperty[methodName].call(<span class="built_in">this</span>, ...arguments);</span><br><span class="line">    <span class="comment">// 执行push()时就类似于Array.prototype.push.call(this, ...arguments)</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听对象属性</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&#x27;object&#x27;</span> || target === <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 不是对象或数组</span></span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 直接修改 Array.prototype，会污染全局的 Array 原型</span></span><br><span class="line">  <span class="comment">// 所以需要利用 arrProto 来扩展方法</span></span><br><span class="line">  <span class="comment">// Array.prototype.push = function () &#123;</span></span><br><span class="line">  <span class="comment">//     updateView()</span></span><br><span class="line">  <span class="comment">//     ...</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(target)) &#123;</span><br><span class="line">    <span class="comment">// 改变数组的原型指向</span></span><br><span class="line">    <span class="comment">// 次数组再次调用数组方法时会先去arrProto中扩展的方法里寻找</span></span><br><span class="line">    target.__proto__ = arrProto;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 重新定义各个属性（for in 也可以遍历数组）</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> target) &#123;</span><br><span class="line">    defineReactive(target, key, target[key]);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Object.defineProperty</code>的缺点</p>
+<ul>
+<li>无法原生监听数组，需要特殊处理</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>基础 API - <code>Object.defineProperty</code></li>
+<li>如何监听对象（深度监听），监听数组</li>
+<li><code>Object.defineProperty</code>的缺点:<ul>
+<li>深度监听，需要递归到底，一次性计算量大 （因此设计 data 的数据结构尽量扁平）</li>
+<li>API 无法监听新增属性/删除属性，例如<code>data.x=100</code>（所以 Vue2.0 需要 Vue.set Vue.delete）</li>
+<li>无法原生监听数组，需要特殊处理</li>
+</ul>
+</li>
+</ul>
+<h1 id="Vue-3-的响应式"><a href="#Vue-3-的响应式" class="headerlink" title="Vue 3 的响应式"></a>Vue 3 的响应式</h1><h2 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h2><ul>
+<li>基本使用</li>
+<li>Reflect</li>
+<li>实现响应式</li>
+</ul>
+<blockquote>
+<p>Proxy 对象用于创建一个对象的代理，从而实现基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等）。<br>创建响应式对象时，使用带有 getter 和 setter 的处理程序遍历其所有 property 并将其转换为 Proxy。<br>Proxy 是一个包含另一个对象或函数并允许你对其进行拦截的对象。</p>
+</blockquote>
+<p>示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;Aliza&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>创建一个 Proxy 对象，并添加 get 与 set 方法，当查询或修改 proxyData 时便会调用创建时设置的 get 与 set 方法，从而实现响应式。同时，对 proxyData 的修改也会被同步到其原始对象 data 上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> proxyData = <span class="keyword">new</span> <span class="built_in">Proxy</span>(data, &#123;</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, key, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.get(target, key, receiver);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;get&#x27;</span>, key);</span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 返回结果</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, key, val, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.set(target, key, val, receiver);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;set&#x27;</span>, key, val);</span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 是否设置成功</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">deleteProperty</span>(<span class="params">target, key</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.deleteProperty(target, key);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;delete property&#x27;</span>, key);</span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 是否删除成功</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>数组的情况：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxyData = <span class="keyword">new</span> <span class="built_in">Proxy</span>(data, &#123;</span><br><span class="line">  <span class="function"><span class="title">get</span>(<span class="params">target, key, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 只监听处理本身（非原型的）属性，原型的属性不处理</span></span><br><span class="line">    <span class="comment">// 若没有这一步会打印出 &#x27;get push&#x27;</span></span><br><span class="line">    <span class="keyword">const</span> ownKeys = <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">    <span class="keyword">if</span> (ownKeys.includes(key)) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;get&#x27;</span>, key); <span class="comment">// 监听</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.get(target, key, receiver);</span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 返回结果</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">set</span>(<span class="params">target, key, val, receiver</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 重复的数据，不处理</span></span><br><span class="line">    <span class="keyword">if</span> (val === target[key]) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.set(target, key, val, receiver);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;set&#x27;</span>, key, val);</span><br><span class="line">    <span class="comment">// console.log(&#x27;result&#x27;, result) // true</span></span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 是否设置成功</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">deleteProperty</span>(<span class="params">target, key</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.deleteProperty(target, key);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;delete property&#x27;</span>, key);</span><br><span class="line">    <span class="comment">// console.log(&#x27;result&#x27;, result) // true</span></span><br><span class="line">    <span class="keyword">return</span> result; <span class="comment">// 是否删除成功</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="一些-Proxy-相关的-API"><a href="#一些-Proxy-相关的-API" class="headerlink" title="一些 Proxy 相关的 API"></a>一些 Proxy 相关的 API</h3><h4 id="new-Proxy-target-handler"><a href="#new-Proxy-target-handler" class="headerlink" title="new Proxy(target, handler)"></a><code>new Proxy(target, handler)</code></h4><ol>
+<li><code>target</code></li>
+</ol>
+<p>&emsp;Proxy 会对 target 对象进行包装。它可以是任何类型的对象，包括内置的数组，函数甚至是另一个代理对象。</p>
+<ol start="2">
+<li><code>handler</code></li>
+</ol>
+<p>&emsp;它是一个对象，它的属性提供了某些操作发生时所对应的处理函数。</p>
+<h4 id="handler-target-key-val-receiver"><a href="#handler-target-key-val-receiver" class="headerlink" title="handler(target, key, val, receiver)"></a><code>handler(target, key, val, receiver)</code></h4><ol>
+<li><code>target</code></li>
+</ol>
+<p>&emsp;目标对象（即例子中的 data）</p>
+<ol start="2">
+<li><code>key</code></li>
+</ol>
+<p>&emsp;将被设置的属性名（data.name data.age）</p>
+<ol start="3">
+<li><code>val</code></li>
+</ol>
+<p>&emsp;新属性值</p>
+<ol start="4">
+<li><code>receiver</code></li>
+</ol>
+<p>&emsp;最初被调用的对象。通常是 proxy 本身，但 handler 的 set 方法也有可能在原型链上，或以其他方式被间接地调用（因此不一定是 proxy 本身）。</p>
+<blockquote>
+<p><strong>比如</strong>：假设有一段代码执行 <code>obj.name = &quot;jen&quot;</code>， obj 不是一个 proxy，且自身不含 name 属性，但是它的原型链上有一个 proxy，那么，那个 proxy 的 set() 处理器会被调用，而此时，obj 会作为 receiver 参数传进来。</p>
+</blockquote>
+<h3 id="Reflect-的作用"><a href="#Reflect-的作用" class="headerlink" title="Reflect 的作用"></a>Reflect 的作用</h3><ul>
+<li>和 Proxy 的能力一一对应（API 与参数相同）</li>
+<li>规范化、标准化、函数式<blockquote>
+<p><code>&#39;a&#39; in obj</code> vs <code>Reflect.has(obj,&#39;a&#39;)</code><br><code>delete obj.a</code> vs <code>Reflect.deleteProperty(obj, &#39;a&#39;)</code></p>
+</blockquote>
+</li>
+<li>代替 Object 上的工具函数<blockquote>
+<p><code>Object.getOwnPropertyNames(obj)</code> vs <code> Reflect.ownKeys(obj)</code></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Proxy-实现响应式"><a href="#Proxy-实现响应式" class="headerlink" title="Proxy 实现响应式"></a>Proxy 实现响应式</h2><ul>
+<li>设置代理配置</li>
+<li>实现深度监听</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建响应式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reactive</span>(<span class="params">target = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> target !== <span class="string">&#x27;object&#x27;</span> || target == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 不是对象或数组，则返回</span></span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 代理配置</span></span><br><span class="line">  <span class="keyword">const</span> proxyConf = &#123;</span><br><span class="line">    <span class="function"><span class="title">get</span>(<span class="params">target, key, receiver</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 只处理本身（非原型的）属性</span></span><br><span class="line">      <span class="keyword">const</span> ownKeys = <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">      <span class="keyword">if</span> (ownKeys.includes(key)) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;get&#x27;</span>, key); <span class="comment">// 监听</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.get(target, key, receiver);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 深度监听</span></span><br><span class="line">      <span class="comment">// 只有在用到的时候才执行递归，性能提升</span></span><br><span class="line">      <span class="comment">// 本质是，获取到哪一层，哪一层才会获得响应式</span></span><br><span class="line">      <span class="keyword">return</span> reactive(result);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">set</span>(<span class="params">target, key, val, receiver</span>)</span> &#123;</span><br><span class="line">      <span class="comment">// 重复的数据，不处理</span></span><br><span class="line">      <span class="keyword">if</span> (val === target[key]) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> ownKeys = <span class="built_in">Reflect</span>.ownKeys(target);</span><br><span class="line">      <span class="keyword">if</span> (ownKeys.includes(key)) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;已有的 key&#x27;</span>, key);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;新增的 key&#x27;</span>, key);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.set(target, key, val, receiver);</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;set&#x27;</span>, key, val);</span><br><span class="line">      <span class="comment">// console.log(&#x27;result&#x27;, result) // true</span></span><br><span class="line">      <span class="keyword">return</span> result; <span class="comment">// 是否设置成功</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">deleteProperty</span>(<span class="params">target, key</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> result = <span class="built_in">Reflect</span>.deleteProperty(target, key);</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;delete property&#x27;</span>, key);</span><br><span class="line">      <span class="comment">// console.log(&#x27;result&#x27;, result) // true</span></span><br><span class="line">      <span class="keyword">return</span> result; <span class="comment">// 是否删除成功</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 生成代理对象</span></span><br><span class="line">  <span class="keyword">const</span> observed = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, proxyConf);</span><br><span class="line">  <span class="keyword">return</span> observed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>为何 Proxy 实现深度监听的性能更好?</p>
+</blockquote>
+<p>利用 Proxy 使用递归实现对对象的深度监听时，只有在被监听对象的深层属性被用到时才进行递归。对于多层嵌套的对象，获取到哪一层时，那一层才会获得响应性。而<code>Object.defineProperty</code>实现深度监听时，需要在创建响应式对象时对对象进行完整的递归。</p>
+<p>如果使用 Proxy 对如下对象进行深度监听时。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">str</span>: <span class="string">&#x27;proxy&#x27;</span>,</span><br><span class="line">  <span class="attr">num</span>: &#123;</span><br><span class="line">    <span class="attr">count</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="attr">a</span>: &#123;</span><br><span class="line">      <span class="attr">b</span>: &#123;</span><br><span class="line">        <span class="attr">c</span>: <span class="number">100</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>若仅调用 proxyData 时，其 num 属性依旧是一个普通对象，但当调用 proxyData.num.a.b 时，递归才会执行到<code>&#123;b: &#123;c: 100&#125;&#125;</code>，深层的 b 属性才会获得响应性。</p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>Proxy 实现的深度监听，性能更好</li>
+<li>Proxy 可监听 新增/删除 属性</li>
+<li>Proxy 可监听数组变化</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/11/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue-%E7%BB%84%E4%BB%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1578,141 +1785,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/15/JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/15/JavaScript-%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85/" class="post-title-link" itemprop="url">JavaScript 作用域和闭包</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-15 16:56:03" itemprop="dateCreated datePublished" datetime="2021-07-15T16:56:03+08:00">2021-07-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="JavaScript-作用域和闭包"><a href="#JavaScript-作用域和闭包" class="headerlink" title="JavaScript 作用域和闭包"></a>JavaScript 作用域和闭包</h1><h3 id="1-闭包"><a href="#1-闭包" class="headerlink" title="1 闭包"></a>1 闭包</h3><blockquote>
-<p>重要概念：<strong>自由变量</strong></p>
-</blockquote>
-<ul>
-<li>当一个变量在当前作用域没有定义，但被使用了。</li>
-<li><strong>在其被定义的作用域中</strong>向上级作用域，一层一层依次寻找，直到找到位置。</li>
-<li>如果到全局作用域都没有找到，则报错 ‘xx is not defined’</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数作为返回值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">100</span>; <span class="comment">// 向上查找到函数 create 的作用域中 a = 100</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a); <span class="comment">// 自由变量</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> fn = create();</span><br><span class="line"><span class="keyword">let</span> a = <span class="number">200</span>;</span><br><span class="line">fn(); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数作为参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">200</span>;</span><br><span class="line">  fn();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a = <span class="number">100</span>; <span class="comment">// 向上查找到全局作用域 a = 100</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(a);<span class="comment">// 自由变量</span></span><br><span class="line">&#125;</span><br><span class="line">print(fn) <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>自由变量的查找，是函数定义的地方，向上级作用域查找。而不是其被调用的作用域。</strong></p>
-<h1 id="this-的赋值"><a href="#this-的赋值" class="headerlink" title="this 的赋值"></a>this 的赋值</h1><blockquote>
-<p><strong>重要概念：this 的取值是在函数执行时才被确定的</strong></p>
-</blockquote>
-<h3 id="1-作为普通函数"><a href="#1-作为普通函数" class="headerlink" title="1 作为普通函数"></a>1 作为普通函数</h3><p>以函数的形式（包括普通函数、定时器函数、立即执行函数）调用时，this 的指向永远都是 window。比如 <code>fn1</code>();相当于 <code>window.fn1()</code>;</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn1() <span class="comment">// window</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-使用-call-apply-bind-调用"><a href="#2-使用-call-apply-bind-调用" class="headerlink" title="2 使用 call apply bind 调用"></a>2 使用 call apply bind 调用</h3><ol>
-<li><strong>call</strong></li>
-</ol>
-<blockquote>
-<p>fn1.call(this 指向, 函数实参 1, 函数实参 2)</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn1.call(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;) <span class="comment">// &#123; x: 100 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>call()</code>可以立即调用一个函数，与此同时，他还可以改变这个函数内部的 this 指向。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 call</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myCall = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取传入的对象（执行上下文）</span></span><br><span class="line">  context = context || <span class="built_in">window</span>; <span class="comment">// [...arguments][0]</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获取 fn1.apply1() 中的 fn1</span></span><br><span class="line">  context.func = <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = [...arguments].slice(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 执行函数并使用 result 存储结果</span></span><br><span class="line">  <span class="keyword">const</span> result = context.func(...args);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 删除函数</span></span><br><span class="line">  <span class="keyword">delete</span> context.func;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">fn1.myCall(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li><strong>bind</strong></li>
-</ol>
-<blockquote>
-<p>fn2 = fn1.bind(this 指向, 函数实参 1, 函数实参 2);</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line">fn2 = fn1.bind(&#123; <span class="attr">x</span>: <span class="number">200</span> &#125;)</span><br><span class="line">fn2() <span class="comment">// &#123; x: 200 &#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>bind()</code> 方法不会调用函数，但是可以改变函数内部的 this 指向，并返回一个新的函数（指定 this 和指定实参的<strong>原函数拷贝</strong>）。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 bind</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myBind = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">  <span class="comment">// 获取 this 指向</span></span><br><span class="line">  <span class="keyword">const</span> that = args.shift();</span><br><span class="line">  <span class="comment">// 获取 fn1.myBind() 中的 fn1</span></span><br><span class="line">  <span class="keyword">const</span> self = <span class="built_in">this</span>;</span><br><span class="line">  <span class="comment">// 返回一个函数</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> self.apply(that, args);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bind demo</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fn2 = fn1.myBind(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, <span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>);</span><br><span class="line"><span class="keyword">const</span> res = fn2();</span><br><span class="line"><span class="built_in">console</span>.log(res);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br><span class="line"><span class="comment">// this is fn1</span></span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li><strong>apply</strong></li>
-</ol>
-<blockquote>
-<p>fn1.apply(this 指向, [函数实参 1, 函数实参 2])</p>
-</blockquote>
-<p><code>apply()</code>可以立即调用一个函数，与此同时，他还可以改变这个函数内部的 this 指向。传入的实参<u>必须是一个数组</u>。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr1 = [<span class="number">3</span>, <span class="number">7</span>, <span class="number">10</span>, <span class="number">8</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> maxValue = <span class="built_in">Math</span>.max.apply(<span class="built_in">Math</span>, arr1); <span class="comment">// 求数组 arr1 中元素的最大值</span></span><br><span class="line"><span class="built_in">console</span>.log(maxValue); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟 apply</span></span><br><span class="line"><span class="built_in">Function</span>.prototype.myApply = <span class="function"><span class="keyword">function</span> (<span class="params">context</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取传入的对象（执行上下文）</span></span><br><span class="line">  context = context || <span class="built_in">window</span>;</span><br><span class="line">  <span class="comment">// fn1.apply1() 中的 fn1</span></span><br><span class="line">  context.func = <span class="built_in">this</span>;</span><br><span class="line">  <span class="comment">// 将参数拆解为数组</span></span><br><span class="line">  <span class="keyword">const</span> args = <span class="built_in">arguments</span>[<span class="number">1</span>];</span><br><span class="line">  <span class="comment">// 执行函数并使用 result 存储结果</span></span><br><span class="line">  <span class="keyword">const</span> result = context.func(...args);</span><br><span class="line">  <span class="comment">// 删除函数</span></span><br><span class="line">  <span class="keyword">delete</span> context.func;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn1</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;this&#x27;</span>, <span class="built_in">this</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(a, b, c);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is fn1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">fn1.myApply(&#123; <span class="attr">x</span>: <span class="number">100</span> &#125;, [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>]);</span><br><span class="line"><span class="comment">// this &#123; x: 100 &#125;</span></span><br><span class="line"><span class="comment">// 10 20 30</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-作为对象的方法调用"><a href="#3-作为对象的方法调用" class="headerlink" title="3 作为对象的方法调用"></a>3 作为对象的方法调用</h3><p>以方法的形式调用时，this 指向调用方法的那个对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> monika = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;莫妮卡&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">sayHi</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// this 即当前对象</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">wait</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// this === window</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">waitAgain</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// this 即当前对象</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="built_in">this</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p><code>monika.sayHi()</code> 调用该方法的对象是 monika，因此 this 指向 monika。</p>
-</li>
-<li><p><code>monika.wait()</code> 内 setTimeout 中为匿名函数，而这个匿名函数不是作为某个对象的方法来调用执行，是在全局执行，因此 this 指向 window。</p>
-</li>
-<li><p><code>monika.waitAgain()</code> 中箭头函数的 this，取其上级作用域的 this。</p>
-</li>
-</ul>
-<h3 id="4-class-中的-this"><a href="#4-class-中的-this" class="headerlink" title="4 class 中的 this"></a>4 class 中的 this</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">People</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">name, age</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">sayHi</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Hi, 我是<span class="subst">$&#123;<span class="built_in">this</span>.name&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> monika = <span class="keyword">new</span> People(<span class="string">&#x27;莫妮卡&#x27;</span>, <span class="number">19</span>);</span><br><span class="line">monika.sayHi(); <span class="comment">// monika 对象</span></span><br></pre></td></tr></table></figure>
-
-<p>在 class 中的 this 指向实例对象。</p>
-<blockquote>
-<p><code>monika.__proto__.sayHi();</code> 通过原型调用 sayHi()时，this 指向隐式原型，打印结果为’Hi, 我是 undefined’。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1784,7 +1856,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
