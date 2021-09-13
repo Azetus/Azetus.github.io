@@ -147,6 +147,131 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/" class="post-title-link" itemprop="url">学习笔记：React-Redux</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-13 15:14:33" itemprop="dateCreated datePublished" datetime="2021-09-13T15:14:33+08:00">2021-09-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Redux-使用"><a href="#Redux-使用" class="headerlink" title="Redux 使用"></a>Redux 使用</h1><ul>
+<li>单向数据流</li>
+<li>react-redux</li>
+<li>异步 action</li>
+<li>中间件</li>
+</ul>
+<h1 id="Redux-单向数据流"><a href="#Redux-单向数据流" class="headerlink" title="Redux 单向数据流"></a>Redux 单向数据流</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>store state</li>
+<li>action</li>
+<li>reducer</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li><code>dispatch(action)</code></li>
+<li>reducer -&gt; newState</li>
+<li>subscribe 触发通知</li>
+</ul>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><ul>
+<li>创建一个 reducer <code>(state, action) =&gt; state</code></li>
+<li>遵循不可变值的原则，state 变化时要返回一个全新的对象</li>
+<li>使用 <code>createStore()</code> ，传入 reducer 作为参数创建 store</li>
+<li>订阅更新</li>
+<li>修改时通过 <code>state.dispatch()</code> dispatch 一个 action</li>
+<li>reducer 接收到 action 并判断执行何种操作</li>
+</ul>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><blockquote>
+<p>引用自 Redux 文档</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这是一个 reducer，形式为 (state, action) =&gt; state 的纯函数。</span></span><br><span class="line"><span class="comment"> * 描述了 action 如何把 state 转变成下一个 state。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * state 的形式取决于你，可以是基本类型、数组、对象、</span></span><br><span class="line"><span class="comment"> * 甚至是 Immutable.js 生成的数据结构。惟一的要点是</span></span><br><span class="line"><span class="comment"> * 当 state 变化时需要返回全新的对象，而不是修改传入的参数。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 下面例子使用 `switch` 语句和字符串来做判断，但你可以写帮助类(helper)</span></span><br><span class="line"><span class="comment"> * 根据不同的约定（如方法映射）来判断，只要适用你的项目即可。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = <span class="number">0</span>, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;INCREMENT&#x27;</span>:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;DECREMENT&#x27;</span>:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Redux store 来存放应用的状态。</span></span><br><span class="line"><span class="comment">// API 是 &#123; subscribe, dispatch, getState &#125;。</span></span><br><span class="line"><span class="keyword">let</span> store = createStore(counter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以手动订阅更新，也可以事件绑定到视图层。</span></span><br><span class="line">store.subscribe(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(store.getState()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变内部 state 惟一方法是 dispatch 一个 action。</span></span><br><span class="line"><span class="comment">// action 可以被序列化，用日记记录和储存下来，后期还可以以回放的方式执行</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;INCREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;INCREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;DECREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h1><ul>
+<li><code>&lt;Provider&gt;</code></li>
+<li>connect</li>
+<li>mapStateToProps</li>
+<li>mapDispatchToProps</li>
+</ul>
+<h1 id="redux-处理异步"><a href="#redux-处理异步" class="headerlink" title="redux 处理异步"></a>redux 处理异步</h1><ul>
+<li>redux-thunk</li>
+<li>redux-promise</li>
+<li>redux-saga</li>
+</ul>
+<h2 id="同步-action"><a href="#同步-action" class="headerlink" title="同步 action"></a>同步 action</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步 action</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addTodo = <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 返回 action 对象</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;ADD_TODO&#x27;</span>,</span><br><span class="line">    <span class="attr">id</span>: nextTodoId++,</span><br><span class="line">    text</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="异步-action"><a href="#异步-action" class="headerlink" title="异步 action"></a>异步 action</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">&#x27;redux-thunk&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> rootReducer <span class="keyword">from</span> <span class="string">&#x27;./reducer/index&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 store 时，作为中间件引入 redux-thunk</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(rootReducer, applyMiddleware(thunk));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步 action</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addTodoAsync = <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 返回函数，其中有 dispatch 参数</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ajax 异步获取数据</span></span><br><span class="line">    fetch(url).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 执行异步 action</span></span><br><span class="line">      dispatch(addTodo(res.text));</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="redux-中间件"><a href="#redux-中间件" class="headerlink" title="redux 中间件"></a>redux 中间件</h1><p><img src="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/middleware.png" alt="middleware"></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; applyMiddleware, createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> createLogger <span class="keyword">from</span> <span class="string">&#x27;redux-logger&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">&#x27;redux-thunk&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> logger = createLogger();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会按顺序执行</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer, applyMiddleware(thunk, logger));</span><br></pre></td></tr></table></figure>
+
+<h2 id="redux-中间件-logger-实现"><a href="#redux-中间件-logger-实现" class="headerlink" title="redux 中间件 - logger 实现"></a>redux 中间件 - logger 实现</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改 dispatch， 增加logger</span></span><br><span class="line"><span class="keyword">let</span> next = store.dispatch;</span><br><span class="line">store.dispatch = <span class="function"><span class="keyword">function</span> <span class="title">dispatchAndLog</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dispatching&#x27;</span>, action);</span><br><span class="line">  next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;next state&#x27;</span>, store.getState());</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="redux-数据流图"><a href="#redux-数据流图" class="headerlink" title="redux 数据流图"></a>redux 数据流图</h1><p><img src="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/redux_pic.png" alt="redux_pic"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>基本概念</li>
+<li>单向数据流</li>
+<li>react-redux</li>
+<li>异步 action</li>
+<li>中间件</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1395,132 +1520,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/" class="post-title-link" itemprop="url">学习笔记：虚拟 DOM 和 diff</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-18 10:08:51" itemprop="dateCreated datePublished" datetime="2021-08-18T10:08:51+08:00">2021-08-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="虚拟-DOM-Virtual-DOM-和-diff"><a href="#虚拟-DOM-Virtual-DOM-和-diff" class="headerlink" title="虚拟 DOM( Virtual DOM ) 和 diff"></a>虚拟 DOM( Virtual DOM ) 和 diff</h1><p><strong>技术背景</strong></p>
-<ul>
-<li>DOM 操作<strong>非常</strong>耗费性能</li>
-<li>使用 jQuery，可以自行控制 DOM 操作的时机，手动调整</li>
-<li>Vue 和 React 都是数据驱动视图，如何有效控制 DOM 操作？</li>
-</ul>
-<h2 id="解决方案-vdom"><a href="#解决方案-vdom" class="headerlink" title="解决方案 - vdom"></a>解决方案 - vdom</h2><ul>
-<li>有了一定复杂度，想减少计算次数比较难</li>
-<li>将计算，更多的转移为 JS 计算，因为 JS 执行速度很快</li>
-<li>vdom - 用 JS 模拟 DOM 结构，计算出最小的变更，操作 DOM</li>
-</ul>
-<blockquote>
-<p>DOM 操作依旧是必不可少的，但 vdom 可以尽可能减少无用的 DOM 操作</p>
-</blockquote>
-<h2 id="用-JS-模拟-DOM-结构"><a href="#用-JS-模拟-DOM-结构" class="headerlink" title="用 JS 模拟 DOM 结构"></a>用 JS 模拟 DOM 结构</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>vdom<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 20px&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>a<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">tag</span>: <span class="string">&#x27;div&#x27;</span>,</span><br><span class="line">  <span class="attr">props</span>:&#123;</span><br><span class="line">    <span class="attr">className</span>: <span class="string">&#x27;container&#x27;</span>,</span><br><span class="line">    <span class="attr">id</span>: <span class="string">&#x27;div1&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">children</span>:[</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">tag</span>: <span class="string">&#x27;p&#x27;</span>,</span><br><span class="line">      <span class="attr">children</span>: <span class="string">&#x27;vdom&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">tag</span>: <span class="string">&#x27;ul&#x27;</span>,</span><br><span class="line">      <span class="attr">props</span>: &#123;<span class="attr">style</span>: <span class="string">&#x27;font-size: 20px&#x27;</span>&#125;,</span><br><span class="line">      <span class="attr">children</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">tag</span>: <span class="string">&#x27;li&#x27;</span>,</span><br><span class="line">          <span class="attr">children</span>: <span class="string">&#x27;a&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Vue2-的-vue-template-compiler"><a href="#Vue2-的-vue-template-compiler" class="headerlink" title="Vue2 的 vue-template-compiler"></a>Vue2 的 vue-template-compiler</h2><h3 id="with-语法"><a href="#with-语法" class="headerlink" title="with 语法"></a>with 语法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">a</span>: <span class="number">100</span>, <span class="attr">b</span>: <span class="number">200</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(obj.a); <span class="comment">// 100</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.b); <span class="comment">// 200</span></span><br><span class="line"><span class="built_in">console</span>.log(obj.c); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 with，能改变 &#123;&#125; 内自由变量的查找方式</span></span><br><span class="line"><span class="comment">// 将 &#123;&#125; 内的自由变量，当做 obj 的属性来查找</span></span><br><span class="line"><span class="keyword">with</span> (obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(a); <span class="comment">// 100</span></span><br><span class="line">  <span class="built_in">console</span>.log(b); <span class="comment">// 200</span></span><br><span class="line">  <span class="built_in">console</span>.log(c); <span class="comment">// 会报错！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>改变 {} 内自由变量的查找方式，当做 obj 的属性来查找</li>
-<li>如果找不到匹配的 obj 属性，就会报错</li>
-</ul>
-<h3 id="vue-template-compiler-的模板编译"><a href="#vue-template-compiler-的模板编译" class="headerlink" title="vue-template-compiler 的模板编译"></a>vue-template-compiler 的模板编译</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> compiler = <span class="built_in">require</span>(<span class="string">&#x27;vue-template-compiler&#x27;</span>);</span><br><span class="line"><span class="comment">// 插值</span></span><br><span class="line"><span class="keyword">const</span> template = <span class="string">`&lt;p&gt;&#123;&#123;message&#125;&#125;&lt;/p&gt;`</span>;</span><br><span class="line"><span class="comment">// with(this)&#123;return createElement(&#x27;p&#x27;,[createTextVNode(toString(message))])&#125;</span></span><br><span class="line"><span class="comment">// 编译</span></span><br><span class="line"><span class="keyword">const</span> res = compiler.compile(template);</span><br><span class="line"><span class="built_in">console</span>.log(res.render);</span><br><span class="line"><span class="comment">// with(this)&#123;return _c(&#x27;p&#x27;,[_v(_s(message))])&#125;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p><code>this</code> -&gt; <code>new Vue(&#123;...&#125;)</code></p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> template = <span class="string">`</span></span><br><span class="line"><span class="string">    &lt;div id=&quot;div1&quot; class=&quot;container&quot;&gt;</span></span><br><span class="line"><span class="string">        &lt;img :src=&quot;imgUrl&quot;/&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt;</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"><span class="comment">// with (this) &#123;</span></span><br><span class="line"><span class="comment">//   return _c(&#x27;div&#x27;, &#123; staticClass: &#x27;container&#x27;, attrs: &#123; id: &#x27;div1&#x27; &#125; &#125;, [</span></span><br><span class="line"><span class="comment">//     _c(&#x27;img&#x27;, &#123; attrs: &#123; src: imgUrl &#125; &#125;)</span></span><br><span class="line"><span class="comment">//   ]);</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> _c(</span><br><span class="line">    <span class="string">&#x27;tag-name&#x27;</span>,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">// class-name, attrs ....</span></span><br><span class="line">    &#125;,</span><br><span class="line">    [</span><br><span class="line">      <span class="comment">// childrenNodes1, childrenNodes2</span></span><br><span class="line">    ]</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>模板编译为 render 函数，执行 render 函数返回 vnode</li>
-<li>基于 vnode 再执行 patch 和 diff</li>
-<li>使用 webpack vue-loader 会在开发环境下编译模板</li>
-</ul>
-<hr>
-<h1 id="vdom-diff"><a href="#vdom-diff" class="headerlink" title="vdom diff"></a>vdom diff</h1><p><img src="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/diff_tree.png" alt="diff_tree"></p>
-<h2 id="树结构-diff-的时间复杂度-O-n-3"><a href="#树结构-diff-的时间复杂度-O-n-3" class="headerlink" title="树结构 diff 的时间复杂度 O(n^3)"></a>树结构 diff 的时间复杂度 O(n^3)</h2><ul>
-<li>第一，遍历 tree1；第二，遍历 tree2</li>
-<li>第三，排序</li>
-<li>1000 个节点，要计算 1 亿次，这样的算法是不可用的</li>
-</ul>
-<h2 id="优化时间复杂度到-O-n"><a href="#优化时间复杂度到-O-n" class="headerlink" title="优化时间复杂度到 O(n)"></a>优化时间复杂度到 O(n)</h2><ol>
-<li>只比较同一层级，不跨级比较</li>
-<li>tag 不相同，则直接删掉重建，不再深度比较</li>
-<li>tag 和 key，两者都相同，则认为是相同节点，不再深度比较</li>
-</ol>
-<p><strong>1. 只比较同一层级</strong></p>
-<p><img src="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/diff_tree_01.png" alt="diff_tree_01"></p>
-<p><strong>2. tag 不相同，则直接删掉重建，不再深度比较</strong></p>
-<p><img src="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/diff_tree_02.png" alt="diff_tree_02"></p>
-<h2 id="不使用-key-和使用-key"><a href="#不使用-key-和使用-key" class="headerlink" title="不使用 key 和使用 key"></a>不使用 key 和使用 key</h2><p><img src="/2021/08/18/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E6%8B%9F-DOM-%E5%92%8C-diff/diff_keys.png" alt="diff_key"></p>
-<p>如果不使用 key 或使用随机数，在更新 vdom 时，不变的节点只能全部删掉重建。key 使用 index 时，若新的 vdom 中节点顺序发生了改变，也只能将节点删掉重建（index 仅按顺序赋值，如： 0 1 2 3 4）。</p>
-<blockquote>
-<p><strong>认为是相同节点的条件：tag 和 key 两者都相同</strong></p>
-</blockquote>
-<p>如果使用了 key，在对比 children 时，可以根据 tag 与 key 快速得出哪些新旧节点是相同的，直接移动即可。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1592,7 +1591,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

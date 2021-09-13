@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Redux 使用 单向数据流 react-redux 异步 action 中间件  Redux 单向数据流基本概念 store state action reducer  概述 dispatch(action) reducer -&gt; newState subscribe 触发通知  基本使用 创建一个 reducer (state, action) &#x3D;&gt; state 遵循不可变值的原则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记：React-Redux">
+<meta property="og:url" content="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="Redux 使用 单向数据流 react-redux 异步 action 中间件  Redux 单向数据流基本概念 store state action reducer  概述 dispatch(action) reducer -&gt; newState subscribe 触发通知  基本使用 创建一个 reducer (state, action) &#x3D;&gt; state 遵循不可变值的原则">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/middleware.png">
+<meta property="og:image" content="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/redux_pic.png">
+<meta property="article:published_time" content="2021-09-13T07:14:33.000Z">
+<meta property="article:modified_time" content="2021-09-13T07:16:12.901Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/middleware.png">
+
+<link rel="canonical" href="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>学习笔记：React-Redux | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习笔记：React-Redux
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-13 15:14:33" itemprop="dateCreated datePublished" datetime="2021-09-13T15:14:33+08:00">2021-09-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Redux-使用"><a href="#Redux-使用" class="headerlink" title="Redux 使用"></a>Redux 使用</h1><ul>
+<li>单向数据流</li>
+<li>react-redux</li>
+<li>异步 action</li>
+<li>中间件</li>
+</ul>
+<h1 id="Redux-单向数据流"><a href="#Redux-单向数据流" class="headerlink" title="Redux 单向数据流"></a>Redux 单向数据流</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ul>
+<li>store state</li>
+<li>action</li>
+<li>reducer</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li><code>dispatch(action)</code></li>
+<li>reducer -&gt; newState</li>
+<li>subscribe 触发通知</li>
+</ul>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><ul>
+<li>创建一个 reducer <code>(state, action) =&gt; state</code></li>
+<li>遵循不可变值的原则，state 变化时要返回一个全新的对象</li>
+<li>使用 <code>createStore()</code> ，传入 reducer 作为参数创建 store</li>
+<li>订阅更新</li>
+<li>修改时通过 <code>state.dispatch()</code> dispatch 一个 action</li>
+<li>reducer 接收到 action 并判断执行何种操作</li>
+</ul>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><blockquote>
+<p>引用自 Redux 文档</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这是一个 reducer，形式为 (state, action) =&gt; state 的纯函数。</span></span><br><span class="line"><span class="comment"> * 描述了 action 如何把 state 转变成下一个 state。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * state 的形式取决于你，可以是基本类型、数组、对象、</span></span><br><span class="line"><span class="comment"> * 甚至是 Immutable.js 生成的数据结构。惟一的要点是</span></span><br><span class="line"><span class="comment"> * 当 state 变化时需要返回全新的对象，而不是修改传入的参数。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 下面例子使用 `switch` 语句和字符串来做判断，但你可以写帮助类(helper)</span></span><br><span class="line"><span class="comment"> * 根据不同的约定（如方法映射）来判断，只要适用你的项目即可。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">counter</span>(<span class="params">state = <span class="number">0</span>, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;INCREMENT&#x27;</span>:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;DECREMENT&#x27;</span>:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 Redux store 来存放应用的状态。</span></span><br><span class="line"><span class="comment">// API 是 &#123; subscribe, dispatch, getState &#125;。</span></span><br><span class="line"><span class="keyword">let</span> store = createStore(counter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以手动订阅更新，也可以事件绑定到视图层。</span></span><br><span class="line">store.subscribe(<span class="function">() =&gt;</span> <span class="built_in">console</span>.log(store.getState()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变内部 state 惟一方法是 dispatch 一个 action。</span></span><br><span class="line"><span class="comment">// action 可以被序列化，用日记记录和储存下来，后期还可以以回放的方式执行</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;INCREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;INCREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line">store.dispatch(&#123; <span class="attr">type</span>: <span class="string">&#x27;DECREMENT&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="react-redux"><a href="#react-redux" class="headerlink" title="react-redux"></a>react-redux</h1><ul>
+<li><code>&lt;Provider&gt;</code></li>
+<li>connect</li>
+<li>mapStateToProps</li>
+<li>mapDispatchToProps</li>
+</ul>
+<h1 id="redux-处理异步"><a href="#redux-处理异步" class="headerlink" title="redux 处理异步"></a>redux 处理异步</h1><ul>
+<li>redux-thunk</li>
+<li>redux-promise</li>
+<li>redux-saga</li>
+</ul>
+<h2 id="同步-action"><a href="#同步-action" class="headerlink" title="同步 action"></a>同步 action</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 同步 action</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addTodo = <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 返回 action 对象</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;ADD_TODO&#x27;</span>,</span><br><span class="line">    <span class="attr">id</span>: nextTodoId++,</span><br><span class="line">    text</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="异步-action"><a href="#异步-action" class="headerlink" title="异步 action"></a>异步 action</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">&#x27;redux-thunk&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> rootReducer <span class="keyword">from</span> <span class="string">&#x27;./reducer/index&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 store 时，作为中间件引入 redux-thunk</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(rootReducer, applyMiddleware(thunk));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 异步 action</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addTodoAsync = <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 返回函数，其中有 dispatch 参数</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ajax 异步获取数据</span></span><br><span class="line">    fetch(url).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 执行异步 action</span></span><br><span class="line">      dispatch(addTodo(res.text));</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="redux-中间件"><a href="#redux-中间件" class="headerlink" title="redux 中间件"></a>redux 中间件</h1><p><img src="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/middleware.png" alt="middleware"></p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; applyMiddleware, createStore &#125; <span class="keyword">from</span> <span class="string">&#x27;redux&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> createLogger <span class="keyword">from</span> <span class="string">&#x27;redux-logger&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> thunk <span class="keyword">from</span> <span class="string">&#x27;redux-thunk&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> logger = createLogger();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会按顺序执行</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer, applyMiddleware(thunk, logger));</span><br></pre></td></tr></table></figure>
+
+<h2 id="redux-中间件-logger-实现"><a href="#redux-中间件-logger-实现" class="headerlink" title="redux 中间件 - logger 实现"></a>redux 中间件 - logger 实现</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改 dispatch， 增加logger</span></span><br><span class="line"><span class="keyword">let</span> next = store.dispatch;</span><br><span class="line">store.dispatch = <span class="function"><span class="keyword">function</span> <span class="title">dispatchAndLog</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dispatching&#x27;</span>, action);</span><br><span class="line">  next(action);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;next state&#x27;</span>, store.getState());</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="redux-数据流图"><a href="#redux-数据流图" class="headerlink" title="redux 数据流图"></a>redux 数据流图</h1><p><img src="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/redux_pic.png" alt="redux_pic"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>基本概念</li>
+<li>单向数据流</li>
+<li>react-redux</li>
+<li>异步 action</li>
+<li>中间件</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="prev" title="学习笔记：React 性能优化">
+      <i class="fa fa-chevron-left"></i> 学习笔记：React 性能优化
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">Redux 使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-number">2.</span> <span class="nav-text">Redux 单向数据流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%94%E7%A4%BA"><span class="nav-number">2.3.1.</span> <span class="nav-text">演示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#react-redux"><span class="nav-number">3.</span> <span class="nav-text">react-redux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redux-%E5%A4%84%E7%90%86%E5%BC%82%E6%AD%A5"><span class="nav-number">4.</span> <span class="nav-text">redux 处理异步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5-action"><span class="nav-number">4.1.</span> <span class="nav-text">同步 action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5-action"><span class="nav-number">4.2.</span> <span class="nav-text">异步 action</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redux-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">redux 中间件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E4%B8%AD%E9%97%B4%E4%BB%B6-logger-%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.1.</span> <span class="nav-text">redux 中间件 - logger 实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redux-%E6%95%B0%E6%8D%AE%E6%B5%81%E5%9B%BE"><span class="nav-number">6.</span> <span class="nav-text">redux 数据流图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
