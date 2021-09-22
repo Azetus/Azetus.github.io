@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="KMP 算法 Knuth-Morris-Pratt 算法  现有一字符串“DBC BDAFE ABCDABD DABCDABF FCUI”，其中是否包含一个子串“ABCDABF”？ (1)首先将字符串“DBC BDAFE ABCDABD DABCDABF FCUI”的首字母与模式串“ABCDABF”的首字母比较，发现不匹配时，将模式串后移一位。 (2) 在字母不匹配时不断将模式串后移一位，直至字符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串匹配: KMP 算法">
+<meta property="og:url" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:description" content="KMP 算法 Knuth-Morris-Pratt 算法  现有一字符串“DBC BDAFE ABCDABD DABCDABF FCUI”，其中是否包含一个子串“ABCDABF”？ (1)首先将字符串“DBC BDAFE ABCDABD DABCDABF FCUI”的首字母与模式串“ABCDABF”的首字母比较，发现不匹配时，将模式串后移一位。 (2) 在字母不匹配时不断将模式串后移一位，直至字符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_01.gif">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_02.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_03.gif">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_04.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_05.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_06.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_07.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_08.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_09.png">
+<meta property="og:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_10.png">
+<meta property="article:published_time" content="2021-09-22T08:11:03.000Z">
+<meta property="article:modified_time" content="2021-09-22T08:12:55.733Z">
+<meta property="article:author" content="Azem">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_01.gif">
+
+<link rel="canonical" href="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>字符串匹配: KMP 算法 | Azem's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azem's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符串匹配: KMP 算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-22 16:11:03" itemprop="dateCreated datePublished" datetime="2021-09-22T16:11:03+08:00">2021-09-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h1><blockquote>
+<p>Knuth-Morris-Pratt 算法</p>
+</blockquote>
+<p>现有一字符串“DBC BDAFE ABCDABD DABCDABF FCUI”，其中是否包含一个子串“ABCDABF”？</p>
+<h2 id="1"><a href="#1" class="headerlink" title="(1)"></a>(1)</h2><p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_01.gif" alt="kmp_01"><br>首先将字符串“DBC BDAFE ABCDABD DABCDABF FCUI”的首字母与模式串“ABCDABF”的首字母比较，发现不匹配时，将模式串后移一位。</p>
+<h2 id="2"><a href="#2" class="headerlink" title="(2)"></a>(2)</h2><p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_02.png" alt="kmp_02"></p>
+<p>在字母不匹配时不断将模式串后移一位，直至字符串与模式串的首字母匹配。</p>
+<p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_03.gif" alt="kmp_03"></p>
+<p>接着比较字符串和搜索词的下一个字符，直到有一位不匹配或者完全匹配。</p>
+<h2 id="3"><a href="#3" class="headerlink" title="(3)"></a>(3)</h2><p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_04.png" alt="kmp_04"></p>
+<p>在例子中的情况里，在匹配到最后一位时，字符串最后一位为’D’，而模式串最后一位为’F’，二者不匹配。</p>
+<p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_05.png" alt="kmp_05"></p>
+<p>此时可以将模式串直接向后移动一位继续匹配，这样的暴力搜索解法可行，但是效率不高，因为无法有效利用已经搜索过的前 6 个字母。</p>
+<h2 id="4"><a href="#4" class="headerlink" title="(4)"></a>(4)</h2><blockquote>
+<p>前缀、后缀与部分匹配值</p>
+</blockquote>
+<p>前缀与后缀：“前缀”是指除了最后一个字符外，一个字符串的全部头部组合，而同理，“后缀”是指除了第一个字符外，一个字符串全部尾部的组合。</p>
+<p>部分匹配值就是指一个字符串“前缀”与“后缀”的最长共有元素长度。</p>
+<blockquote>
+<p>例如”ABCDABF”的子串”A”前后缀为空寂，共有长度为 0<br>子串”AB”的前缀为<code>[A]</code> 后缀为<code>[B]</code>，共有长度为 0<br>以此类推至子串”ABCDAB”的前缀组合为<code>[A,AB,ABC,ABCD,ABCDA]</code>后缀组合为<code>[BCDAB,CDAB,DAB,AB,B]</code>，共有元素为”AB”长度为 2</p>
+</blockquote>
+<p>以此可以得出一张部分匹配表</p>
+<p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_06.png" alt="kmp_06"></p>
+<h2 id="4-1"><a href="#4-1" class="headerlink" title="(4)"></a>(4)</h2><p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_07.png" alt="kmp_07"><br><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_08.png" alt="kmp_08"></p>
+<p>在例子中，最后一位不匹配，但前六位”ABCDAB”是匹配的，可以利用部分匹配表。得到最后一个匹配的字符”B”对应的部分匹配值是 2。因此可以按如下公式得到，模式串下一次匹配时应向后移动 4 位。</p>
+<blockquote>
+<p>移动位数 = 已匹配字符数 - 对应的部分匹配值</p>
+</blockquote>
+<h1 id="JavaScript-实现"><a href="#JavaScript-实现" class="headerlink" title="JavaScript 实现"></a>JavaScript 实现</h1><h2 id="1-生成模式串的部分匹配表"><a href="#1-生成模式串的部分匹配表" class="headerlink" title="1 生成模式串的部分匹配表"></a>1 生成模式串的部分匹配表</h2><p>首先我们需要根据模式串构建模式串的部分匹配表。<br>假设模式串为”ABABCABAAACA”可以得到下表：</p>
+<table>
+<thead>
+<tr>
+<th align="center">i</th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">6</th>
+<th align="center">7</th>
+<th align="center">8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">target[i]</td>
+<td align="center">A</td>
+<td align="center">B</td>
+<td align="center">A</td>
+<td align="center">B</td>
+<td align="center">C</td>
+<td align="center">A</td>
+<td align="center">B</td>
+<td align="center">A</td>
+<td align="center">A</td>
+</tr>
+<tr>
+<td align="center">len, prefix_table[i]</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<p>可以看出如果我们想要得到<code>prefix_table[i]</code> 我们只需要将<code>target[len]</code>和<code>target[i]</code>进行比较即可，假设此时 <code>i = 7</code>，上一位的 <code>len = 2</code>，可以得到<code>target[2] === A === target[7]</code>，此时，我们得到<code>target[len]===target[i]</code>,然后对<code>len++</code>，记录<code>prefix_table[i]===len</code>,i 指针后移即可。</p>
+<p>现在，我们已经得到了 i=7 的值，还剩下 i=8。我们同样按照上面的思路来思考。比较<code>target[8]---&gt;A</code>与<code>target[3]----&gt;B</code>，发现不匹配。将 len 侧移后再比较一轮。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">genPrefixTable</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> prefix_table = [];</span><br><span class="line">  <span class="keyword">let</span> len = <span class="number">0</span>; <span class="comment">// 最长公共前后缀长度初始化为0</span></span><br><span class="line">  prefix_table[<span class="number">0</span>] = len;</span><br><span class="line">  <span class="keyword">let</span> n = target.length;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; n) &#123;</span><br><span class="line">    <span class="keyword">if</span> (target[len] === target[i]) &#123;</span><br><span class="line">      len++;</span><br><span class="line">      prefix_table[i] = len;</span><br><span class="line">      i++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 侧移</span></span><br><span class="line">        len = prefix_table[len - <span class="number">1</span>]; <span class="comment">//缩小最长公共前后缀的长度</span></span><br><span class="line">        <span class="comment">// 再下一轮 while 循环时再比较一次</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        prefix_table[i] = <span class="number">0</span>;</span><br><span class="line">        i++;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> prefix_table;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-得到-next-数组"><a href="#2-得到-next-数组" class="headerlink" title="2 得到 next 数组"></a>2 得到 next 数组</h2><p>字符不匹配时</p>
+<blockquote>
+<p>模式串位移的位数 = 已匹配字符数 - 不匹配字符上一位字符对应的部分匹配值。</p>
+</blockquote>
+<p>因此，再出现不匹配情况时，我们不用去关心失配位字符的情况，而是需要考虑上一位字符。因此可以将最大长度表右移一位，首位赋值-1，变得到了 next 数组。</p>
+<p>最终我们在计算模式串位移位数可以得到：</p>
+<blockquote>
+<p>移动位数 = 失配字符位置 - 失配字符对应的 next 数组的值</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">target[i]</th>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">C</th>
+<th align="center">A</th>
+<th align="center">B</th>
+<th align="center">A</th>
+<th align="center">A</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">next[i]</td>
+<td align="center">-1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">genNextArr</span>(<span class="params">prefix_table</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> next = <span class="keyword">new</span> <span class="built_in">Array</span>(prefix_table.length).fill(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = prefix_table.length - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    next[i] = prefix_table[i - <span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-KMP-算法"><a href="#3-KMP-算法" class="headerlink" title="3 KMP 算法"></a>3 KMP 算法</h2><p>使用之前构建的函数生成 next 数组，利用两个指针分别遍历模板字符串<code>str</code>和模式字符串<code>target</code>。在双指针都小于两个字符串的长度时不停的循环遍历。在匹配时，双指针同步右移。在出现失配情况时，根据 next 数组，得到此时<code>j = next[j]</code>。</p>
+<p><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_09.png" alt="kmp_09"><br><img src="/2021/09/22/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D-KMP-%E7%AE%97%E6%B3%95/KMP_10.png" alt="kmp_10"></p>
+<p>此时指针<code>i = 12</code>，指针<code>j = 8</code>，模式串整体右移 5 位。对于两个指针相当于<code>i</code>不变，<code>j = next[j] -&gt; 3</code>，若出现<code>j -&gt; -1</code>的情况，则两个指针整体右移一位。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">KMP</span>(<span class="params">str, target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> prefix_table = genPrefixTable(target);</span><br><span class="line">  <span class="keyword">let</span> next = genNextArr(prefix_table);</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>; <span class="comment">// str 指针</span></span><br><span class="line">  <span class="keyword">let</span> j = <span class="number">0</span>; <span class="comment">// target 指针</span></span><br><span class="line">  <span class="keyword">while</span> (i &lt; str.length &amp;&amp; j &lt; target.length) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str[i] === target[j]) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      j++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      j = next[j]; <span class="comment">// 右移</span></span><br><span class="line">      <span class="keyword">if</span> (j === -<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 这部分可以移到第一个 if 中 ——&gt; if(str[i] === target[j] || j === -1)</span></span><br><span class="line">        i++;</span><br><span class="line">        j++;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (j === target.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> i - j;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="优化后的-KMP-算法"><a href="#优化后的-KMP-算法" class="headerlink" title="优化后的 KMP 算法"></a>优化后的 KMP 算法</h1><p>直接构建 next 数组，节省一部分内存空间。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">genNextArr</span>(<span class="params">target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> j = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> next = <span class="keyword">new</span> <span class="built_in">Array</span>(target.length).fill(<span class="number">0</span>);</span><br><span class="line">  next[<span class="number">0</span>] = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; target.length - <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (j === -<span class="number">1</span> || target[i] === target[j]) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      j++;</span><br><span class="line">      next[i] = j;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      j = next[j];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>KMP 部分基本无变化</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">KMP</span>(<span class="params">str, target</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> next = Next(target);</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>; <span class="comment">// str 指针</span></span><br><span class="line">  <span class="keyword">let</span> j = <span class="number">0</span>; <span class="comment">// target 指针</span></span><br><span class="line">  <span class="keyword">while</span> (i &lt; str.length &amp;&amp; j &lt; target.length) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str[i] === target[j] || j === -<span class="number">1</span>) &#123;</span><br><span class="line">      i++;</span><br><span class="line">      j++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      j = next[j]; <span class="comment">//右移</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (j === target.length) &#123;</span><br><span class="line">    <span class="keyword">return</span> i - j;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/13/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-Redux/" rel="prev" title="学习笔记：React-Redux">
+      <i class="fa fa-chevron-left"></i> 学习笔记：React-Redux
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#KMP-%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">KMP 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1"><span class="nav-number">1.1.</span> <span class="nav-text">(1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2"><span class="nav-number">1.2.</span> <span class="nav-text">(2)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3"><span class="nav-number">1.3.</span> <span class="nav-text">(3)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4"><span class="nav-number">1.4.</span> <span class="nav-text">(4)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1"><span class="nav-number">1.5.</span> <span class="nav-text">(4)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">JavaScript 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%94%9F%E6%88%90%E6%A8%A1%E5%BC%8F%E4%B8%B2%E7%9A%84%E9%83%A8%E5%88%86%E5%8C%B9%E9%85%8D%E8%A1%A8"><span class="nav-number">2.1.</span> <span class="nav-text">1 生成模式串的部分匹配表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BE%97%E5%88%B0-next-%E6%95%B0%E7%BB%84"><span class="nav-number">2.2.</span> <span class="nav-text">2 得到 next 数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-KMP-%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">3 KMP 算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E5%90%8E%E7%9A%84-KMP-%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">优化后的 KMP 算法</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
