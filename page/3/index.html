@@ -147,6 +147,265 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/23/HTML-%E4%BA%8B%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/23/HTML-%E4%BA%8B%E4%BB%B6/" class="post-title-link" itemprop="url">HTML 事件</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-23 12:35:13" itemprop="dateCreated datePublished" datetime="2021-07-23T12:35:13+08:00">2021-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="事件绑定和事件冒泡"><a href="#事件绑定和事件冒泡" class="headerlink" title="事件绑定和事件冒泡"></a>事件绑定和事件冒泡</h1><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>事件绑定</li>
+<li>事件冒泡</li>
+<li>事件代理</li>
+</ul>
+<h2 id="事件绑定"><a href="#事件绑定" class="headerlink" title="事件绑定"></a>事件绑定</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> btn = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;btn1&#x27;</span>)</span><br><span class="line">btn.addEventListener(<span class="string">&#x27;click&#x27;</span>,<span class="function"><span class="params">event</span>=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;clicked&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>通用的绑定函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindEvent</span>(<span class="params">elem, type, fn</span>) </span>&#123;</span><br><span class="line">  elem.addEventListener(type, fn);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> a = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;link1&#x27;</span>);</span><br><span class="line">bindEvent(a, <span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.preventDefault(); <span class="comment">// 阻止默认行为</span></span><br><span class="line">  alert(<span class="string">&#x27;clicked&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h2><p><code>event.stopPropagation()</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p1&quot;</span>&gt;</span>激活<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p2&quot;</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p3&quot;</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p4&quot;</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div2&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p5&quot;</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p6&quot;</span>&gt;</span>取消<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;p1&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> body = <span class="built_in">document</span>.body;</span><br><span class="line">bindEvent(p1, <span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  e.stopPropagation(); <span class="comment">// 该方法将停止事件的传播，阻止它被分派到其他 Document 节点。</span></span><br><span class="line">  alert(<span class="string">&#x27;激活&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line">bindEvent(body, <span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  alert(<span class="string">&#x27;取消&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="事件代理"><a href="#事件代理" class="headerlink" title="事件代理"></a>事件代理</h1><ul>
+<li>代码简洁</li>
+<li>减少浏览器内存占用</li>
+<li>不要滥用（适用于瀑布流等）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindEvent</span>(<span class="params">elem, type, selector, fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (fn == <span class="literal">null</span>) &#123;</span><br><span class="line">    fn = selector;</span><br><span class="line">    selector = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  elem.addEventListener(type, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> target = event.target;</span><br><span class="line">    <span class="keyword">if</span> (selector) &#123;</span><br><span class="line">      <span class="comment">// 代理绑定</span></span><br><span class="line">      <span class="keyword">if</span> (target.matches(selector)) &#123;</span><br><span class="line">        fn.call(target, event);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 普通绑定</span></span><br><span class="line">      fn.call(target, event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>描述事件冒泡的流程</p>
+<ul>
+<li>基于 DOM 树形结构</li>
+<li>事件会顺着触发元素往上冒泡</li>
+<li>应用场景：代理</li>
+</ul>
+<p>无限下拉列表，如何监听每个列表元素点击</p>
+<ul>
+<li>事件代理</li>
+<li>用 e.target 获取触发元素</li>
+<li>用 matches 判断是否是触发元素</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/22/HTML-DOM-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">HTML DOM 学习笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-22 12:30:52" itemprop="dateCreated datePublished" datetime="2021-07-22T12:30:52+08:00">2021-07-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><p><strong>DOM 操作 （Document Object Module)</strong></p>
+<ul>
+<li><p>DOM 属于那种数据结构</p>
+</li>
+<li><p>DOM 操作的常用 API</p>
+</li>
+<li><p>attribute 和 property 的区别</p>
+</li>
+<li><p>一次性插入多个 DOM 节点，考虑性能</p>
+</li>
+<li><p>DOM 的本质</p>
+</li>
+<li><p>DOM 节点的操作</p>
+</li>
+<li><p>DOM 结构的操作</p>
+</li>
+<li><p>DOM 性能</p>
+</li>
+</ul>
+<hr>
+<h1 id="DOM-的本质"><a href="#DOM-的本质" class="headerlink" title="DOM 的本质"></a>DOM 的本质</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">note</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">to</span>&gt;</span>Tove<span class="tag">&lt;/<span class="name">to</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">from</span>&gt;</span>Jani<span class="tag">&lt;/<span class="name">from</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">heading</span>&gt;</span>Reminder<span class="tag">&lt;/<span class="name">heading</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span>Don&#x27;t forget me this weekend!<span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">other</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">b</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">other</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">note</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>this is p<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>HTML 是一种特定的 XML，规定了可以使用的各个标签。</p>
+</blockquote>
+<p><strong>DOM 的本质是一棵树</strong><br>浏览器从 HTML 文件解析出的一棵树</p>
+<hr>
+<h1 id="DOM-节点操作"><a href="#DOM-节点操作" class="headerlink" title="DOM 节点操作"></a>DOM 节点操作</h1><ul>
+<li>获取 DOM 节点</li>
+<li>attribute</li>
+<li>property</li>
+</ul>
+<h2 id="获取-DOM-节点"><a href="#获取-DOM-节点" class="headerlink" title="获取 DOM 节点"></a>获取 DOM 节点</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>) <span class="comment">// 元素</span></span><br><span class="line"><span class="keyword">const</span> divList = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"><span class="built_in">console</span>.log(divList.length)</span><br><span class="line"><span class="built_in">console</span>.log(divList[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> containerList = <span class="built_in">document</span>.getElementsByClassName(<span class="string">&#x27;container&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DOM-节点的-property"><a href="#DOM-节点的-property" class="headerlink" title="DOM 节点的 property"></a>DOM 节点的 property</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.querySelectorAll(<span class="string">&#x27;p&#x27;</span>) <span class="comment">// 集合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = pList[<span class="number">0</span>]</span><br><span class="line">p.style.width = <span class="string">&#x27;100px&#x27;</span>     <span class="comment">// 修改样式</span></span><br><span class="line"><span class="built_in">console</span>.log(p.style.width)  <span class="comment">// 获取样式</span></span><br><span class="line">p.className = <span class="string">&#x27;red&#x27;</span>         <span class="comment">// 修改class</span></span><br><span class="line"><span class="built_in">console</span>.log(p.className)    <span class="comment">// 获取 class</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取 nodeName 和 nodeType</span></span><br><span class="line"><span class="built_in">console</span>.log(p.nodeName)</span><br><span class="line"><span class="built_in">console</span>.log(p.nodeType)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取 DOM 元素通过 JS 属性的方式进行操作</p>
+</blockquote>
+<h2 id="DOM-节点的-attribute"><a href="#DOM-节点的-attribute" class="headerlink" title="DOM 节点的 attribute"></a>DOM 节点的 attribute</h2><blockquote>
+<p>修改的是 DON 节点的属性</p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>property：修改对象属性，不会提现到 html 结构中（尽量用此种方式）</li>
+<li>attribute：修改 html 属性，会改变 html 结构</li>
+<li>两者都有可能引起 DOM 重新渲染</li>
+</ul>
+<hr>
+<h1 id="DOM-结构操作"><a href="#DOM-结构操作" class="headerlink" title="DOM 结构操作"></a>DOM 结构操作</h1><ul>
+<li>新增/插入节点</li>
+<li>获取子元素列表，获取父元素</li>
+<li>删除子元素</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">&quot;p2&quot;</span>&gt;</span>一段文字 2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>一段文字 3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div2&quot;</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;./w8h09ebV24.png&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> div2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div2&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加新节点</span></span><br><span class="line"><span class="keyword">const</span> p1 = <span class="built_in">document</span>.createElement(<span class="string">&#x27;p&#x27;</span>);</span><br><span class="line">p1.innerHTML = <span class="string">&#x27;this is p1&#x27;</span>;</span><br><span class="line">div1.appendChild(p1); <span class="comment">// 添加新创建的元素</span></span><br><span class="line"><span class="comment">// 移动已有节点</span></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;p2&#x27;</span>);</span><br><span class="line">div2.appendChild(p2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取父元素</span></span><br><span class="line"><span class="built_in">console</span>.log(p2.parentNode);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取子元素列表</span></span><br><span class="line"><span class="keyword">const</span> div1ChildNodes = div1.childNodes;</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">0</span>].nodeName, div1ChildNodes[<span class="number">0</span>].nodeType);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodes[<span class="number">1</span>].nodeName, div1ChildNodes[<span class="number">1</span>].nodeType);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> div1ChildNodesP = <span class="built_in">Array</span>.from(div1.childNodes).filter(<span class="function">(<span class="params">child</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (child.nodeType === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(div1ChildNodesP);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除节点</span></span><br><span class="line">div1.removeChild(div1ChildNodesP[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="DOM-性能"><a href="#DOM-性能" class="headerlink" title="DOM 性能"></a>DOM 性能</h1><ul>
+<li>DOM 操作非常”昂贵”，避免频繁的 DOM 操作。</li>
+<li>对 DOM 查询做缓存。</li>
+<li>将频繁操作改为一次性操作。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">&quot;list&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> list = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;list&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个文档片段，此时还没要插入到 DOM 树种</span></span><br><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行插入</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> li = <span class="built_in">document</span>.createElement(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line">  li.innerHTML = <span class="string">`List item <span class="subst">$&#123;i + <span class="number">1</span>&#125;</span>`</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 先插入文档片段中</span></span><br><span class="line">  frag.appendChild(li);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 都完成之后，再统一插入到 DOM 结构中</span></span><br><span class="line">list.appendChild(frag);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>DOM 是哪种数据结构</strong></p>
+<ul>
+<li>树（DOM 树）</li>
+</ul>
+<p><strong>DOM 操作常用 API</strong></p>
+<ul>
+<li>DOM 节点操作</li>
+<li>DOM 结构操作</li>
+<li>attribute 和 property</li>
+</ul>
+<p><strong>attribute 和 property 的区别</strong></p>
+<ul>
+<li>property：修改对象属性，不会体现到 html 结构中</li>
+<li>attribute：修改 html 属性，会改变 html 结构</li>
+<li>二者都有可能引起 DOM 重新渲染</li>
+</ul>
+<p><strong>一次性插入多个节点，考虑性能</strong></p>
+<ul>
+<li>使用文档片段，一次性插入 DOM 树种。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/21/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AJavaScript-%E5%BC%82%E6%AD%A5-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -900,7 +1159,7 @@
 <p>最终效果如下：</p>
 <p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png" alt="img01"></p>
 <p>这是因为，在 BFC 下，如果<code>margin-left</code>与<code>margin-right</code>同时为 <code>auto</code>，即代表二者相等，左右 margin 的计算值为元素剩余可用空间的一半，结果就是子元素在水平方向上居中。<br>而如果<code>margin-top</code>和<code>margin-bottom</code>同时为 <code>auto</code>，则他们的计算值都为 0，因此无法垂直居中</p>
-<h3 id="FFC-下使用margin-auto对元素进行垂直居中"><a href="#FFC-下使用margin-auto对元素进行垂直居中" class="headerlink" title="FFC 下使用margin:auto对元素进行垂直居中"></a>FFC 下使用<code>margin:auto</code>对元素进行垂直居中</h3><p>如果将上文中父元素 box1 设置为<code>display:flex</code>，则效果如下：</p>
+<h3 id="FFC-下使用margin-auto对元素进行垂直居中"><a href="#FFC-下使用margin-auto对元素进行垂直居中" class="headerlink" title="FFC 下使用margin:auto对元素进行垂直居中"></a>FFC 下使用<code>margin:auto</code>对元素进行垂直居中</h3><p>如果将上文中父元素 box1 设置为<code>display: flex</code>，则效果如下：</p>
 <p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png" alt="img02"></p>
 <p>原因是在于，flex 格式化上下文中，设置了<code>margin: auto</code>的元素，在通过 <code>justify-content</code> 和 <code>align-self</code> 进行对齐之前，任何可供子元素分配的剩余空间都会分配到该方向的 margin 中去，并且，<code>margin: auto</code> 的生效不仅是水平方向，垂直方向也会自动去分配这个剩余空间。</p>
 <h3 id="基于-flex-布局实现导航栏"><a href="#基于-flex-布局实现导航栏" class="headerlink" title="基于 flex 布局实现导航栏"></a>基于 flex 布局实现导航栏</h3><p>假如使用以下代码实现一个网页顶部的导航栏，利用<code>justify-content: space-around</code>来调整导航栏中各元素的间距。</p>
@@ -1013,7 +1272,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1024,7 +1283,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
