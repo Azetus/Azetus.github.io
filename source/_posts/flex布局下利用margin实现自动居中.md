@@ -45,7 +45,7 @@ CSS 代码：
 
 ### FFC 下使用`margin:auto`对元素进行垂直居中
 
-如果将上文中父元素 box1 设置为`display:auto`，则效果如下：
+如果将上文中父元素 box1 设置为`display: flex`，则效果如下：
 
 ![img02](20210720170100.png)
 

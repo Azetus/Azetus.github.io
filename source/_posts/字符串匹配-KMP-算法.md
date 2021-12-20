@@ -198,7 +198,7 @@ KMP 部分基本无变化
 
 ```JavaScript
 function KMP(str, target) {
-  const next = Next(target);
+  const next = genNextArr(target);
   let i = 0; // str 指针
   let j = 0; // target 指针
   while (i < str.length && j < target.length) {
