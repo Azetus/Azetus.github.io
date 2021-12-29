@@ -147,6 +147,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/29/jsencrypt-js%E4%B8%8ENodejs%E7%9A%84crypto%E6%A8%A1%E5%9D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/29/jsencrypt-js%E4%B8%8ENodejs%E7%9A%84crypto%E6%A8%A1%E5%9D%97/" class="post-title-link" itemprop="url">jsencrypt.js与NodeJs的crypto模块</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-29 15:06:53" itemprop="dateCreated datePublished" datetime="2021-12-29T15:06:53+08:00">2021-12-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NodeJs/" itemprop="url" rel="index"><span itemprop="name">NodeJs</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前搞了一个简单的 Task-App，前端部分使用的 React，后端部分使用的 express 框架，包含了用户注册、登录的功能，需要用到 RSA 加密算法为用户传输的密码进行加密处理，因为是第一次接触和使用，正好把使用过程和遇到的一些小问题记录下来，方便以后复习查阅。</p>
+<h1 id="RSA-加密算法"><a href="#RSA-加密算法" class="headerlink" title="RSA 加密算法"></a>RSA 加密算法</h1><p>RSA 加密算法是一种非对称加密算法，可以在不直接传递秘钥时完成解密，RSA 加密使用了”一对”密钥，分别是公钥和私钥，秘钥在生成时即是两两成对的。在使用时甲使用公钥加密，乙使用私钥解密。</p>
+<p>只要将私钥保密，将公钥公开给任何用户，即是第三者得到了公钥，也无法解开使用公钥加密的密文。</p>
+<p>同时 RSA 算法属于一种块加密算法，其特点便是<strong>总是保持在一个固定长度的块上进行操作</strong>，因此可接受的明文长度限制是由秘钥的 key length 决定的。所以在加密和解密的过程中需要分块进行，当分块后的内容小于 key length 时会自动填满。RSA 算法主要有三种填充方式：<code>RSA_NO_PADDING</code>、<code>RSA_PKCS1_PADDING</code>、<code>RSA_PKCS1_OAEP_PADDING</code></p>
+<h2 id="jsencrypt-js-的使用"><a href="#jsencrypt-js-的使用" class="headerlink" title="jsencrypt.js 的使用"></a>jsencrypt.js 的使用</h2><p>jsencrypt.js 的使用十分简单，首先安装依赖<code>npm install jsencrypt</code>，然后在文件中引入<code>import JSEncrypt from &#39;jsencrypt&#39;</code>。</p>
+<p>jsencrypt.js <strong>仅支持 RSA_PKCS1_PADDING 填充方式</strong></p>
+<p>加密</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; publicKey &#125; <span class="keyword">from</span> <span class="string">&#x27;./res_public_key&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 公钥加密</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">rsaEncrypt</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> encode = <span class="keyword">new</span> JSEncrypt();</span><br><span class="line">  encode.setPublicKey(publicKey);</span><br><span class="line">  <span class="keyword">const</span> encodeData = encode.encrypt(data);</span><br><span class="line">  <span class="keyword">return</span> encodeData;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> rsaEncrypt;</span><br></pre></td></tr></table></figure>
+
+<p>解密</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; PrivateKey &#125; <span class="keyword">from</span> <span class="string">&#x27;./res_private_key&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 私钥解密</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">rsaDecrypt</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> decode = <span class="keyword">new</span> JSEncrypt();</span><br><span class="line">  decode.setPrivateKey(publicKey);</span><br><span class="line">  <span class="keyword">const</span> decodeData = encode.decrypt(data);</span><br><span class="line">  <span class="keyword">return</span> decodeData;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> rsadecrypt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="crypto-私钥解密"><a href="#crypto-私钥解密" class="headerlink" title="crypto 私钥解密"></a>crypto 私钥解密</h2><p>crypto 是 NodeJs 原生自带的一个加密模块，使用它来对前端发送过来的密文进行解密。服务端持有的私钥以<code>.pem</code>的格式存储在服务器上，首先引入 crypto 与 fs 模块。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后从文件中读取私钥。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> privateKey = fs.readFileSync(<span class="string">&#x27;./utils/rsa_private_key.pem&#x27;</span>).toString();</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>crypto.privateDecrypt(privateKey, buffer)</code>方法来对密文进行解密。</p>
+<p>根据文档说明：</p>
+<blockquote>
+<p>If <code>privateKey</code> is not a <code>KeyObject</code>, this function behaves as if <code>privateKey</code> had been passed to <code>crypto.createPrivateKey()</code>. If it is an <code>object</code>, the <code>padding</code> property can be passed. Otherwise, this function uses <code>RSA_PKCS1_OAEP_PADDING</code>.</p>
+</blockquote>
+<p>如果参数<code>privateKey</code>不是一个由<code>crypto.createPrivateKey()</code>方法生成的<code>KeyObject</code>，则等同于将该参数传入<code>crypto.createPrivateKey()</code>一样，如果参数是一个对象，则可以传入对象中的<code>padding</code>属性，否则将默认使用 <code>RSA_PKCS1_OAEP_PADDING</code> 填充方式。</p>
+<p>在前文中提到过：jsencrypt.js <strong>仅支持 RSA_PKCS1_PADDING 填充方式</strong></p>
+<p>因此这里需要手动设置 crypto 解密私钥时使用的填充方式。否则无法解密密文。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> privateKeyObj = &#123;</span><br><span class="line">  <span class="attr">key</span>: privateKey,</span><br><span class="line">  <span class="attr">padding</span>: crypto.constants.RSA_PKCS1_PADDING</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decrypt</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> decodeData = crypto</span><br><span class="line">    .privateDecrypt(privateKeyObj, Buffer.from(data, <span class="string">&#x27;base64&#x27;</span>))</span><br><span class="line">    .toString(<span class="string">&#x27;utf-8&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> decodeData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用-MD5-加密存入数据库的用户密码"><a href="#使用-MD5-加密存入数据库的用户密码" class="headerlink" title="使用 MD5 加密存入数据库的用户密码"></a>使用 MD5 加密存入数据库的用户密码</h1><p>一般来说，用户信息数据库中的用户密码是不会直接使用明文进行存储的，如果数据库直接使用明文存储用户密码，若数据库泄露后，普通用户也可以很容易的使用泄露的明文密码登录他人的账户。因此在项目中使用 MD5 对用户密码进行加密处理。</p>
+<p>MD5 是一种哈希算法，可以将任意长度的输入串经过计算得到固定长度的输出，而且只有在明文相同的情况下，才能等到相同的密文，并且这个算法是不可逆的。</p>
+<p>在用户注册的场景下，将由 RSA 私钥解密出的用户的密码进行 MD5 加密后再存储进数据库，而在用户登录验证时，将私钥解密出的用户的密码进行 MD5 处理后与数据库中的记录进行比对，因为 MD5 明文相同才能得到相同密文的特性，直接使用密文与密文相匹配，匹配成功则返回登录成功。</p>
+<p>依旧是用 NodeJs 自带的 crypto 库进行加密处理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 密匙</span></span><br><span class="line"><span class="keyword">const</span> SECRET_KEY = <span class="string">&#x27;MySecretKey&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// md5 加密</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">md5</span>(<span class="params">content</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> md5 = crypto.createHash(<span class="string">&#x27;md5&#x27;</span>);</span><br><span class="line">  <span class="keyword">return</span> md5.update(content).digest(<span class="string">&#x27;hex&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加密函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">genPassword</span>(<span class="params">password</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> str = <span class="string">`password=<span class="subst">$&#123;password&#125;</span>&amp;key=<span class="subst">$&#123;SECRET_KEY&#125;</span>`</span>;</span><br><span class="line">  <span class="keyword">return</span> md5(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/17/%E8%AE%B0%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2React-NodeJs%E9%A1%B9%E7%9B%AE&%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -272,6 +371,15 @@
               <span class="post-meta-item-text">发表于</span>
 
               <time title="创建时间：2021-12-17 15:54:10" itemprop="dateCreated datePublished" datetime="2021-12-17T15:54:10+08:00">2021-12-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
             </span>
 
           
@@ -413,7 +521,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JavaScript学习笔记</span></a>
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
                 </span>
             </span>
 
@@ -601,7 +709,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -726,7 +834,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -914,7 +1022,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -1026,7 +1134,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -1165,7 +1273,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -1346,7 +1454,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">React 学习笔记</span></a>
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
                 </span>
             </span>
 
@@ -1525,84 +1633,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/22/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue3-%E7%9A%84-watch-%E4%B8%8E-watchEffect/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/22/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue3-%E7%9A%84-watch-%E4%B8%8E-watchEffect/" class="post-title-link" itemprop="url">学习笔记：Vue3 的 watch 与 watchEffect</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-22 19:06:50" itemprop="dateCreated datePublished" datetime="2021-08-22T19:06:50+08:00">2021-08-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Vue-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">Vue 学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="watch-和-watchEffect-的区别"><a href="#watch-和-watchEffect-的区别" class="headerlink" title="watch 和 watchEffect 的区别"></a>watch 和 watchEffect 的区别</h1><ul>
-<li>两者都可以监听 data 属性变化</li>
-<li>watch 需要明确监听哪个属性</li>
-<li>watchEffect 会根据其中的属性，自动监听其变化</li>
-</ul>
-<h2 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; reactive, ref, toRefs, watch, watchEffect &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;Watch&#x27;</span>,</span><br><span class="line">  <span class="function"><span class="title">setup</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> numberRef = ref(<span class="number">100</span>);</span><br><span class="line">    <span class="keyword">const</span> state = reactive(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Aliza&#x27;</span>,</span><br><span class="line">      <span class="attr">age</span>: <span class="number">25</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// watch 和 watchEffect</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      numberRef,</span><br><span class="line">      ...toRefs(state)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">watch(</span><br><span class="line">  numberRef,</span><br><span class="line">  <span class="function">(<span class="params">newNumber, oldNumber</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;ref watch&#x27;</span>, newNumber, oldNumber);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// , &#123;</span></span><br><span class="line">  <span class="comment">//     immediate: true // 初始化之前就监听，可选</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  numberRef.value = <span class="number">200</span>;</span><br><span class="line">&#125;, <span class="number">1500</span>);</span><br><span class="line"></span><br><span class="line">watch(</span><br><span class="line">  <span class="comment">// 第一个参数，确定要监听哪个属性</span></span><br><span class="line">  <span class="function">() =&gt;</span> state.age,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 第二个参数，回调函数</span></span><br><span class="line">  <span class="function">(<span class="params">newAge, oldAge</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;state watch&#x27;</span>, newAge, oldAge);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 第三个参数，配置项</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">immediate</span>: <span class="literal">true</span> <span class="comment">// 初始化之前就监听，可选</span></span><br><span class="line">    <span class="comment">// deep: true // 深度监听</span></span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  state.age = <span class="number">18</span>;</span><br><span class="line">&#125;, <span class="number">1500</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  state.name = <span class="string">&#x27;Monika&#x27;</span>;</span><br><span class="line">&#125;, <span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
-
-<h3 id="watchEffect"><a href="#watchEffect" class="headerlink" title="watchEffect"></a>watchEffect</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">watchEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 初始化时，一定会执行一次（收集要监听的数据）</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;watchEffect&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">watchEffect(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;state.age&#x27;</span>, state.age);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;state.name&#x27;</span>, state.name);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  state.age = <span class="number">18</span>;</span><br><span class="line">&#125;, <span class="number">1500</span>);</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  state.name = <span class="string">&#x27;Monika&#x27;</span>;</span><br><span class="line">&#125;, <span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
-
-<p>watchEffect <strong>初始化时，一定会执行一次</strong>。收集要监听的数据。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1674,18 +1704,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
