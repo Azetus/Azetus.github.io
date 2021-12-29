@@ -2,9 +2,9 @@
 title: 学习笔记：React-Redux
 date: 2021-09-13 15:14:33
 tags:
-  - React
-categories:
   - React 学习笔记
+categories:
+  - React
 ---
 
 # Redux 使用

@@ -4,7 +4,7 @@ date: 2021-08-11 15:36:52
 tags:
   - Vue 组件
 categories:
-  - Vue 学习笔记
+  - Vue
 ---
 
 # Vue 组件使用

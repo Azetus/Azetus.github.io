@@ -6,7 +6,7 @@ tags:
   - KMP
   - 字符串匹配
 categories:
-  - JavaScript学习笔记
+  - JavaScript
 ---
 
 # KMP 算法

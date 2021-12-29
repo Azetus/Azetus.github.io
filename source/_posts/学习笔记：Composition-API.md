@@ -5,7 +5,7 @@ tags:
   - Vue3
   - Composition API
 categories:
-  - Vue 学习笔记
+  - Vue
 ---
 
 # Composition API

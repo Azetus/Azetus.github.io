@@ -5,7 +5,7 @@ tags:
   - JavaScript
   - 作用域
 categories:
-  - JavaScript学习笔记
+  - JavaScript
 ---
 
 # JavaScript 作用域和闭包

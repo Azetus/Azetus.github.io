@@ -6,7 +6,7 @@ tags:
   - watch
   - watchEffect
 categories:
-  - Vue 学习笔记
+  - Vue
 ---
 
 # watch 和 watchEffect 的区别

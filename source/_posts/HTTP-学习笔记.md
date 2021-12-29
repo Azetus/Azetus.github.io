@@ -7,7 +7,7 @@ tags:
   - 缓存
   - http methods
 categories:
-  - http学习笔记
+  - http
 ---
 
 # http 知识点

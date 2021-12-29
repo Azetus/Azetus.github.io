@@ -2,9 +2,9 @@
 title: 学习笔记：React 基本使用(2)
 date: 2021-08-31 14:56:10
 tags:
-  - React
-categories:
   - React 学习笔记
+categories:
+  - React
 ---
 
 # 知识点

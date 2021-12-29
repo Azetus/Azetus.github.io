@@ -7,7 +7,7 @@ tags:
   - Promise
   - async/await
 categories:
-  - JavaScript学习笔记
+  - JavaScript
 ---
 # 学习笔记：JavaScript 异步(1)
 

@@ -8,7 +8,7 @@ tags:
   - async/await
   - 宏任务、微任务
 categories:
-  - JavaScript学习笔记
+  - JavaScript
 ---
 
 # 学习笔记：JavaScript 异步(2)

@@ -5,7 +5,7 @@ tags:
   - JavaScript
   - 原型链
 categories:
-  - JavaScript学习笔记
+  - JavaScript
 ---
 
 # JavaScript 原型与原型链

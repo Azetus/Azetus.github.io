@@ -3,6 +3,8 @@ title: 记一次 Redux Toolkit 的使用
 date: 2021-12-17 15:54:10
 tags:
   - React
+categories:
+  - React
 ---
 
 # 初识 Redux Toolkit

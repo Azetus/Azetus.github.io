@@ -5,7 +5,7 @@ tags:
   - css
   - margin
 categories:
-  - css学习笔记
+  - CSS
 ---
 
 # flex 布局下利用 margin 实现自动居中

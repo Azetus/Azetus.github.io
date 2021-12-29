@@ -2,9 +2,9 @@
 title: 学习笔记：React 性能优化
 date: 2021-09-13 15:07:43
 tags:
-  - React
-categories:
   - React 学习笔记
+categories:
+  - React
 ---
 
 # 知识点

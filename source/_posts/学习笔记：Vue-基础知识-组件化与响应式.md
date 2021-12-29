@@ -5,7 +5,7 @@ tags:
   - Vue 组件
   - 响应式
 categories:
-  - Vue 学习笔记
+  - Vue
 ---
 
 # Vue 的组件化与响应式

@@ -5,7 +5,7 @@ tags:
   - Vue3
   - 生命周期
 categories:
-  - Vue 学习笔记
+  - Vue
 ---
 
 # Vue3 生命周期
