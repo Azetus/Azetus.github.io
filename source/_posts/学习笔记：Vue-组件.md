@@ -122,7 +122,7 @@ export default {
 
 # 生命周期（单个组件）
 
-![life_cycle](https://vue3js.cn/docs/zh/images/lifecycle.png)
+![life_cycle](lifecycle.svg)
 
 > 图片引用自 vue3 文档
 
