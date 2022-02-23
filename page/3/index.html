@@ -147,6 +147,348 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">HTTP 学习笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-01 12:52:47" itemprop="dateCreated datePublished" datetime="2021-08-01T12:52:47+08:00">2021-08-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/http/" itemprop="url" rel="index"><span itemprop="name">http</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="http-知识点"><a href="#http-知识点" class="headerlink" title="http 知识点"></a>http 知识点</h1><ul>
+<li>http 状态码</li>
+<li>http method</li>
+<li>Restful API</li>
+<li>http headers</li>
+<li>http 缓存策略</li>
+</ul>
+<hr>
+<h1 id="http-状态码"><a href="#http-状态码" class="headerlink" title="http 状态码"></a>http 状态码</h1><ul>
+<li>状态码分类</li>
+<li>常见状态码</li>
+<li>关于协议和规范</li>
+</ul>
+<h2 id="状态码分类"><a href="#状态码分类" class="headerlink" title="状态码分类"></a>状态码分类</h2><ul>
+<li><code>1xx</code> 服务器收到请求</li>
+<li><code>2xx</code> 请求成功，如 200</li>
+<li><code>3xx</code> 重定向，如 302</li>
+<li><code>4xx</code> 客户端错误，如 404</li>
+<li><code>5xx</code> 服务端错误，如 500</li>
+</ul>
+<h2 id="常见状态码"><a href="#常见状态码" class="headerlink" title="常见状态码"></a>常见状态码</h2><ul>
+<li><code>200</code> 成功</li>
+<li><code>301</code> 永久重定向（配合 location，浏览器自动处理，会记住该地址后续自动重定向，例如域名更换的情况）</li>
+<li><code>302</code> 临时重定向（配合 location，浏览器自动处理，再次访问时仍会访问原地址，例如搜索引擎点击搜索结果转跳时）</li>
+<li><code>304</code> 资源未被修改（例：服务器端的资源与上次请求时发送的相同）</li>
+<li><code>404</code> 资源未找到（url 错误）</li>
+<li><code>403</code> 没有权限（例：未登录）</li>
+<li><code>500</code> 服务器错误（例：服务器内部错误等）</li>
+<li><code>504</code> 网关超时（例：访问的服务器与上游服务器通讯时未得到及时响应）</li>
+</ul>
+<h2 id="关于协议和规范"><a href="#关于协议和规范" class="headerlink" title="关于协议和规范"></a>关于协议和规范</h2><ul>
+<li>是一个约定</li>
+<li>要求大家遵守执行</li>
+</ul>
+<hr>
+<h1 id="http-methods"><a href="#http-methods" class="headerlink" title="http methods"></a>http methods</h1><ul>
+<li>传统的 methods</li>
+<li>现在的 methods</li>
+<li>Restful API</li>
+</ul>
+<h2 id="传统的-methods"><a href="#传统的-methods" class="headerlink" title="传统的 methods"></a>传统的 methods</h2><ul>
+<li><code>get</code> 获取服务器数据</li>
+<li><code>post</code> 向服务器提交数据</li>
+<li>简单的网页功能，就这两个操作</li>
+</ul>
+<h2 id="现在的-methods"><a href="#现在的-methods" class="headerlink" title="现在的 methods"></a>现在的 methods</h2><ul>
+<li><code>get</code> 获取数据</li>
+<li><code>post</code> <strong>新建</strong>数据</li>
+<li><code>patch</code>/<code>put</code> 更新数据 （局部更新/更新整个资源）</li>
+<li><code>delete</code> 删除数据</li>
+</ul>
+<h2 id="Restful-API"><a href="#Restful-API" class="headerlink" title="Restful API"></a>Restful API</h2><ul>
+<li>一种新的 API 设计方法（早已推广使用）</li>
+<li>传统 API 设计：把每个 url 当做一个功能</li>
+<li>Restful API 设计：把每个 url 当做一个唯一的资源</li>
+</ul>
+<h3 id="如何设计成一个资源？"><a href="#如何设计成一个资源？" class="headerlink" title="如何设计成一个资源？"></a>如何设计成一个资源？</h3><ul>
+<li>尽量不用 url 参数</li>
+<li>用 method 表示操作类型</li>
+</ul>
+<h4 id="不使用-url-参数"><a href="#不使用-url-参数" class="headerlink" title="不使用 url 参数"></a>不使用 url 参数</h4><ul>
+<li>传统 API 设计：<code>/api/list?pageIndex=2</code></li>
+<li>Restful API 设计: <code>/api/list/2</code></li>
+</ul>
+<h4 id="用-method-表示操作类型"><a href="#用-method-表示操作类型" class="headerlink" title="用 method 表示操作类型"></a>用 method 表示操作类型</h4><p>传统 API 设计:</p>
+<ul>
+<li>新建：<code>post</code> 请求 <code>/api/create-blog</code></li>
+<li>更新：<code>post</code> 请求 <code>/api/update-blog?id=100</code></li>
+<li>获取：<code>get</code> 请求 <code>/api/get-blog?id=100</code></li>
+</ul>
+<p>Restful API 设计：</p>
+<ul>
+<li>新建：<code>post</code> 请求 <code>/api/blog</code></li>
+<li>更新：<code>patch</code> 请求 <code>/api/blog/100</code></li>
+<li>获取：<code>get</code> 请求 <code>/api/blog/100</code></li>
+</ul>
+<hr>
+<h1 id="http-headers"><a href="#http-headers" class="headerlink" title="http headers"></a>http headers</h1><ul>
+<li>常见的 Request Headers</li>
+<li>常见的 Response Headers</li>
+</ul>
+<h2 id="Request-Headers"><a href="#Request-Headers" class="headerlink" title="Request Headers"></a>Request Headers</h2><ul>
+<li><code>Accept</code> 浏览器可接收的数据格式</li>
+<li><code>Accept-Encoding</code> 浏览器可接收的压缩算法，如 gzip</li>
+<li><code>Accept-Language</code> 浏览器可以接收，如 zh-CN</li>
+<li><code>Connection:keep-alive</code> 一次 TCP 连接重复使用</li>
+<li><code>cookie</code></li>
+<li><code>Host</code> 请求的域名</li>
+<li><code>User-Agent</code> (UA) 浏览器信息</li>
+<li><code>Content-type</code> 发送数据的格式，如 <code>application/json</code></li>
+</ul>
+<h2 id="Response-Headers"><a href="#Response-Headers" class="headerlink" title="Response Headers"></a>Response Headers</h2><ul>
+<li><code>Content-type</code> 返回的数据格式，如 <code>application/json</code></li>
+<li><code>Content-length</code> 返回的数据大小，多少字节</li>
+<li><code>Content-Encoding</code> 返回数据的压缩算法，如 gzip</li>
+<li><code>Set-cookie</code> 更改 cookie</li>
+</ul>
+<h2 id="自定义-Headers"><a href="#自定义-Headers" class="headerlink" title="自定义 Headers"></a>自定义 Headers</h2><ul>
+<li>自定义 Request Headers 在前端向后端发送请求时添加</li>
+<li>自定义 Response Headers 在后端返回时由后端添加</li>
+</ul>
+<h2 id="缓存相关的-Headers"><a href="#缓存相关的-Headers" class="headerlink" title="缓存相关的 Headers"></a>缓存相关的 Headers</h2><ul>
+<li><code>Cache-Control</code> <code>Expires</code></li>
+<li><code>Last-Modified</code> <code>If-Modified-Since</code></li>
+<li><code>Etag</code> <code>if-None-Match</code></li>
+</ul>
+<hr>
+<h1 id="http-缓存"><a href="#http-缓存" class="headerlink" title="http 缓存"></a>http 缓存</h1><ul>
+<li>关于缓存的介绍</li>
+<li><strong>http 缓存策略（强制缓存+协商缓存）</strong></li>
+<li>刷新操作方式，对缓存的影响</li>
+</ul>
+<h2 id="关于缓存"><a href="#关于缓存" class="headerlink" title="关于缓存"></a>关于缓存</h2><ul>
+<li>什么是缓存？<blockquote>
+<p>一些没有必要重复获取的资源，不再重新获取（本地或服务端暂存）</p>
+</blockquote>
+</li>
+<li>为什么需要缓存？<blockquote>
+<p>CPU 计算、页面渲染都是很快的，整个环节中较慢的环节是网络请求，同时网络请求也是不稳定的。（信号，网络速度）<br>优化是需要尽量减少网络请求的体积和数量。（木桶效应）</p>
+</blockquote>
+</li>
+<li>哪些资源可以被缓存？ <strong>静态资源(js css img)</strong><blockquote>
+<p>html 一般是不能缓存的，因为随时可能更新。<br>业务数据一般也是不能缓存的，例如博客文章，评论信息。<br>联动：webpack 打包静态资后生成的 hash 值</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h1 id="http-缓存-强制缓存"><a href="#http-缓存-强制缓存" class="headerlink" title="http 缓存 - 强制缓存"></a>http 缓存 - 强制缓存</h1><h2 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h2><ul>
+<li>在 Response Headers 中</li>
+<li>控制强制缓存的逻辑</li>
+<li>例如 <code>Cache-Control: max-age = 3153600</code>(单位是秒)</li>
+</ul>
+<p><img src="/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/http_image_01.png" alt="http_image_01"></p>
+<blockquote>
+<p>浏览器初次向服务端请求资源时，如果服务端判断该资源可以使用缓存存储则会在 Response Header 中添加 Cache-Control。<br>当浏览器再次请求该资源时，则从缓存中直接查找。（若未失效的情况下）<br>若缓存已失效，则再次向浏览器请求。</p>
+</blockquote>
+<h2 id="Cache-Control-的值"><a href="#Cache-Control-的值" class="headerlink" title="Cache-Control 的值"></a>Cache-Control 的值</h2><ul>
+<li>max-age</li>
+<li>no-cache (不用强制缓存，交给服务端处理，缓存时需要进行校验)</li>
+<li>no-store (不使用缓存，只从服务器获取资源)</li>
+<li>private (只允许最终用户做缓存)</li>
+<li>public (允许中间路由和代理做缓存)</li>
+</ul>
+<h2 id="关于-Expires"><a href="#关于-Expires" class="headerlink" title="关于 Expires"></a>关于 Expires</h2><ul>
+<li>同在 Response Headers 中</li>
+<li>同为控制缓存过期</li>
+<li>已被 Cache-Control 代替</li>
+</ul>
+<hr>
+<h1 id="http-缓存-协商缓存-对比缓存"><a href="#http-缓存-协商缓存-对比缓存" class="headerlink" title="http 缓存 - 协商缓存 (对比缓存)"></a>http 缓存 - 协商缓存 (对比缓存)</h1><ul>
+<li>服务器端缓存策略</li>
+<li>服务器判断客户端缓存资源，是否和服务端资源一致</li>
+<li>一致则返回 304 (资源未被修改)，否则返回 200 和最新的资源</li>
+</ul>
+<p><img src="/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/http_image_02.png" alt="http_image_02"></p>
+<h2 id="资源标识"><a href="#资源标识" class="headerlink" title="资源标识"></a>资源标识</h2><ul>
+<li>在 Response Headers 中，有两种</li>
+<li><code>Last-Modified</code> 资源最后的修改时间</li>
+<li><code>Etag</code> 资源的唯一标识（字符串，类似人类的指纹）</li>
+</ul>
+<h2 id="Last-Modified-和-Etag"><a href="#Last-Modified-和-Etag" class="headerlink" title="Last-Modified 和 Etag"></a>Last-Modified 和 Etag</h2><ul>
+<li>会优先使用<code>Etag</code></li>
+<li><code>Last-Modified</code>只能精确到秒级</li>
+<li>如果资源被重复生成，而内容不变，则 <code>Etag</code> 更精确(Etag 不会变)</li>
+</ul>
+<p><img src="/2021/08/01/HTTP-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/http_image_03.png" alt="http_image_03"></p>
+<hr>
+<h1 id="刷新操作对缓存的影响"><a href="#刷新操作对缓存的影响" class="headerlink" title="刷新操作对缓存的影响"></a>刷新操作对缓存的影响</h1><ul>
+<li>正常操作：地址栏输入 url，跳转连接，前进后退等</li>
+<li>手动刷新：F5，点击刷新按钮，右击菜单刷新</li>
+<li>强制刷新：ctrl + F5</li>
+</ul>
+<h2 id="不同刷新操作，不同的缓存策略"><a href="#不同刷新操作，不同的缓存策略" class="headerlink" title="不同刷新操作，不同的缓存策略"></a>不同刷新操作，不同的缓存策略</h2><ul>
+<li>正常操作：强制缓存<font color='#1FDD1F'>有效</font>，协商缓存<font color='#1FDD1F'>有效</font></li>
+<li>手动刷新：强制缓存<font color='red'>失效</font>，协商缓存<font color='#1FDD1F'>有效</font></li>
+<li>强制刷新：强制缓存<font color='red'>失效</font>，协商缓存<font color='red'>失效</font></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/28/JS-Web-API-%E5%AD%98%E5%82%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azem's Notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/28/JS-Web-API-%E5%AD%98%E5%82%A8/" class="post-title-link" itemprop="url">JS-Web-API 存储</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-28 12:49:55" itemprop="dateCreated datePublished" datetime="2021-07-28T12:49:55+08:00">2021-07-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JS-Web-API%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">JS-Web-API学习笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="JS-Web-API-存储"><a href="#JS-Web-API-存储" class="headerlink" title="JS-Web-API 存储"></a>JS-Web-API 存储</h1><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
+<li>cookie</li>
+<li>localStorage 和 sessionStorage</li>
+</ul>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><ul>
+<li>本身用于浏览器和 server 通讯</li>
+<li>被”借用”到本地存储来</li>
+<li>可用 <code>document.cookie = &#39;key = value&#39;</code>来修改<blockquote>
+<p>document.cookie 一次只能追加一个键值对，新的键值对会追加进 cookir，相同的 key 值会覆盖</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="cookie-的缺点"><a href="#cookie-的缺点" class="headerlink" title="cookie 的缺点"></a>cookie 的缺点</h2><ul>
+<li>存储大小，最大 4KB</li>
+<li>http 请求时需要发送到服务端，增加请求数据量</li>
+<li>只能用 <code>document.cookie = &#39;...&#39;</code> 来修改，太过简陋</li>
+</ul>
+<h2 id="localStorage-和-sessionStorage"><a href="#localStorage-和-sessionStorage" class="headerlink" title="localStorage 和 sessionStorage"></a>localStorage 和 sessionStorage</h2><ul>
+<li>HTML5 专门为存储而设计，最大可存 5Mb</li>
+<li>API 简单易用，<code>setItem</code>、<code>getItem</code></li>
+<li>不会随着 http 请求被发送出去</li>
+</ul>
+<p>二者区别：</p>
+<ul>
+<li>localStorage 数据会永久存储，除非代码或手动删除</li>
+<li>sessionStorage 数据只存在于当前会话，浏览器关闭则清空</li>
+<li>一般用 localStorage 会更多一些</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>容量 cookie 最大 4kb， localStorage 和 sessionStorage 最大 5Mb</li>
+<li>API 易用性</li>
+<li>是否会随 http 请求发送出去</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/27/Ajax-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1242,113 +1584,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/" class="post-title-link" itemprop="url">flex布局下利用margin实现自动居中</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-08 16:23:43" itemprop="dateCreated datePublished" datetime="2021-07-08T16:23:43+08:00">2021-07-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="flex-布局下利用-margin-实现自动居中"><a href="#flex-布局下利用-margin-实现自动居中" class="headerlink" title="flex 布局下利用 margin 实现自动居中"></a>flex 布局下利用 margin 实现自动居中</h1><p>在传统 BFC（块格式化上下文）中，若子元素为 <code>margin:auto</code>，子元素只会在水平方向居中。如下所示：</p>
-<p>HTML 代码：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;box1&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;box2&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>CSS 代码：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.box1</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">600px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">600px</span>;</span><br><span class="line">  <span class="attribute">border</span>: black solid <span class="number">1px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.box2</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最终效果如下：</p>
-<p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720164514.png" alt="img01"></p>
-<p>这是因为，在 BFC 下，如果<code>margin-left</code>与<code>margin-right</code>同时为 <code>auto</code>，即代表二者相等，左右 margin 的计算值为元素剩余可用空间的一半，结果就是子元素在水平方向上居中。<br>而如果<code>margin-top</code>和<code>margin-bottom</code>同时为 <code>auto</code>，则他们的计算值都为 0，因此无法垂直居中</p>
-<h3 id="FFC-下使用margin-auto对元素进行垂直居中"><a href="#FFC-下使用margin-auto对元素进行垂直居中" class="headerlink" title="FFC 下使用margin:auto对元素进行垂直居中"></a>FFC 下使用<code>margin:auto</code>对元素进行垂直居中</h3><p>如果将上文中父元素 box1 设置为<code>display: flex</code>，则效果如下：</p>
-<p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720170100.png" alt="img02"></p>
-<p>原因是在于，flex 格式化上下文中，设置了<code>margin: auto</code>的元素，在通过 <code>justify-content</code> 和 <code>align-self</code> 进行对齐之前，任何可供子元素分配的剩余空间都会分配到该方向的 margin 中去，并且，<code>margin: auto</code> 的生效不仅是水平方向，垂直方向也会自动去分配这个剩余空间。</p>
-<h3 id="基于-flex-布局实现导航栏"><a href="#基于-flex-布局实现导航栏" class="headerlink" title="基于 flex 布局实现导航栏"></a>基于 flex 布局实现导航栏</h3><p>假如使用以下代码实现一个网页顶部的导航栏，利用<code>justify-content: space-around</code>来调整导航栏中各元素的间距。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;navigator&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav01<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav02<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav03<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav04<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav05<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">justify-content</span>: space-around;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">li</span> &#123;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172014.png" alt="img03"></p>
-<p>可以看到结果各元素在垂直方向上并没有居中对齐，这时如果在子元素的 css 代码中添加<code>margin: auto;</code>就能达到想要的效果</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">li</span> &#123;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720172811.png" alt="img04"></p>
-<blockquote>
-<p><em>若不使用<code>margin: auto;</code>调整垂直居中，也可以设置子元素的<code>line-height</code>等于父元素<code>height</code>，这样也能呈现同样的效果</em></p>
-</blockquote>
-<blockquote>
-<p><em>此外,若子元素设置了<code>margin: auto;</code>,其父元素的<code>justify-content</code>将不会再生效</em></p>
-</blockquote>
-<h4 id="使用自动-margin-还可以实现元素的不规则两端对齐"><a href="#使用自动-margin-还可以实现元素的不规则两端对齐" class="headerlink" title="使用自动 margin 还可以实现元素的不规则两端对齐"></a>使用自动 margin 还可以实现元素的不规则两端对齐</h4><p>导航栏的 dom 结构如下</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;navigator&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav01<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav02<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav03<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>nav04<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;signup&quot;</span>&gt;</span>Sign Up<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span>Log In<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>若想要导航栏中 nav01 至 nav04 在导航栏左侧对齐，而登录和注册按钮在右侧对齐，可以在登录按钮即 Sign Up 的 CSS 样式中添加<code>margin-left: auto</code>，此时 Sign Up 的左侧 margin 的计算值将会自动添加其父元素水平方向剩余的可支配空间，从而实现我们想要的效果</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.navigator</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.signup</span> &#123;</span><br><span class="line">  <span class="attribute">margin-left</span>: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最终的效果如下：</p>
-<p><img src="/2021/07/08/flex%E5%B8%83%E5%B1%80%E4%B8%8B%E5%88%A9%E7%94%A8margin%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E5%B1%85%E4%B8%AD/20210720174355.png" alt="img05"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1416,7 +1655,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1427,7 +1666,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">44</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1454,7 +1693,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
