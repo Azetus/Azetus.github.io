@@ -22,9 +22,9 @@
 
   <meta name="description" content="记录些学习笔记，随便写写。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Azem&#39;s Notes">
+<meta property="og:title" content="Azetus的随笔">
 <meta property="og:url" content="http://example.com/page/2/index.html">
-<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:site_name" content="Azetus的随笔">
 <meta property="og:description" content="记录些学习笔记，随便写写。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Azem">
@@ -43,7 +43,7 @@
   };
 </script>
 
-  <title>Azem's Notes</title>
+  <title>Azetus的随笔</title>
   
 
 
@@ -94,7 +94,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Azem's Notes</h1>
+      <h1 class="site-title">Azetus的随笔</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -147,6 +147,145 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-3/" class="post-title-link" itemprop="url">学习笔记：React 基本使用(3)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-03 16:41:51" itemprop="dateCreated datePublished" datetime="2021-09-03T16:41:51+08:00">2021-09-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><ul>
+<li>函数组件</li>
+<li>非受控组件</li>
+<li>Portals</li>
+</ul>
+<h1 id="函数组件"><a href="#函数组件" class="headerlink" title="函数组件"></a>函数组件</h1><h2 id="class-组件"><a href="#class-组件" class="headerlink" title="class 组件"></a>class 组件</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">List</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; list &#125; = <span class="built_in">this</span>.props;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;list.map((item, index) =&gt; &#123;</span></span><br><span class="line"><span class="xml">          return (</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;item.title&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          );</span></span><br><span class="line"><span class="xml">        &#125;)&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数组件-1"><a href="#函数组件-1" class="headerlink" title="函数组件"></a>函数组件</h2><ul>
+<li>纯函数，输入 props，输出 JSX</li>
+<li>没有实例，没有生命周期，没有 state ，不包含逻辑</li>
+<li>不能扩展其他方法</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">List</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; list &#125; = props;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">      &#123;list.map((item, index) =&gt; &#123;</span></span><br><span class="line"><span class="xml">        return (</span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;item.title&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">        );</span></span><br><span class="line"><span class="xml">      &#125;)&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h2><ul>
+<li>若组件只接收输入的 props 并输出一个 JSX，选择函数组件</li>
+<li>如果组件包含其他逻辑，必须需要设置 state，需要调用声明周期，选择 class 组件</li>
+</ul>
+<h1 id="非受控组件"><a href="#非受控组件" class="headerlink" title="非受控组件"></a>非受控组件</h1><ul>
+<li>ref</li>
+<li>defaultValue defaultChecked</li>
+<li>手动操作 DOM 元素</li>
+</ul>
+<h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><p><code>this.nameInputRef = React.createRef()</code><br>需要使用<code>React.createRef()</code>创建 ref ，并赋值给<code>this</code>的一个属性。在 render 中使用<code>ref=&#123;this.nameInputRef&#125;</code>使用 ref。<br>在使用时，通过<code>this.nameInputRef.current</code>获取当前 DOM 节点。</p>
+<h2 id="defaultValue"><a href="#defaultValue" class="headerlink" title="defaultValue"></a>defaultValue</h2><p>在 render 中使用 <code>defaultValue</code> 而不是 <code>value</code>，并且没有 <code>onChange</code> 事件，因此在<code>&lt;input&gt;</code> 中输入的内容并不会改变 state。<br>而 <code>alert</code> 使用的值是直接从 DOM 中获取的，因此可以弹出输入的内容。</p>
+<blockquote>
+<p><code>&lt;input&gt;</code> value -&gt; defaultValue</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Monika&#x27;</span>,</span><br><span class="line">      <span class="attr">flag</span>: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">this</span>.nameInputRef = React.createRef(); <span class="comment">// 创建 ref</span></span><br><span class="line">    <span class="built_in">this</span>.fileInputRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// input defaultValue</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;/* 使用 defaultValue 而不是 value ，使用 ref */&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">defaultValue</span>=<span class="string">&#123;this.state.name&#125;</span> <span class="attr">ref</span>=<span class="string">&#123;this.nameInputRef&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;/* state 并不会随着改变 */&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>state.name: &#123;this.state.name&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.alertName&#125;</span>&gt;</span>alert name<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  alertName = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> elem = <span class="built_in">this</span>.nameInputRef.current; <span class="comment">// 通过 ref 获取 DOM 节点</span></span><br><span class="line">    alert(elem.value); <span class="comment">// 不是 this.state.name</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="defaultChecked"><a href="#defaultChecked" class="headerlink" title="defaultChecked"></a>defaultChecked</h2><blockquote>
+<p><code>&lt;input type=&quot;checkbox&quot;&gt;</code> checked -&gt; defaultChecked</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">defaultChecked</span>=<span class="string">&#123;this.state.flag&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h2 id="file"><a href="#file" class="headerlink" title="file"></a>file</h2><blockquote>
+<p>当无法使用 state，必须使用 DOM 操作时。比如获取文件名时。</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.fileInputRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// file</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">ref</span>=<span class="string">&#123;this.fileInputRef&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.alertFile&#125;</span>&gt;</span>alert file<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  alertFile = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> elem = <span class="built_in">this</span>.fileInputRef.current; <span class="comment">// 通过 ref 获取 DOM 节点</span></span><br><span class="line">    alert(elem.files[<span class="number">0</span>].name);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>必须手动操作 DOM 元素，setState 实现不了</li>
+<li>比如文件上传<code>&lt;input type=file&gt;</code></li>
+<li>某些富文本编辑器，需要传入 DOM 元素</li>
+<li>如何选择：<ul>
+<li>优先使用受控组件，复合 React 设计原则（数据驱动视图）</li>
+<li>必须操作 DOM 时，在使用非受控组件</li>
+</ul>
+</li>
+</ul>
+<h1 id="Portals"><a href="#Portals" class="headerlink" title="Portals"></a>Portals</h1><ul>
+<li>React 组件默认会按照既定层次嵌套渲染</li>
+<li>如何让组件渲染到父组件以外</li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="父组件"><a href="#父组件" class="headerlink" title="父组件"></a>父组件</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">PortalsDemo</span>&gt;</span>Modal 内容<span class="tag">&lt;/<span class="name">PortalsDemo</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="子组件"><a href="#子组件" class="headerlink" title="子组件"></a>子组件</h3><blockquote>
+<p><code>this.props.children</code> 可以获取组件内的东西（类似 vue slot）</p>
+</blockquote>
+<h4 id="正常渲染的情况"><a href="#正常渲染的情况" class="headerlink" title="正常渲染的情况"></a>正常渲染的情况</h4><p>会嵌套在很多层<code>&lt;div&gt;</code>内部。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./style.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 正常渲染</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;modal&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;this.props.children&#125; &#123;/* 类似 vue slot */&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.modal</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">margin-left</span>: -<span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#000</span>;</span><br><span class="line">  <span class="comment">/* opacity: .2; */</span></span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-Portal-的情况"><a href="#使用-Portal-的情况" class="headerlink" title="使用 Portal 的情况"></a>使用 Portal 的情况</h4><p>引入<code>ReactDOM</code>，并使用<code>ReactDOM.createPortal()</code>创建 Portal，其第二个参数为元素需要渲染的 DOM 节点位置。此时该组件将被挂载在<code>&lt;body&gt;</code>下第一层级。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./style.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 使用 Portals 渲染到 body 上。</span></span><br><span class="line">    <span class="comment">// fixed 元素要放在 body 上，有更好的浏览器兼容性。</span></span><br><span class="line">    <span class="keyword">return</span> ReactDOM.createPortal(</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;modal&quot;</span>&gt;</span>&#123;this.props.children&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>,</span><br><span class="line">      <span class="built_in">document</span>.body <span class="comment">// DOM 节点</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Portals-的使用场景"><a href="#Portals-的使用场景" class="headerlink" title="Portals 的使用场景"></a>Portals 的使用场景</h2><ul>
+<li>父组件设置了<code>overflow: hidden</code>，父组件使用了 BFC ，限制了子组件的展示</li>
+<li>父组件 z-index 值太小</li>
+<li><code>position: fixed;</code> 的组件需要放在 body 第一层级</li>
+<li>主要针对 CSS 兼容性和布局相关的问题</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/31/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -156,7 +295,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -337,7 +476,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -552,7 +691,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -630,7 +769,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -770,7 +909,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -886,7 +1025,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -969,7 +1108,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1095,7 +1234,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1302,7 +1441,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1425,276 +1564,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/06/%E5%89%8D%E7%AB%AF%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/06/%E5%89%8D%E7%AB%AF%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">前端运行环境-学习笔记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-06 12:58:38" itemprop="dateCreated datePublished" datetime="2021-08-06T12:58:38+08:00">2021-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h1><ul>
-<li>运行环境即浏览器（server 端有 node.js）</li>
-<li>下载网页代码，渲染出页面，期间会执行若干 JS</li>
-<li>要保证代码在浏览器中：稳定且高效</li>
-</ul>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><ul>
-<li>网页加载过程</li>
-<li>性能优化</li>
-<li>安全</li>
-</ul>
-<hr>
-<h1 id="网页加载过程"><a href="#网页加载过程" class="headerlink" title="网页加载过程"></a>网页加载过程</h1><h2 id="知识点-1"><a href="#知识点-1" class="headerlink" title="知识点"></a>知识点</h2><ul>
-<li>加载资源的形式</li>
-<li>加载资源的过程</li>
-<li>渲染页面的过程</li>
-<li>从输入 url 到渲染出页面的整个过程</li>
-<li><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</li>
-</ul>
-<h2 id="资源的形式"><a href="#资源的形式" class="headerlink" title="资源的形式"></a>资源的形式</h2><ul>
-<li>html 代码</li>
-<li>媒体文件，如图片、视频等</li>
-<li>JavaScript CSS</li>
-</ul>
-<h2 id="加载过程"><a href="#加载过程" class="headerlink" title="加载过程"></a>加载过程</h2><ul>
-<li>DNS (Domain Name Server)解析：域名 -&gt; IP 地址<blockquote>
-<p>域名相比 ip 地址更容易记忆，大型网站的 ip 地址随用户所在地会不同</p>
-</blockquote>
-</li>
-<li>浏览器根据 IP 地址向服务器发起 http 请求</li>
-<li>服务器处理 http 请求，并返回给浏览器</li>
-</ul>
-<h2 id="渲染过程"><a href="#渲染过程" class="headerlink" title="渲染过程"></a>渲染过程</h2><ul>
-<li>根据 HTML 代码生成 DOM Tree</li>
-<li>根据 CSS 代码生成 CSSOM</li>
-<li>将 DOM Tree 和 CSSOM 整合形成 Render Tree</li>
-<li>浏览器根据 Render Tree 渲染页面</li>
-<li>如果遇到<code>&lt;script&gt;</code>则暂停渲染，优先加载并执行 JS 代码，完成再继续（JS 有可能会改变 DOM 结构，因此需要先暂停渲染）</li>
-<li>直到吧 Render Tree 渲染完成</li>
-</ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>示例 1</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> <span class="attr">href</span>=<span class="string">&quot;style.css&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>先加载 css 代码，生成 CSSOM，在根据 html 生成 DOM Tree。最后整合生成 Render Tree 并渲染页面。</p>
-<blockquote>
-<p>为何建议把 css 放在 head 中：若放在 body 中可能会重复生成 Render Tree 并重复渲染，导致页面加载卡顿。（表现为页面样式突然变化）</p>
-</blockquote>
-<p>示例 2</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">&#x27;container&#x27;</span>).innerHTML = <span class="string">&quot;update by js&quot;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>test<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>先生成 DOM 树，遇到<code>&lt;script&gt;</code>后暂停渲染，加载并执行，js 修改了 DOM 内容，重新渲染。</p>
-<blockquote>
-<p>为何建议把 js 放在 body 里面的最后：js 在 body 中间时可能会截断首屏内容，使其只显示上面的一部分。</p>
-</blockquote>
-<p>示例 3</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;test.png&quot;</span> /&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><code>&lt;img&gt;</code> 标签不会阻塞 DOM 渲染</p>
-<h2 id="window-onload和DOMContentLoaded的区别"><a href="#window-onload和DOMContentLoaded的区别" class="headerlink" title="window.onload和DOMContentLoaded的区别"></a><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;load&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">//  页面的全部资源加载完才会执行，包括图片、视频等</span></span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentLoaded&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// DOM 渲染完即可执行，此时图片、视频可能还没有加载完（推荐）</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>浏览器请求到 HTML 代码后，在生成 DOM 的最开始阶段（应该是 Bytes → characters 后），并行发起 css、图片、js 的请求，无论他们是否在 HEAD 里。<strong>发起 js 文件的下载 request 并不需要 DOM 处理到那个 script 节点</strong>。</p>
-</blockquote>
-<hr>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="从输入-url-到渲染出页面的整个过程"><a href="#从输入-url-到渲染出页面的整个过程" class="headerlink" title="从输入 url 到渲染出页面的整个过程"></a>从输入 url 到渲染出页面的整个过程</h3><ul>
-<li>下载资源：各个资源类型，下载过程</li>
-<li>渲染页面：结合 html css javascript 图片等</li>
-</ul>
-<h3 id="window-onload和DOMContentLoaded的区别-1"><a href="#window-onload和DOMContentLoaded的区别-1" class="headerlink" title="window.onload和DOMContentLoaded的区别"></a><code>window.onload</code>和<code>DOMContentLoaded</code>的区别</h3><ul>
-<li><code>window.onload</code> 资源全部加载完才执行，包括图片等</li>
-<li><code>DOMContentLoaded</code> DOM 渲染完成即可，图片可能尚未下载</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> img1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;img1&#x27;</span>);</span><br><span class="line">img1.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;img loaded&#x27;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">window</span>.addEventListener(<span class="string">&#x27;load&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;window loaded&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentloaded&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;dom content loaded&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>test<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img1&quot;</span> <span class="attr">src</span>=<span class="string">&quot;test.png&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">./index.js</span>&quot;&quot;&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>dom content loaded<br>img loaded<br>window loaded</p>
-</blockquote>
-<hr>
-<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="性能优化原则"><a href="#性能优化原则" class="headerlink" title="性能优化原则"></a>性能优化原则</h2><ul>
-<li>多实用内存、缓存或其他方法</li>
-<li>减少 CPU 计算量，减少网络加载耗时</li>
-<li>（适用于所有编程的性能优化 —— 空间换时间）</li>
-</ul>
-<h2 id="从何入手"><a href="#从何入手" class="headerlink" title="从何入手"></a>从何入手</h2><ul>
-<li>让加载更快</li>
-<li>让渲染更快</li>
-</ul>
-<h3 id="让加载更快"><a href="#让加载更快" class="headerlink" title="让加载更快"></a>让加载更快</h3><ul>
-<li><p>减少资源体积：压缩代码</p>
-<blockquote>
-<p>webpack 压缩打包</p>
-</blockquote>
-</li>
-<li><p>减少访问次数：合并代码，SSR 服务器端渲染，缓存</p>
-<blockquote>
-<p>webpack 打包合并模块</p>
-</blockquote>
-</li>
-<li><p>使用更快的网络：CDN</p>
-</li>
-</ul>
-<h3 id="让渲染更快"><a href="#让渲染更快" class="headerlink" title="让渲染更快"></a>让渲染更快</h3><ul>
-<li>CSS 放在 head，JS 放在 body 最下面</li>
-<li>今早开始执行 JS，用 DOMContentLoaded 触发</li>
-<li>懒加载（图片懒加载，上滑加载更多，何时需要何时加载）</li>
-<li>对 DOM 查询进行缓存</li>
-<li>频繁 DOM 操作，合并到一起插入 DOM 结构</li>
-<li>节流 throttle 防抖 debounce（体验性优化，让<em>渲染更加流畅</em>）</li>
-</ul>
-<h2 id="性能优化示例"><a href="#性能优化示例" class="headerlink" title="性能优化示例"></a>性能优化示例</h2><h3 id="资源合并"><a href="#资源合并" class="headerlink" title="资源合并"></a>资源合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;a.js&quot;</span>&gt;&lt;/script&gt;</span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;b.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;c.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;abc.js&gt;&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><ul>
-<li>contenthash</li>
-<li>静态资源加 hash 后缀，根据文件内容计算 hash</li>
-<li>文件内容不变，则 hash 不变，则 url 不变</li>
-<li>url 和文件不变，则会自动触发 http 缓存机制，返回 304</li>
-</ul>
-<h3 id="CDN"><a href="#CDN" class="headerlink" title="CDN"></a>CDN</h3><ul>
-<li>Content Delivery Network，内容分发网络</li>
-</ul>
-<h3 id="SSR"><a href="#SSR" class="headerlink" title="SSR"></a>SSR</h3><ul>
-<li>服务端渲染：将网页和数据一起加载，一起渲染</li>
-<li>非 SSR（前后端分离）：先加载网页，再加载数据，再渲染数据</li>
-<li>早先的 JSP ASP PHP，现在的 vue React SSR</li>
-</ul>
-<h3 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h3><p>一种图片懒加载的实现方式，利用自定义属性值存储原始图片的 src，当用户查看原图或下滑至图片漏出屏幕时将 preview 的 src 替换为原始图片的 src。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">id</span>=<span class="string">&quot;img1&quot;</span> <span class="attr">src</span>=<span class="string">&quot;preview.png&quot;</span> <span class="attr">data-realsrc</span>=<span class="string">&quot;abc.png&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">  <span class="comment">// 上划露出屏幕或点击时</span></span></span><br><span class="line"><span class="javascript">  <span class="keyword">var</span> img1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;img1&#x27;</span>);</span></span><br><span class="line"><span class="javascript">  img1.src = img1.getAttribute(<span class="string">&#x27;data-realsrc&#x27;</span>);</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="缓存-DOM-查询"><a href="#缓存-DOM-查询" class="headerlink" title="缓存 DOM 查询"></a>缓存 DOM 查询</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pList = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> length = pList.length <span class="comment">// 将查询结果缓存起来</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="DOM-操作一起插入到-DOM-结构"><a href="#DOM-操作一起插入到-DOM-结构" class="headerlink" title="DOM 操作一起插入到 DOM 结构"></a>DOM 操作一起插入到 DOM 结构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment()</span><br></pre></td></tr></table></figure>
-
-<h3 id="尽早开始-JS-执行"><a href="#尽早开始-JS-执行" class="headerlink" title="尽早开始 JS 执行"></a>尽早开始 JS 执行</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">&#x27;DOMContentLoaded&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// DOM 渲染完既可执行</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h1><ul>
-<li>问题：常见的 web 前端攻击方式有哪些？<ul>
-<li>XSS 跨站请求攻击</li>
-<li>XSRF 跨站请求伪造</li>
-</ul>
-</li>
-</ul>
-<h2 id="XSS-攻击"><a href="#XSS-攻击" class="headerlink" title="XSS 攻击"></a>XSS 攻击</h2><ul>
-<li>一个博客网站，我发表一篇博客，其中嵌入<code>&lt;script&gt;</code>脚本</li>
-<li>脚本内容：获取 cookie，发送到我的服务器（服务器配合跨域）</li>
-<li>发布这篇博客，有人查看它，就可以收割访问者的 cookie</li>
-</ul>
-<h2 id="XSS-预防"><a href="#XSS-预防" class="headerlink" title="XSS 预防"></a>XSS 预防</h2><ul>
-<li>替换特殊字符，如<code>&lt;</code> 变为 <code>&amp;lt;</code>， <code>&gt;</code>变为<code>&amp;gt;</code></li>
-<li><code>&lt;script&gt;</code>变为 <code>&amp;lt;script&amp;gt;</code>，直接显示，而不会作为脚本执行</li>
-<li>前端需要替换，后端也要替换，都做总不会有错</li>
-</ul>
-<blockquote>
-<p>npm - xss 工具</p>
-</blockquote>
-<h2 id="XSRF-攻击"><a href="#XSRF-攻击" class="headerlink" title="XSRF 攻击"></a>XSRF 攻击</h2><ul>
-<li>你正在购物，看中了某个商品，商品 id 是 100</li>
-<li>付费接口是 <code>xxx.com/pay?id=100</code>，但没有任何验证</li>
-<li>攻击者看中了一个商品，id 是 200</li>
-<li>攻击者发送一封邮件，邮件标题很吸引人</li>
-<li>邮件正文中隐藏着 <code>&lt;img src=xxx.com/pay?id=200 /&gt;</code><blockquote>
-<p>img 请求可以跨域<br>已登录购物网站时，个人信息会随着请求被带过去</p>
-</blockquote>
-</li>
-<li>一查看邮件，就会帮攻击者购买了 id 为 200 的商品</li>
-</ul>
-<h2 id="XSRF-预防"><a href="#XSRF-预防" class="headerlink" title="XSRF 预防"></a>XSRF 预防</h2><ul>
-<li>使用 post 接口</li>
-<li>增加验证，例如密码、短信验证码、指纹、刷脸等</li>
-</ul>
-<hr>
-<h1 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖 debounce"></a>防抖 debounce</h1><ul>
-<li>监听一个输入框，文字变化和触发 change 事件</li>
-<li>直接用 keyup 事件，则会频繁触发 change 事件</li>
-<li>防抖：用户输入结束或暂停时，才会触发 change 事件</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;input1&#x27;</span>);</span><br><span class="line"><span class="comment">// DO NOT do it like this!</span></span><br><span class="line"><span class="comment">// input1.addEventListener(&#x27;keyup&#x27;, function () &#123;</span></span><br><span class="line"><span class="comment">//   console.log(input1.value);</span></span><br><span class="line"><span class="comment">// &#125;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 利用定时器添加一个延迟</span></span><br><span class="line"><span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line">input1.addEventListener(<span class="string">&#x27;keyup&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">  &#125;</span><br><span class="line">  timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 模拟触发 change 事件</span></span><br><span class="line">    <span class="built_in">console</span>.log(input1.value);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 清空定时器</span></span><br><span class="line">    timer = <span class="literal">null</span>;</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;input1&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./debounce.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>将方法封装之后</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, delay = <span class="number">500</span></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// timer 是在闭包中</span></span><br><span class="line">  <span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> arg = [...arguments];</span><br><span class="line">    <span class="keyword">let</span> context = <span class="built_in">this</span>;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      fn.apply(context, arg);</span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">input1.addEventListener(</span><br><span class="line">  <span class="string">&#x27;keyup&#x27;</span>,</span><br><span class="line">  debounce(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(input1.value);</span><br><span class="line">  &#125;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="节流-throttle"><a href="#节流-throttle" class="headerlink" title="节流 throttle"></a>节流 throttle</h1><ul>
-<li>拖拽一个元素时，要随时拿到该元素被拖拽的位置</li>
-<li>直接用 drag 事件，则会频繁触发，很容易导致卡顿</li>
-<li>节流：无论拖拽速度多块，都会每隔 100ms 触发一次</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">draggable</span>=<span class="string">&quot;true&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./throttle.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> div1 = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;div1&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line">div1.addEventListener(<span class="string">&#x27;drag&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e.offsetX, e.offsetY);</span><br><span class="line"></span><br><span class="line">    timer = <span class="literal">null</span>;</span><br><span class="line">  &#125;, <span class="number">100</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>将方法封装之后</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, delay = <span class="number">100</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="comment">// event 参数会传给返回的函数</span></span><br><span class="line">    <span class="keyword">let</span> arg = [...arguments];</span><br><span class="line">    <span class="keyword">let</span> context = <span class="built_in">this</span>;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      fn.apply(context, arg); <span class="comment">// 将 event 参数传入 fn</span></span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">div1.addEventListener(</span><br><span class="line">  <span class="string">&#x27;drag&#x27;</span>,</span><br><span class="line">  throttle(<span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event.offsetX, event.offsetY);</span><br><span class="line">  &#125;,<span class="number">150</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1766,18 +1635,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

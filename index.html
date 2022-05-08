@@ -22,9 +22,9 @@
 
   <meta name="description" content="记录些学习笔记，随便写写。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Azem&#39;s Notes">
+<meta property="og:title" content="Azetus的随笔">
 <meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Azem&#39;s Notes">
+<meta property="og:site_name" content="Azetus的随笔">
 <meta property="og:description" content="记录些学习笔记，随便写写。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Azem">
@@ -43,7 +43,7 @@
   };
 </script>
 
-  <title>Azem's Notes</title>
+  <title>Azetus的随笔</title>
   
 
 
@@ -94,7 +94,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Azem's Notes</h1>
+      <h1 class="site-title">Azetus的随笔</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -147,6 +147,492 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/08/JavaScript%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%BB%86%E8%8A%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/08/JavaScript%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%BB%86%E8%8A%82/" class="post-title-link" itemprop="url">JavaScript：数据类型细节</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-08 12:55:28" itemprop="dateCreated datePublished" datetime="2022-05-08T12:55:28+08:00">2022-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E8%BF%9B%E9%98%B6/" itemprop="url" rel="index"><span itemprop="name">JavaScript进阶</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-数据类型的陷阱"><a href="#1-数据类型的陷阱" class="headerlink" title="1 数据类型的陷阱"></a>1 数据类型的陷阱</h1><h2 id="判断是不是-Object"><a href="#判断是不是-Object" class="headerlink" title="判断是不是 Object"></a>判断是不是 Object</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> obj === <span class="string">&#x27;object&#x27;</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一个问题：上面的方法有什么问题？</p>
+<blockquote>
+<p><code>typeof null</code> 返回的值也是<code>object</code></p>
+</blockquote>
+</li>
+<li><p>  第二个问题：为什么<code>typeof null</code> 返回的值是<code>object</code></p>
+</li>
+</ul>
+<p>让我们追溯到 JavaScript 的第一个版本，此时一个值在栈中占用<strong>32 个位的存储单元</strong>，而其分为两个部分，第一部分为<strong>3 位的标记位</strong>剩余的位存储数据。此时 JavaScript 只有 5 种数据类型。</p>
+<blockquote>
+<p>000: object<br>001: interger<br>010: double<br>100: string<br>110: boolean</p>
+</blockquote>
+<p>而 null 是特殊的一类，其 32 位机器码全部为 0，所以，其标记位也自然全部为 0。</p>
+<ul>
+<li>  第三个问题：为什么不修复这个问题？</li>
+</ul>
+<p>问题存在的位置过于底层，牵一发而动全身。</p>
+<h2 id="一元运算符-转为数字"><a href="#一元运算符-转为数字" class="headerlink" title="一元运算符+转为数字"></a>一元运算符+转为数字</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toNumber</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> +val</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>ES5 中没有问题，但是在 ES6 中会报错，因为 ES6 引入了<code>BigInt</code>与<code>Symbol</code>数据类型，二者无法被转变为<code>number</code>。</p>
+<h2 id="位转移为数字"><a href="#位转移为数字" class="headerlink" title="位转移为数字"></a>位转移为数字</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toNumber</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val &gt;&gt; <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toNumber2</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val &gt;&gt;&gt; <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个代码会有什么问题？当输入一个非常大的数的时候会返回什么？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 超大的数</span></span><br><span class="line">toNumber(<span class="built_in">Number</span>.MAX_SAFE_INTEGER)   <span class="comment">// -1</span></span><br><span class="line">toNumber2(<span class="built_in">Number</span>.MAX_SAFE_INTEGER)  <span class="comment">// 4294967295</span></span><br></pre></td></tr></table></figure>
+
+<p>为什么会这样？</p>
+<h3 id="无符号位移的情况"><a href="#无符号位移的情况" class="headerlink" title="无符号位移的情况"></a>无符号位移的情况</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// toNumber2(Number.MAX_SAFE_INTEGER)  =&gt; 4294967295</span></span><br><span class="line"><span class="keyword">var</span> val = <span class="built_in">Number</span>.MAX_SAFE_INTEGER.toString(<span class="number">2</span>)</span><br><span class="line"><span class="comment">// 11111111111111111111111111111111111111111111111111111</span></span><br><span class="line"><span class="keyword">var</span> val1 = val.substring(<span class="number">0</span>,<span class="number">32</span>)</span><br><span class="line"><span class="comment">// 11111111111111111111111111111111</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="built_in">parseInt</span>(val1, <span class="number">2</span>)</span><br><span class="line"><span class="comment">// 4294967295</span></span><br></pre></td></tr></table></figure>
+
+<p>当进行右移位运算的时候，会将数字当做一个 <strong>32 位</strong>整数进行计算的，当长度超出 <strong>32 位时</strong>会进行截取。</p>
+<h3 id="有符号位移的情况"><a href="#有符号位移的情况" class="headerlink" title="有符号位移的情况"></a>有符号位移的情况</h3><blockquote>
+<p>有符号数字，最高位为符号位。</p>
+</blockquote>
+<p>十进制变二进制：原码 -&gt; 反码 -&gt; 加一（补码）<br>二进制变十进制：减一 -&gt; 反码 -&gt; 原码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> val = <span class="built_in">Number</span>.MAX_SAFE_INTEGER.toString(<span class="number">2</span>)</span><br><span class="line"><span class="comment">// 11111111111111111111111111111111111111111111111111111</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> val1 = val.substring(<span class="number">0</span>,<span class="number">32</span>)</span><br><span class="line"><span class="comment">// 11111111111111111111111111111111</span></span><br></pre></td></tr></table></figure>
+
+<p>截取前 32 位后减一</p>
+<p><code>11111111111111111111111111111110</code></p>
+<p>之后再取反码</p>
+<p><code>00000000000000000000000000000001 = 1</code></p>
+<p>最终等于 1，因为其最高位 1 是负数。</p>
+<blockquote>
+<p>此外这种方法对于 BigInt 和 Symbol 也是无效的！</p>
+</blockquote>
+<h3 id="补充知识，关于-JavaScript-的补码"><a href="#补充知识，关于-JavaScript-的补码" class="headerlink" title="补充知识，关于 JavaScript 的补码"></a>补充知识，关于 JavaScript 的补码</h3><p>JavaScript 将数字存储为 64 位浮点数，但所有按位运算都以 32 位二进制数执行。在执行位运算之前，JavaScript 将数字转换为 32 位有符号整数。执行按位操作后，结果将转换回 64 位 JavaScript 数。</p>
+<p>对于有符号的整数，JavaScript 为了方便底层识别和运算，二进制使用补码。正数的补码就是原码本身，而负数的反码为其原码除符号位以外的各位按位取反，并在末位加一。</p>
+<blockquote>
+<p>正数：补码 = 原码；<br>负数：补码 = 除符号位取反码+1;</p>
+</blockquote>
+<p>以按位取反 <code>~</code> 运算符为例：</p>
+<p><code>~5 -&gt; -6</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">00000000000000000000000000000101 (5)</span><br><span class="line">11111111111111111111111111111010 (~5 = -6)</span><br><span class="line">11111111111111111111111111111011 (-5 即 ~5+1)</span><br></pre></td></tr></table></figure>
+
+<p>有符号整数使用最左边的位作为减号。</p>
+<p>所以：<br><code>~x</code> -&gt; <code>-(x+1)</code></p>
+<p>例子：<br>57 的二进制表示为(1 个字节):00111001<br>按位取反后(<del>57)的二进制: 11000110 此表示为十进制:-70<br>这是一个负数，是有符号的数，负数在计算机里要用其补码来表示:补码=符号位以后按位取反再加 1<br>所以-70(11000110)符号位以后按位取反后为(10111001) 再加 1 则为(10111010)<br>换成十进制为:-58<br>因此</del>57=-58</p>
+<p>总结：当进行别的运算的时候，也需要将所有原码转换成补码，正数的原码=补码，负数的补码为反码+1，反码为原码除符号位取反，之后进行相应运算，（&amp;、|、~、^、移动等），然后反向求原码，可以得到最后结果。</p>
+<blockquote>
+<p>按位取反小窍门：</p>
+</blockquote>
+<p><code>!~x</code> -&gt; <code>-1</code> 返回 <code>true</code> 其他均为 <code>false</code><br><code>!!~x</code> -&gt; <code>-1</code> 返回 <code>false</code> 而其他均为 <code>true</code></p>
+<p>可以判断后端 api 返回的 errno 是否为-1</p>
+<h2 id="字符串批量转换为整数"><a href="#字符串批量转换为整数" class="headerlink" title="字符串批量转换为整数"></a>字符串批量转换为整数</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>];</span><br><span class="line">arr.map(<span class="built_in">parseInt</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果是什么？</p>
+<p><code>[ 1, NaN, NaN ]</code></p>
+<p>为什么？</p>
+<p>其实上面的代码相当于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;3&#x27;</span>].map(<span class="function">(<span class="params">val, index</span>) =&gt;</span> <span class="built_in">parseInt</span>(val, index))</span><br></pre></td></tr></table></figure>
+
+<p><code>parseInt</code>的第二个参数是进制。取值范围<code>2 ~ 36</code></p>
+<h2 id="if-条件判断"><a href="#if-条件判断" class="headerlink" title="if 条件判断"></a>if 条件判断</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> result = &#123;&#125;;</span><br><span class="line"><span class="comment">// name存在</span></span><br><span class="line"><span class="keyword">if</span>(obj.name)&#123;</span><br><span class="line">    result.name = obj.name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
+
+<p>本质是转为布尔值。<br>falsy : <code>0</code> , <code>false</code>, <code>&quot;&quot;</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code></p>
+<p>也会被转为 <code>false</code></p>
+<p>应该使用<code>Object.hasOwnProperty()</code></p>
+<h2 id="宽松比较"><a href="#宽松比较" class="headerlink" title="宽松比较"></a>宽松比较</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="literal">null</span> == <span class="number">0</span>) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;0&#x27;</span> == <span class="literal">false</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>本质：隐式转换</p>
+<ul>
+<li>  NaN 和任何值都不等，包括它自己</li>
+<li>  bigInt，Symbol 首先比较是否同类型</li>
+<li>  null，undefined</li>
+<li>  布尔值与其他类型（布尔值 -&gt; 数字）</li>
+<li>  数字类型和字符串类型（字符串 -&gt; 数字）</li>
+<li>对象类型和原始类型相比较（对象类型 -&gt; 原始类型）<ul>
+<li>  对象类型与对象类型（比较引用）</li>
+</ul>
+</li>
+</ul>
+<h2 id="杂谈"><a href="#杂谈" class="headerlink" title="杂谈"></a>杂谈</h2><ul>
+<li>  <code>typeof</code>性能比<code>instanceof</code>性能高 2 倍 （百万级别）</li>
+<li>null 和 undefined 实现机制完全不一样<ul>
+<li>  null 是一个关键字，而 undefined 是一个变量</li>
+</ul>
+</li>
+<li>  判断是不是数字，NaN</li>
+</ul>
+<h1 id="2-数据类型的-8-种判断方式"><a href="#2-数据类型的-8-种判断方式" class="headerlink" title="2 数据类型的 8 种判断方式"></a>2 数据类型的 8 种判断方式</h1><h2 id="第一种：typeof"><a href="#第一种：typeof" class="headerlink" title="第一种：typeof"></a>第一种：typeof</h2><ul>
+<li>  主要用途：操作数的类型，只能识别基础数据类型和引用类型</li>
+<li><strong>特别注意</strong>：null，NaN，document.all<ul>
+<li>  null -&gt; Object</li>
+<li>  NaN -&gt; Number</li>
+<li>  document.all -&gt; undefind</li>
+</ul>
+</li>
+<li>  注意事项：已经不是绝对安全（暂时性死区）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">typeof</span> a</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line">log()<span class="comment">// Cannot access &#x27;a&#x27; before initialization</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第二种：constructor"><a href="#第二种：constructor" class="headerlink" title="第二种：constructor"></a>第二种：constructor</h2><ul>
+<li>  原理：constructor 指向创建实例对象的构造函数（然后 toString）</li>
+<li>注意事项：<ul>
+<li>  null 和 undefined 没有构造函数</li>
+<li>  constructor 可以被改写</li>
+</ul>
+</li>
+<li>  并不安全</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">String</span>.prototype.constructor = <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>.constructor)</span><br></pre></td></tr></table></figure>
+
+<p>可以被改写，因此十分不安全，只能作为辅助手段。</p>
+<h2 id="第三种：instanceof"><a href="#第三种：instanceof" class="headerlink" title="第三种：instanceof"></a>第三种：instanceof</h2><ul>
+<li>  原理：在原型链上查找，查到即是其示例</li>
+<li>注意事项：<ul>
+<li>  右操作数必须是函数或者 class</li>
+<li>  <strong>多全局对象，例如多 window 之间</strong>，此对象非彼对象</li>
+<li>  例：iframe</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> frame = <span class="built_in">window</span>.frames[<span class="number">0</span>]</span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> isInstanceOf = [] <span class="keyword">instanceof</span> frame.Array</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">&#x27;frame.Array&#x27;</span>, frame.Array)</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(<span class="string">&#x27;isInstanceOf&#x27;</span>, isInstanceOf)</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第四种：isPrototypeOf"><a href="#第四种：isPrototypeOf" class="headerlink" title="第四种：isPrototypeOf"></a>第四种：isPrototypeOf</h2><ul>
+<li>  原理：是否出现在实例对象的原型链上</li>
+<li>注意事项：<ul>
+<li>  能正常返回值的情况，基本等同于 instanceof</li>
+</ul>
+</li>
+</ul>
+<h2 id="第五种：Object-prototype-toString"><a href="#第五种：Object-prototype-toString" class="headerlink" title="第五种：Object.prototype.toString"></a>第五种：Object.prototype.toString</h2><ul>
+<li>  原理：通过函数的动态 this 特效，返回其数据类型</li>
+<li>自定义对象如何获得<code>[object MyArray]</code>类型<ul>
+<li>  Symbol.toStringTag</li>
+</ul>
+</li>
+<li><code>Object.prototype.toString.call(Boolean.prototype)</code>会返回什么<ul>
+<li>  Object</li>
+</ul>
+</li>
+</ul>
+<h2 id="第六种：鸭子类型检查"><a href="#第六种：鸭子类型检查" class="headerlink" title="第六种：鸭子类型检查"></a>第六种：鸭子类型检查</h2><ul>
+<li>  原理：检查自身，属性的类型或者执行结果的类型</li>
+<li>  例子：kindOf 与 p-is-promise</li>
+<li>  适用场景：候选方案</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPromise</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> value <span class="keyword">instanceof</span> <span class="built_in">Promise</span> || (</span><br><span class="line">        isObject(value) &amp;&amp;</span><br><span class="line">        <span class="keyword">typeof</span> value.then === <span class="string">&#x27;function&#x27;</span> &amp;&amp;</span><br><span class="line">        <span class="keyword">typeof</span> value.catch === <span class="string">&#x27;function&#x27;</span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第七种：Symbol-toStringTag"><a href="#第七种：Symbol-toStringTag" class="headerlink" title="第七种：Symbol.toStringTag"></a>第七种：Symbol.toStringTag</h2><ul>
+<li>  原理：Object.prototype.toString 会读取该值</li>
+<li>  适用场景：需自定义类型</li>
+<li>注意事项：<ul>
+<li>  兼容性</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyArray</span> </span>&#123;</span><br><span class="line">    get [<span class="built_in">Symbol</span>.toStringTag]()&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;MyArray&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> pf = <span class="built_in">console</span>.log;</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> MyArray();</span><br><span class="line">pf(<span class="built_in">Object</span>.prototype.toString.call(a) )</span><br></pre></td></tr></table></figure>
+
+<h2 id="第八种：等比较"><a href="#第八种：等比较" class="headerlink" title="第八种：等比较"></a>第八种：等比较</h2><ul>
+<li>  原理：与某个固定值比较</li>
+<li>  适用场景：undefind、window、document、null</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// underscore源码</span></span><br><span class="line">_.isUndefined = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj === <span class="keyword">void</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>基础数据类型</th>
+<th>引用类型</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>typeof</td>
+<td>√</td>
+<td>×</td>
+<td>NaN, Object, document.all</td>
+</tr>
+<tr>
+<td>constructor</td>
+<td>部分</td>
+<td>√</td>
+<td>可以被改写</td>
+</tr>
+<tr>
+<td>instanceof</td>
+<td>×</td>
+<td>√</td>
+<td>多窗口，右边必须是构造函数或者 class</td>
+</tr>
+<tr>
+<td>isPrototypeOf</td>
+<td>×</td>
+<td>√</td>
+<td>小心 null 和 undefined</td>
+</tr>
+<tr>
+<td>toString</td>
+<td>√</td>
+<td>√</td>
+<td>小心内置原型</td>
+</tr>
+<tr>
+<td>鸭子类型</td>
+<td>–</td>
+<td>√</td>
+<td>不得已或者兼容时</td>
+</tr>
+<tr>
+<td>Symbol.toStringTag</td>
+<td>×</td>
+<td>√</td>
+<td>用于识别自定义对象</td>
+</tr>
+<tr>
+<td>等比较</td>
+<td>√</td>
+<td>√</td>
+<td>特殊对象</td>
+</tr>
+</tbody></table>
+<h2 id="附：Redux-kindOf-ts-源码"><a href="#附：Redux-kindOf-ts-源码" class="headerlink" title="附：Redux kindOf.ts 源码"></a>附：Redux kindOf.ts 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">miniKindOf</span>(<span class="params">val: any</span>): <span class="title">string</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (val === <span class="keyword">void</span> <span class="number">0</span>) <span class="keyword">return</span> <span class="string">&#x27;undefined&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (val === <span class="literal">null</span>) <span class="keyword">return</span> <span class="string">&#x27;null&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> type = <span class="keyword">typeof</span> val</span><br><span class="line">  <span class="keyword">switch</span> (type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;boolean&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;string&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;number&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;symbol&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;function&#x27;</span>: &#123;</span><br><span class="line">      <span class="keyword">return</span> type</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(val)) <span class="keyword">return</span> <span class="string">&#x27;array&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (isDate(val)) <span class="keyword">return</span> <span class="string">&#x27;date&#x27;</span></span><br><span class="line">  <span class="keyword">if</span> (isError(val)) <span class="keyword">return</span> <span class="string">&#x27;error&#x27;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title">constructorName</span> = <span class="title">ctorName</span>(<span class="params">val</span>)</span><br><span class="line">  <span class="title">switch</span> (<span class="params">constructorName</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Symbol&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Promise&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;WeakMap&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;WeakSet&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Map&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;Set&#x27;</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="title">constructorName</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // <span class="title">other</span></span><br><span class="line">  <span class="title">return</span> <span class="title">Object</span>.<span class="title">prototype</span>.<span class="title">toString</span></span><br><span class="line">    .<span class="title">call</span>(<span class="params">val</span>)</span><br><span class="line">    .<span class="title">slice</span>(<span class="params"><span class="number">8</span>, -<span class="number">1</span></span>)</span><br><span class="line">    .<span class="title">toLowerCase</span>(<span class="params"></span>)</span><br><span class="line">    .<span class="title">replace</span>(<span class="params"><span class="regexp">/\s/g</span>, <span class="string">&#x27;&#x27;</span></span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title">function</span> <span class="title">ctorName</span>(<span class="params">val: any</span>): <span class="title">string</span> | <span class="title">null</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> val.constructor === <span class="string">&#x27;function&#x27;</span> ? val.constructor.name : <span class="literal">null</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isError</span>(<span class="params">val: any</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    val <span class="keyword">instanceof</span> <span class="built_in">Error</span> ||</span><br><span class="line">    (<span class="keyword">typeof</span> val.message === <span class="string">&#x27;string&#x27;</span> &amp;&amp;</span><br><span class="line">      val.constructor &amp;&amp;</span><br><span class="line">      <span class="keyword">typeof</span> val.constructor.stackTraceLimit === <span class="string">&#x27;number&#x27;</span>)</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isDate</span>(<span class="params">val: any</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (val <span class="keyword">instanceof</span> <span class="built_in">Date</span>) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="keyword">typeof</span> val.toDateString === <span class="string">&#x27;function&#x27;</span> &amp;&amp;</span><br><span class="line">    <span class="keyword">typeof</span> val.getDate === <span class="string">&#x27;function&#x27;</span> &amp;&amp;</span><br><span class="line">    <span class="keyword">typeof</span> val.setDate === <span class="string">&#x27;function&#x27;</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">kindOf</span>(<span class="params">val: any</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> typeOfVal: string = <span class="keyword">typeof</span> val</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>) &#123;</span><br><span class="line">    typeOfVal = miniKindOf(val)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> typeOfVal</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-ES6-中的-NaN"><a href="#3-ES6-中的-NaN" class="headerlink" title="3 ES6 中的 NaN"></a>3 ES6 中的 NaN</h1><h2 id="NaN-和-Number-NaN"><a href="#NaN-和-Number-NaN" class="headerlink" title="NaN 和 Number.NaN"></a>NaN 和 Number.NaN</h2><ul>
+<li>  特点 1：typeof 返回的是数字</li>
+<li>  特点 2：自己与自己不相等</li>
+<li>  特点 3：不能被删除</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="built_in">window</span>,<span class="string">&quot;NaN&quot;</span>)</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="attr">configurable</span>: <span class="literal">false</span></span><br><span class="line"><span class="attr">enumerable</span>: <span class="literal">false</span></span><br><span class="line"><span class="attr">value</span>: <span class="literal">NaN</span></span><br><span class="line"><span class="attr">writable</span>: <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="isNaN"><a href="#isNaN" class="headerlink" title="isNaN()"></a>isNaN()</h2><ul>
+<li>  isNaN：检查 toNumber 返回值，如果是 NaN 就返回 true，反之则返回 false</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 语义化代码</span></span><br><span class="line"><span class="keyword">const</span> myIsNaN = <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.is(<span class="built_in">Number</span>(val),<span class="literal">NaN</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：并不是一个安全的方法，如果传入 bigInt 或者 Symbol 类型则会抛出错误</p>
+<h2 id="ES6-的-Number-isNaN"><a href="#ES6-的-Number-isNaN" class="headerlink" title="ES6 的 Number.isNaN"></a>ES6 的 Number.isNaN</h2><ul>
+<li>  Number.isNaN：判断一个值是否是数字，并且值等于 NaN</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 语义化代码</span></span><br><span class="line"><span class="built_in">Number</span>.myIsNaN = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span> val !==<span class="string">&quot;number&quot;</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.is(val,<span class="literal">NaN</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="严格判断-NaN-汇总"><a href="#严格判断-NaN-汇总" class="headerlink" title="严格判断 NaN 汇总"></a>严格判断 NaN 汇总</h2><ul>
+<li>  ES6 <code>Number.isNaN()</code></li>
+<li>  自身比较（自身不等于自身）</li>
+<li>  Object.is</li>
+<li>  typeof + NaN</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isNaNVal</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.is(val, <span class="literal">NaN</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isNaNVal</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val !== val;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isNaNVal</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&#x27;number&#x27;</span> &amp;&amp; <span class="built_in">isNaN</span>(val)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 综合垫片</span></span><br><span class="line"><span class="keyword">if</span> (!(<span class="string">&quot;isNaN&quot;</span> <span class="keyword">in</span> <span class="built_in">Number</span>)) &#123;</span><br><span class="line">    <span class="built_in">Number</span>.isNaN = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&#x27;number&#x27;</span> &amp;&amp; <span class="built_in">isNaN</span>(val)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="通过陷阱看本质"><a href="#通过陷阱看本质" class="headerlink" title="通过陷阱看本质"></a>通过陷阱看本质</h2><ol>
+<li>例子</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="literal">NaN</span>]</span><br><span class="line">arr.indexOf(<span class="literal">NaN</span>) <span class="comment">// -1</span></span><br><span class="line">arr.includes(<span class="literal">NaN</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>includes：调用内部的<code>Number::sameValueZero</code><br>indexOf：调用内部的<code>Number::equal</code></p>
+<h1 id="4-数值千分位的-6-种方法"><a href="#4-数值千分位的-6-种方法" class="headerlink" title="4 数值千分位的 6 种方法"></a>4 数值千分位的 6 种方法</h1><p>对一个数值进行千分位，即<code>938765432.02 → 938,765,432.02</code></p>
+<h2 id="1-数值转字符串遍历"><a href="#1-数值转字符串遍历" class="headerlink" title="(1) 数值转字符串遍历"></a>(1) 数值转字符串遍历</h2><ul>
+<li>  整体思路：数字转字符串，整数部分低位往高位遍历。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">938765432.02</span><br><span class="line">         ^</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>数字转字符串，字符串按照<code>.</code>分割</li>
+<li>整数部分拆成字符串数组，并倒序</li>
+<li>遍历，按照每 3 位添加<code>,</code>号</li>
+<li>拼接整数部分+小数部分</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_array</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 转为字符串，并按照.拆分</span></span><br><span class="line">  <span class="keyword">var</span> arr = (number + <span class="string">&#x27;&#x27;</span>).split(<span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">    <span class="comment">// 整数部分再拆分</span></span><br><span class="line">  <span class="keyword">var</span> int = arr[<span class="number">0</span>].split(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    <span class="comment">// 小数部分</span></span><br><span class="line">  <span class="keyword">var</span> fraction = arr[<span class="number">1</span>] || <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="comment">// 返回的变量</span></span><br><span class="line">  <span class="keyword">var</span> r = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">var</span> len = int.length;</span><br><span class="line">    <span class="comment">// 倒叙并遍历</span></span><br><span class="line">  int.reverse().forEach(<span class="function"><span class="keyword">function</span> (<span class="params">v, i</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 非第一位并且是位值是3的倍数， 添加 &quot;,&quot;</span></span><br><span class="line">      <span class="keyword">if</span> (i !== <span class="number">0</span> &amp;&amp; i % <span class="number">3</span> === <span class="number">0</span>) &#123;</span><br><span class="line">          r = v + <span class="string">&quot;,&quot;</span> + r;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 正常添加字符</span></span><br><span class="line">          r = v + r;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">    <span class="comment">// 整数部分和小数部分拼接</span></span><br><span class="line">  <span class="keyword">return</span> r + (!!fraction ? <span class="string">&quot;.&quot;</span> + fraction : <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_array(<span class="number">938765432.02</span>));</span><br><span class="line"><span class="comment">// 938,765,432.02</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-字符串-subString-截取"><a href="#2-字符串-subString-截取" class="headerlink" title="(2) 字符串+subString 截取"></a>(2) 字符串+subString 截取</h2><ul>
+<li>  整体思路，数字转字符串，整数部分高位往低位遍历，三位分数</li>
+</ul>
+<ol>
+<li>数字转字符串，字符串按照<code>.</code>分割</li>
+<li>整数部分对 3 求模，获取多余部分</li>
+<li>按照 3 截取，添加<code>,</code>号</li>
+<li>拼接整数部分+小数部分</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_substring</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 数字转字符串, 并按照 .分割</span></span><br><span class="line">  <span class="keyword">var</span> arr = (number + <span class="string">&#x27;&#x27;</span>).split(<span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">  <span class="keyword">var</span> int = arr[<span class="number">0</span>] + <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">var</span> fraction = arr[<span class="number">1</span>] || <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 多余的位数</span></span><br><span class="line">  <span class="keyword">var</span> f = int.length % <span class="number">3</span>;</span><br><span class="line">  <span class="comment">// 获取多余的位数，f可能是0， 即r可能是空字符串</span></span><br><span class="line">  <span class="keyword">var</span> r = int.substring(<span class="number">0</span>, f);</span><br><span class="line">  <span class="comment">// 每三位添加&quot;,&quot;和对应的字符</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="built_in">Math</span>.floor(int.length / <span class="number">3</span>); i++) &#123;</span><br><span class="line">      r += <span class="string">&#x27;,&#x27;</span> + int.substring(f + i * <span class="number">3</span>, f + (i + <span class="number">1</span>) * <span class="number">3</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//多余的位数，上面</span></span><br><span class="line">  <span class="keyword">if</span> (f === <span class="number">0</span>) &#123;</span><br><span class="line">      r = r.substring(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 整数部分和小数部分拼接</span></span><br><span class="line">  <span class="keyword">return</span> r + (!!fraction ? <span class="string">&quot;.&quot;</span> + fraction : <span class="string">&#x27;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_substring(<span class="number">938765432.02</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-除法-求模"><a href="#3-除法-求模" class="headerlink" title="(3) 除法+求模"></a>(3) 除法+求模</h2><ul>
+<li>  整体思路：求模的值添加<code>,</code>，求余值（是否大于 1）计算是否够结束</li>
+</ul>
+<ol>
+<li>值对 1000 求模，获得最高三位</li>
+<li>值除以 1000，值是否大于 1 判定是否结束</li>
+<li>重复 1 和 2 直到退出</li>
+<li>拼接整数部分+小数部分</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_mod</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> n = number;</span><br><span class="line">    <span class="keyword">var</span> r = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> temp;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">      	<span class="comment">// 求模的值，用于获取高三位，这里可能有小数</span></span><br><span class="line">        mod = n % <span class="number">1000</span>;</span><br><span class="line">      	<span class="comment">// 值是不是大于1，是继续的条件</span></span><br><span class="line">        n = n / <span class="number">1000</span>;</span><br><span class="line">      	<span class="comment">// 高三位</span></span><br><span class="line">        temp = ~~mod;</span><br><span class="line">      	<span class="comment">// 1. 填充 : n&gt;1 循环未结束， 就要填充为比如，1 =&gt; 001,</span></span><br><span class="line">        <span class="comment">// 不然 1 001， 就会变成 &#x27;11&#x27;,</span></span><br><span class="line">      	<span class="comment">// 2. 拼接 &quot;,&quot;</span></span><br><span class="line">        r =  (n &gt;= <span class="number">1</span> ?<span class="string">`<span class="subst">$&#123;temp&#125;</span>`</span>.padStart(<span class="number">3</span>, <span class="string">&quot;0&quot;</span>): temp) + (!!r ? <span class="string">&quot;,&quot;</span> + r : <span class="string">&quot;&quot;</span>)</span><br><span class="line">    &#125; <span class="keyword">while</span> (n &gt;= <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> strNumber = number + <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> index = strNumber.indexOf(<span class="string">&quot;.&quot;</span>);</span><br><span class="line">  	<span class="comment">// 拼接小数部分，</span></span><br><span class="line">    <span class="keyword">if</span> (index &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        r += strNumber.substring(index);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> r;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_mod(<span class="number">38765432.02</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-正则先行断言等"><a href="#4-正则先行断言等" class="headerlink" title="(4) 正则先行断言等"></a>(4) 正则先行断言等</h2><table>
+<thead>
+<tr>
+<th>名字</th>
+<th>表达式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>先行断言（前瞻）</td>
+<td><code>exp1(?=exp2)</code></td>
+<td>查找 exp2 前面的 exp1</td>
+</tr>
+<tr>
+<td>后行断言（后顾）</td>
+<td><code>(?&lt;=exp2)exp1</code></td>
+<td>查找 exp2 后面的 exp1</td>
+</tr>
+<tr>
+<td>正向否定查找（负前瞻）</td>
+<td><code>exp1(?!exp2)</code></td>
+<td>查找后面不是 exp2 的 exp1</td>
+</tr>
+<tr>
+<td>反向否定查找（负后顾）</td>
+<td><code>(?&lt;!exp2)exp1</code></td>
+<td>查找前面不是 exp2 的 exp1</td>
+</tr>
+</tbody></table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(<span class="regexp">/hello (?=[a-z]+)/</span>.test(<span class="string">&quot;hello a&quot;</span>));  <span class="comment">// true</span></span><br><span class="line">print(<span class="regexp">/hello (?=[a-z]+)/</span>.test(<span class="string">&quot;hello 1&quot;</span>));  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>数字 3 个一组，查找它前面 1-3 位的数字，<code>.replace(reg, &#39;$&amp;,&#39;)</code>匹配到的内容+”,”号。<br>replace 函数的第二个参数 newvalue 比较特殊，它有一下几个特殊字符串：</p>
+<p>$$ 直接量符号(就是当做’$$’字符用)<br>$&amp; 与正则相匹配的字符串<br>$` 匹配字符串左边的字符<br>$\’ 匹配字符串右边的字符<br>$1,$2,$3,…,$n 匹配结果中对应的分组匹配结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_regex</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> reg = <span class="regexp">/\d&#123;1,3&#125;(?=(\d&#123;3&#125;)+$)/g</span>;</span><br><span class="line">    <span class="keyword">return</span> (number + <span class="string">&#x27;&#x27;</span>).replace(reg, <span class="string">&#x27;$&amp;,&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 987, 654, 321</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_regex(<span class="number">987654321</span>));</span><br></pre></td></tr></table></figure>
+
+<p><code>.replace(reg, callback)</code> 中的 callback<br>|变量名| 代表的值|<br>|—|—|<br>|match| 匹配的子串。（对应于上述的$&amp;。）|<br>|p1,p2, … |假如 replace()方法的第一个参数是一个 RegExp 对象，则代表第 n 个括号匹配的字符串。（对应于上述的$1，$2 等。）例如，如果是用 /(\a+)(\b+)/ 这个来匹配，p1 就是匹配的 \a+，p2 就是匹配的 \b+。|<br>|offset |匹配到的子字符串在原字符串中的偏移量。（比如，如果原字符串是 ‘abcd’，匹配到的子字符串是 ‘bc’，那么这个参数将会是 1）|<br>|string| 被匹配的原字符串。|<br>|NamedCaptureGroup| 命名捕获组匹配的对象|</p>
+<p>精确的参数个数依赖于 replace() 的第一个参数是否是一个正则表达式（RegExp）对象，以及这个正则表达式中指定了多少个括号子串，如果这个正则表达式里使用了命名捕获， 还会添加一个命名捕获的对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match, p1, p2, p3, offset, string</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// p1 is nondigits, p2 digits, and p3 non-alphanumerics</span></span><br><span class="line">  <span class="keyword">return</span> [p1, p2, p3].join(<span class="string">&#x27; - &#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> newString = <span class="string">&#x27;abc12345#$*%&#x27;</span>.replace(<span class="regexp">/([^\d]*)(\d*)([^\w]*)/</span>, replacer);</span><br><span class="line"><span class="built_in">console</span>.log(newString);  <span class="comment">// abc - 12345 - #$*%</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_regex</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> reg = <span class="regexp">/\d&#123;1,3&#125;(?=(\d&#123;3&#125;)+$)/g</span>;</span><br><span class="line">    <span class="keyword">return</span> (number + <span class="string">&#x27;&#x27;</span>).replace(reg, <span class="function"><span class="keyword">function</span>(<span class="params">match, ...args</span>)</span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(match, ...args);</span><br><span class="line">      <span class="keyword">return</span> match + <span class="string">&#x27;,&#x27;</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">format_with_regex(<span class="number">987654321</span>)</span><br><span class="line"><span class="comment">// 987 321 0 987654321</span></span><br><span class="line"><span class="comment">// 654 321 3 987654321</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_regex</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> reg = <span class="regexp">/(\d)(?=(?:\d&#123;3&#125;)+$)/g</span></span><br><span class="line">    <span class="keyword">return</span> (number + <span class="string">&#x27;&#x27;</span>).replace(reg, <span class="string">&#x27;$1,&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-ECMA-规范"><a href="#5-ECMA-规范" class="headerlink" title="(5) ECMA 规范"></a>(5) ECMA 规范</h2><blockquote>
+<p><code>Intl.NumberFormat</code></p>
+</blockquote>
+<ul>
+<li>  语法：<code>new Intl.NumberFormat([locales[,options]])</code></li>
+<li>  <code>Intl.NumberFormat</code>是对语言敏感的格式化数字类的构造器类</li>
+<li>  基本功能：国际化的数字处理方案，它可以用来显示不同国家对数字的处理偏好。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_Intl</span>(<span class="params">number, minimumFractionDigits, maximumFractionDigits</span>) </span>&#123;</span><br><span class="line">    minimumFractionDigits = minimumFractionDigits || <span class="number">2</span>;</span><br><span class="line">    maximumFractionDigits = (maximumFractionDigits || <span class="number">2</span>);</span><br><span class="line">    maximumFractionDigits = <span class="built_in">Math</span>.max(minimumFractionDigits, maximumFractionDigits);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Intl</span>.NumberFormat(<span class="string">&#x27;en-us&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">maximumFractionDigits</span>: maximumFractionDigits || <span class="number">2</span>,</span><br><span class="line">        <span class="attr">minimumFractionDigits</span>: minimumFractionDigits || <span class="number">2</span></span><br><span class="line">    &#125;).format(number)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用默认配置选项 性能更高</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_Intl</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Intl</span>.NumberFormat(<span class="string">&#x27;en-us&#x27;</span>).format(number)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_Intl(<span class="number">938765432.02</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-toLocaleString"><a href="#6-toLocaleString" class="headerlink" title="(6) toLocaleString"></a>(6) toLocaleString</h2><ul>
+<li>  语法：<code>numObj.toLocaleString([locales[,options]])</code></li>
+<li>  功能：其能把数字转为特定语言环境下的表示字符串</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_toLocaleString</span>(<span class="params">number, minimumFractionDigits, maximumFractionDigits</span>) </span>&#123;</span><br><span class="line">    minimumFractionDigits = minimumFractionDigits || <span class="number">2</span>;</span><br><span class="line">    maximumFractionDigits = (maximumFractionDigits || <span class="number">2</span>);</span><br><span class="line">    maximumFractionDigits = <span class="built_in">Math</span>.max(minimumFractionDigits, maximumFractionDigits);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> number.toLocaleString(<span class="string">&quot;en-us&quot;</span>, &#123;</span><br><span class="line">        <span class="attr">maximumFractionDigits</span>: maximumFractionDigits || <span class="number">2</span>,</span><br><span class="line">        <span class="attr">minimumFractionDigits</span>: minimumFractionDigits || <span class="number">2</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 性能更高</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">format_with_toLocaleString</span>(<span class="params">number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> number.toLocaleString(<span class="string">&quot;en-us&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log;</span><br><span class="line">print(format_with_toLocaleString(<span class="number">938765432.02</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h2><ul>
+<li>T0<ul>
+<li>  求模添加’,’，求余计算是够结束</li>
+</ul>
+</li>
+<li>T1<ul>
+<li>  subString</li>
+<li>  正则</li>
+<li>  字符串遍历</li>
+</ul>
+</li>
+<li>T2<ul>
+<li>  toLocaleString</li>
+<li>  Intl.NumberFormat</li>
+</ul>
+</li>
+</ul>
+<h1 id="5"><a href="#5" class="headerlink" title="5 [] + [], [] + {}, {} + [], {} + {}"></a>5 [] + [], [] + {}, {} + [], {} + {}</h1><h2 id="本质：-二元操作符-规则"><a href="#本质：-二元操作符-规则" class="headerlink" title="本质： 二元操作符+规则"></a>本质： 二元操作符+规则</h2><ul>
+<li>  如果操作数是对象，则对象会转换为原始值</li>
+<li>  如果其中一个操作数是字符串的话，另一个操作数也会转换为字符串，进行字符串连接</li>
+<li>  否则，两个操作数都将转换成数字或 NaN，进行加法操作</li>
+</ul>
+<h2 id="对象转换为原始数据类型的值"><a href="#对象转换为原始数据类型的值" class="headerlink" title="对象转换为原始数据类型的值"></a>对象转换为原始数据类型的值</h2><ul>
+<li>  <code>Symbol.ToPrimitive</code></li>
+<li>  <code>Object.prototype.valueOf</code></li>
+<li>  <code>Object.prototype.toString</code></li>
+</ul>
+<h2 id="的原始值"><a href="#的原始值" class="headerlink" title="[]的原始值"></a>[]的原始值</h2><ul>
+<li>  <code>typeof [][Symbol.ToPrimitive]</code> undefined （没有这个方法）</li>
+<li>  <code>[].valueOf()</code> 返回 [ ]</li>
+<li>  <code>[].toString()</code> 返回 ‘’</li>
+</ul>
+<h2 id="的原始值-1"><a href="#的原始值-1" class="headerlink" title="{}的原始值"></a>{}的原始值</h2><ul>
+<li>  <code>typeof &#123;&#125;[Symbol.ToPrimitive]</code> undefined （没有这个方法）</li>
+<li>  <code>&#123;&#125;.valueOf() 或 (&#123;&#125;).valueOf()</code> 返回 { }</li>
+<li>  <code>(&#123;&#125;).toString()</code> 返回 ‘[object Object]’</li>
+</ul>
+<h2 id="问题的答案"><a href="#问题的答案" class="headerlink" title="问题的答案"></a>问题的答案</h2><ol>
+<li>[] + []<br>等同于<code>[].toString() + [].toString()</code><br>等同于<code>&#39;&#39; + &#39;&#39;</code><br>返回<code>&#39;&#39;</code></li>
+<li>[] + {}<br>等同于<code>[].toString() + (&#123;&#125;).toString()</code><br>等同于<code>&#39;&#39; + &#39;[object Object]&#39;</code><br>返回<code>&#39;[object Object]&#39;</code></li>
+<li>{} + []<br><strong>在浏览器中</strong><br>等同于<code>&#123;&#125;; + []</code><br>等同于<code> + []</code><br>返回 0</li>
+<li>{} + {}<ul>
+<li><strong>在 Chrome 中</strong><ul>
+<li>Chrome 花括号开头和结尾的语句会自动添加括号包裹</li>
+<li>等同于<code>(&#123;&#125;) + (&#123;&#125;)</code></li>
+<li><code>&#39;[object Object][object Object]&#39; </code></li>
+</ul>
+</li>
+<li><strong>在其他浏览器中</strong><ul>
+<li>等同于<code>&#123;&#125;; + &#123;&#125;</code></li>
+<li>等同于<code> + &#39;[object Object]&#39;</code></li>
+<li>返回 NaN</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/23/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AVue-%E7%9F%A5%E8%AF%86%E7%82%B9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -156,7 +642,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -745,7 +1231,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1271,7 +1757,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1370,7 +1856,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1470,7 +1956,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1613,7 +2099,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1801,7 +2287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -1926,7 +2412,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -2114,7 +2600,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
+      <meta itemprop="name" content="Azetus的随笔">
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
@@ -2213,145 +2699,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/azem.png">
-      <meta itemprop="name" content="Azem">
-      <meta itemprop="description" content="记录些学习笔记，随便写写。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Azem's Notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/03/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%9AReact-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8-3/" class="post-title-link" itemprop="url">学习笔记：React 基本使用(3)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-09-03 16:41:51" itemprop="dateCreated datePublished" datetime="2021-09-03T16:41:51+08:00">2021-09-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><ul>
-<li>函数组件</li>
-<li>非受控组件</li>
-<li>Portals</li>
-</ul>
-<h1 id="函数组件"><a href="#函数组件" class="headerlink" title="函数组件"></a>函数组件</h1><h2 id="class-组件"><a href="#class-组件" class="headerlink" title="class 组件"></a>class 组件</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">List</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; list &#125; = <span class="built_in">this</span>.props;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;list.map((item, index) =&gt; &#123;</span></span><br><span class="line"><span class="xml">          return (</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">              <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;item.title&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">          );</span></span><br><span class="line"><span class="xml">        &#125;)&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="函数组件-1"><a href="#函数组件-1" class="headerlink" title="函数组件"></a>函数组件</h2><ul>
-<li>纯函数，输入 props，输出 JSX</li>
-<li>没有实例，没有生命周期，没有 state ，不包含逻辑</li>
-<li>不能扩展其他方法</li>
-</ul>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">List</span>(<span class="params">props</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; list &#125; = props;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">      &#123;list.map((item, index) =&gt; &#123;</span></span><br><span class="line"><span class="xml">        return (</span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;item.id&#125;</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;item.title&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">          <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">        );</span></span><br><span class="line"><span class="xml">      &#125;)&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h2><ul>
-<li>若组件只接收输入的 props 并输出一个 JSX，选择函数组件</li>
-<li>如果组件包含其他逻辑，必须需要设置 state，需要调用声明周期，选择 class 组件</li>
-</ul>
-<h1 id="非受控组件"><a href="#非受控组件" class="headerlink" title="非受控组件"></a>非受控组件</h1><ul>
-<li>ref</li>
-<li>defaultValue defaultChecked</li>
-<li>手动操作 DOM 元素</li>
-</ul>
-<h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><p><code>this.nameInputRef = React.createRef()</code><br>需要使用<code>React.createRef()</code>创建 ref ，并赋值给<code>this</code>的一个属性。在 render 中使用<code>ref=&#123;this.nameInputRef&#125;</code>使用 ref。<br>在使用时，通过<code>this.nameInputRef.current</code>获取当前 DOM 节点。</p>
-<h2 id="defaultValue"><a href="#defaultValue" class="headerlink" title="defaultValue"></a>defaultValue</h2><p>在 render 中使用 <code>defaultValue</code> 而不是 <code>value</code>，并且没有 <code>onChange</code> 事件，因此在<code>&lt;input&gt;</code> 中输入的内容并不会改变 state。<br>而 <code>alert</code> 使用的值是直接从 DOM 中获取的，因此可以弹出输入的内容。</p>
-<blockquote>
-<p><code>&lt;input&gt;</code> value -&gt; defaultValue</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;Monika&#x27;</span>,</span><br><span class="line">      <span class="attr">flag</span>: <span class="literal">true</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">this</span>.nameInputRef = React.createRef(); <span class="comment">// 创建 ref</span></span><br><span class="line">    <span class="built_in">this</span>.fileInputRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// input defaultValue</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;/* 使用 defaultValue 而不是 value ，使用 ref */&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">defaultValue</span>=<span class="string">&#123;this.state.name&#125;</span> <span class="attr">ref</span>=<span class="string">&#123;this.nameInputRef&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;/* state 并不会随着改变 */&#125;</span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>state.name: &#123;this.state.name&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.alertName&#125;</span>&gt;</span>alert name<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  alertName = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> elem = <span class="built_in">this</span>.nameInputRef.current; <span class="comment">// 通过 ref 获取 DOM 节点</span></span><br><span class="line">    alert(elem.value); <span class="comment">// 不是 this.state.name</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="defaultChecked"><a href="#defaultChecked" class="headerlink" title="defaultChecked"></a>defaultChecked</h2><blockquote>
-<p><code>&lt;input type=&quot;checkbox&quot;&gt;</code> checked -&gt; defaultChecked</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;checkbox&quot;</span> <span class="attr">defaultChecked</span>=<span class="string">&#123;this.state.flag&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h2 id="file"><a href="#file" class="headerlink" title="file"></a>file</h2><blockquote>
-<p>当无法使用 state，必须使用 DOM 操作时。比如获取文件名时。</p>
-</blockquote>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.fileInputRef = React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// file</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">ref</span>=<span class="string">&#123;this.fileInputRef&#125;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.alertFile&#125;</span>&gt;</span>alert file<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  alertFile = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> elem = <span class="built_in">this</span>.fileInputRef.current; <span class="comment">// 通过 ref 获取 DOM 节点</span></span><br><span class="line">    alert(elem.files[<span class="number">0</span>].name);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
-<li>必须手动操作 DOM 元素，setState 实现不了</li>
-<li>比如文件上传<code>&lt;input type=file&gt;</code></li>
-<li>某些富文本编辑器，需要传入 DOM 元素</li>
-<li>如何选择：<ul>
-<li>优先使用受控组件，复合 React 设计原则（数据驱动视图）</li>
-<li>必须操作 DOM 时，在使用非受控组件</li>
-</ul>
-</li>
-</ul>
-<h1 id="Portals"><a href="#Portals" class="headerlink" title="Portals"></a>Portals</h1><ul>
-<li>React 组件默认会按照既定层次嵌套渲染</li>
-<li>如何让组件渲染到父组件以外</li>
-</ul>
-<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="父组件"><a href="#父组件" class="headerlink" title="父组件"></a>父组件</h3><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (</span><br><span class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">PortalsDemo</span>&gt;</span>Modal 内容<span class="tag">&lt;/<span class="name">PortalsDemo</span>&gt;</span></span></span><br><span class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h3 id="子组件"><a href="#子组件" class="headerlink" title="子组件"></a>子组件</h3><blockquote>
-<p><code>this.props.children</code> 可以获取组件内的东西（类似 vue slot）</p>
-</blockquote>
-<h4 id="正常渲染的情况"><a href="#正常渲染的情况" class="headerlink" title="正常渲染的情况"></a>正常渲染的情况</h4><p>会嵌套在很多层<code>&lt;div&gt;</code>内部。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./style.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 正常渲染</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;modal&quot;</span>&gt;</span></span></span><br><span class="line"><span class="xml">        &#123;this.props.children&#125; &#123;/* 类似 vue slot */&#125;</span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.modal</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: fixed;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">margin-left</span>: -<span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#000</span>;</span><br><span class="line">  <span class="comment">/* opacity: .2; */</span></span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="使用-Portal-的情况"><a href="#使用-Portal-的情况" class="headerlink" title="使用 Portal 的情况"></a>使用 Portal 的情况</h4><p>引入<code>ReactDOM</code>，并使用<code>ReactDOM.createPortal()</code>创建 Portal，其第二个参数为元素需要渲染的 DOM 节点位置。此时该组件将被挂载在<code>&lt;body&gt;</code>下第一层级。</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">&#x27;react-dom&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./style.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">props</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">super</span>(props);</span><br><span class="line">    <span class="built_in">this</span>.state = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 使用 Portals 渲染到 body 上。</span></span><br><span class="line">    <span class="comment">// fixed 元素要放在 body 上，有更好的浏览器兼容性。</span></span><br><span class="line">    <span class="keyword">return</span> ReactDOM.createPortal(</span><br><span class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">className</span>=<span class="string">&quot;modal&quot;</span>&gt;</span>&#123;this.props.children&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>,</span><br><span class="line">      <span class="built_in">document</span>.body <span class="comment">// DOM 节点</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> App;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Portals-的使用场景"><a href="#Portals-的使用场景" class="headerlink" title="Portals 的使用场景"></a>Portals 的使用场景</h2><ul>
-<li>父组件设置了<code>overflow: hidden</code>，父组件使用了 BFC ，限制了子组件的展示</li>
-<li>父组件 z-index 值太小</li>
-<li><code>position: fixed;</code> 的组件需要放在 body 第一层级</li>
-<li>主要针对 CSS 兼容性和布局相关的问题</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -2423,18 +2770,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
