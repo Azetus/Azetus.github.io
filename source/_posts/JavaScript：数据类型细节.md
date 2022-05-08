@@ -217,6 +217,8 @@ console.log('0' == false) // true
     -   null 是一个关键字，而 undefined 是一个变量
 -   判断是不是数字，NaN
 
+---
+
 # 2 数据类型的 8 种判断方式
 
 ## 第一种：typeof
@@ -418,6 +420,8 @@ export function kindOf(val: any) {
 }
 ```
 
+---
+
 # 3 ES6 中的 NaN
 
 ## NaN 和 Number.NaN
@@ -502,6 +506,8 @@ arr.includes(NaN) // true
 
 includes：调用内部的`Number::sameValueZero`  
 indexOf：调用内部的`Number::equal`
+
+---
 
 # 4 数值千分位的 6 种方法
 
@@ -774,6 +780,8 @@ print(format_with_toLocaleString(938765432.02));
 -   T2
     -   toLocaleString
     -   Intl.NumberFormat
+
+---
 
 # 5 [] + [], [] + {}, {} + [], {} + {}
 
