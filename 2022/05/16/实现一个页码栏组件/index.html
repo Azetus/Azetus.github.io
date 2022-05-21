@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 6.2.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路定义一个函数，该函数返回一个数组，数组元素是 JSX.Element，也就是我们想要 React 渲染出来的元素。当总页数大于 7 个的时候，数组的头尾必定是第一页和最后一页。然后我们根据当前页码来决定数组中间的内容以及省略号是否出现，使用循环或者其他方法，将这">
+  <meta name="description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路">
 <meta property="og:type" content="article">
 <meta property="og:title" content="实现一个页码栏组件">
 <meta property="og:url" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/index.html">
 <meta property="og:site_name" content="Azetus的随笔">
-<meta property="og:description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路定义一个函数，该函数返回一个数组，数组元素是 JSX.Element，也就是我们想要 React 渲染出来的元素。当总页数大于 7 个的时候，数组的头尾必定是第一页和最后一页。然后我们根据当前页码来决定数组中间的内容以及省略号是否出现，使用循环或者其他方法，将这">
+<meta property="og:description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-1.png">
 <meta property="og:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-2.png">
@@ -120,6 +120,16 @@
         <li class="menu-item menu-item-home">
 
     <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -339,11 +349,13 @@
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
+          
         <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
+          
         <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
