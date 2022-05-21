@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路定义一个函数，该函数返回一个数组，数组元素是 JSX.Element，也就是我们想要 React 渲染出来的元素。当总页数大于 7 个的时候，数组的头尾必定是第一页和最后一页。然后我们根据当前页码来决定数组中间的内容以及省略号是否出现，使用循环或者其他方法，将这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现一个页码栏组件">
+<meta property="og:url" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Azetus的随笔">
+<meta property="og:description" content="实现效果    样式如图   页码按钮最多显示 7 个 首尾按钮固定显示 若页码在中间则固定显示 5 个页码按钮，其余用省略号代替  思路定义一个函数，该函数返回一个数组，数组元素是 JSX.Element，也就是我们想要 React 渲染出来的元素。当总页数大于 7 个的时候，数组的头尾必定是第一页和最后一页。然后我们根据当前页码来决定数组中间的内容以及省略号是否出现，使用循环或者其他方法，将这">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-1.png">
+<meta property="og:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-2.png">
+<meta property="og:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-3.png">
+<meta property="article:published_time" content="2022-05-16T12:21:14.000Z">
+<meta property="article:modified_time" content="2022-05-21T06:30:19.936Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-1.png">
+
+<link rel="canonical" href="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>实现一个页码栏组件 | Azetus的随笔</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azetus的随笔</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实现一个页码栏组件
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-16 20:21:14" itemprop="dateCreated datePublished" datetime="2022-05-16T20:21:14+08:00">2022-05-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h1><p><img src="/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-1.png" alt="pageButtonGroup1"><br><img src="/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-2.png" alt="pageButtonGroup2"><br><img src="/2022/05/16/%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E9%A1%B5%E7%A0%81%E6%A0%8F%E7%BB%84%E4%BB%B6/pageButtonGroup-3.png" alt="pageButtonGroup3"></p>
+<ul>
+<li>  样式如图</li>
+</ul>
+<ol>
+<li>页码按钮最多显示 7 个</li>
+<li>首尾按钮固定显示</li>
+<li>若页码在中间则固定显示 5 个页码按钮，其余用省略号代替</li>
+</ol>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>定义一个函数，该函数返回一个数组，数组元素是 JSX.Element，也就是我们想要 React 渲染出来的元素。当总页数大于 7 个的时候，数组的头尾必定是第一页和最后一页。然后我们根据当前页码来决定数组中间的内容以及省略号是否出现，使用循环或者其他方法，将这些元素添加到数组中。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>首先上最终结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState &#125; from &#x27;react&#x27;</span><br><span class="line">import &#x27;./Style/CreatePageStyle.css&#x27;</span><br><span class="line"></span><br><span class="line">const pageIdxBtnStyle = (isCurPage: boolean) =&gt; &#123;</span><br><span class="line">    return isCurPage</span><br><span class="line">        ? (&#123; color: &#x27;#FFFFFF&#x27;, border: &#x27;1px solid #3ABDCF&#x27;, background: &#x27;#3ABDCF&#x27; &#125; as React.CSSProperties)</span><br><span class="line">        : (&#123; color: &#x27;#DCDCDC&#x27;, border: &#x27;1px solid #DCDCDC&#x27; &#125; as React.CSSProperties)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export const PageButtonGroup = () =&gt; &#123;</span><br><span class="line">    const [totalPage, setTotalPage] = useState(9)</span><br><span class="line">    const [curPage, setCurPage] = useState(0)</span><br><span class="line"></span><br><span class="line">    const CreatePage = () =&gt; &#123;</span><br><span class="line">        const pages = [] as JSX.Element[]</span><br><span class="line">        /* 页码按钮最多7个，省略号中间最多显示5个 */</span><br><span class="line">        const groupCount = 5</span><br><span class="line"></span><br><span class="line">        const handleClickPage = (idx: number) =&gt; &#123;</span><br><span class="line">            setCurPage(idx)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (totalPage &lt;= 7) &#123;</span><br><span class="line">            for (let i = 0; i &lt; totalPage; i++) &#123;</span><br><span class="line">                pages.push(</span><br><span class="line">                    &lt;li</span><br><span class="line">                        key=&#123;i.toString()&#125;</span><br><span class="line">                        className=&quot;pageButton&quot;</span><br><span class="line">                        style=&#123;pageIdxBtnStyle(i === curPage)&#125;</span><br><span class="line">                        onClick=&#123;() =&gt; handleClickPage(i)&#125;</span><br><span class="line">                    &gt;</span><br><span class="line">                        &#123;i + 1&#125;</span><br><span class="line">                    &lt;/li&gt;</span><br><span class="line">                )</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            pages.push(</span><br><span class="line">                &lt;li</span><br><span class="line">                    key=&#123;&#x27;0&#x27;&#125;</span><br><span class="line">                    className=&quot;pageButton&quot;</span><br><span class="line">                    style=&#123;pageIdxBtnStyle(curPage === 0)&#125;</span><br><span class="line">                    onClick=&#123;() =&gt; handleClickPage(0)&#125;</span><br><span class="line">                &gt;</span><br><span class="line">                    1</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">            )</span><br><span class="line">            const pageGroupStart = curPage &lt;= 3 ? 1 : totalPage - curPage &gt; 4 ? curPage - 2 : totalPage - groupCount - 1</span><br><span class="line">            const pageGroupEnd = groupCount + pageGroupStart &gt;= totalPage ? totalPage - 1 : groupCount + pageGroupStart</span><br><span class="line">            if (pageGroupStart &gt; 1)</span><br><span class="line">                pages.push(</span><br><span class="line">                    &lt;li key=&#123;&#x27;-1&#x27;&#125;&gt;</span><br><span class="line">                        &lt;p&gt;···&lt;/p&gt;</span><br><span class="line">                    &lt;/li&gt;</span><br><span class="line">                )</span><br><span class="line">            for (let i = pageGroupStart; i &lt; pageGroupEnd; i++) &#123;</span><br><span class="line">                if (i &lt; totalPage &amp;&amp; i &gt; 0)</span><br><span class="line">                    pages.push(</span><br><span class="line">                        &lt;li</span><br><span class="line">                            key=&#123;`$&#123;i&#125;-group`&#125;</span><br><span class="line">                            className=&quot;pageButton&quot;</span><br><span class="line">                            style=&#123;pageIdxBtnStyle(i === curPage)&#125;</span><br><span class="line">                            onClick=&#123;() =&gt; handleClickPage(i)&#125;</span><br><span class="line">                        &gt;</span><br><span class="line">                            &#123;i + 1&#125;</span><br><span class="line">                        &lt;/li&gt;</span><br><span class="line">                    )</span><br><span class="line">            &#125;</span><br><span class="line">            if (pageGroupEnd &lt; totalPage - 1)</span><br><span class="line">                pages.push(</span><br><span class="line">                    &lt;li key=&#123;&#x27;-2&#x27;&#125;&gt;</span><br><span class="line">                        &lt;p&gt;···&lt;/p&gt;</span><br><span class="line">                    &lt;/li&gt;</span><br><span class="line">                )</span><br><span class="line">            pages.push(</span><br><span class="line">                &lt;li</span><br><span class="line">                    key=&#123;totalPage.toString()&#125;</span><br><span class="line">                    className=&quot;pageButton&quot;</span><br><span class="line">                    style=&#123;pageIdxBtnStyle(curPage === totalPage - 1)&#125;</span><br><span class="line">                    onClick=&#123;() =&gt; handleClickPage(totalPage - 1)&#125;</span><br><span class="line">                &gt;</span><br><span class="line">                    &#123;totalPage&#125;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">        return pages</span><br><span class="line">    &#125;</span><br><span class="line">    return (</span><br><span class="line">        &lt;div style=&#123;&#123; display: &#x27;flex&#x27; &#125;&#125;&gt;</span><br><span class="line">            &lt;button</span><br><span class="line">                className=&quot;nextPreButton&quot;</span><br><span class="line">                onClick=&#123;() =&gt; &#123;</span><br><span class="line">                    setCurPage((pre) =&gt; pre - 1)</span><br><span class="line">                &#125;&#125;</span><br><span class="line">            &gt;</span><br><span class="line">                &lt;img src=&#123;require(&#x27;./Style/Image/chevronLeft.png&#x27;)&#125; alt=&quot;leftArrow&quot; /&gt;</span><br><span class="line">            &lt;/button&gt;</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;ul style=&#123;&#123; listStyle: &#x27;none&#x27;, display: &#x27;flex&#x27;, padding: 0 &#125;&#125;&gt;&#123;CreatePage()&#125;&lt;/ul&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">            &lt;button</span><br><span class="line">                className=&quot;nextPreButton&quot;</span><br><span class="line">                onClick=&#123;() =&gt; &#123;</span><br><span class="line">                    setCurPage((pre) =&gt; pre + 1)</span><br><span class="line">                &#125;&#125;</span><br><span class="line">            &gt;</span><br><span class="line">                &lt;img src=&#123;require(&#x27;component/Style/Image/chevronRight.png&#x27;)&#125; alt=&quot;rightArrow&quot; /&gt;</span><br><span class="line">            &lt;/button&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>样式文件</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.pageButton</span> &#123;</span><br><span class="line">    <span class="attribute">list-style</span>: none;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">32px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">32px</span>;</span><br><span class="line">    <span class="attribute">line-height</span>: <span class="number">32px</span>;</span><br><span class="line">    <span class="attribute">text-align</span>: center;</span><br><span class="line">    <span class="attribute">margin</span>: auto <span class="number">8px</span>;</span><br><span class="line">    <span class="attribute">border-radius</span>: <span class="number">3px</span>;</span><br><span class="line">    user-select: none;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.nextPreButton</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">14px</span>;</span><br><span class="line">    <span class="attribute">line-height</span>: <span class="number">64px</span>;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">border</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">outline</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">background</span>: none;</span><br><span class="line">    user-select: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="定义所需要的状态"><a href="#定义所需要的状态" class="headerlink" title="定义所需要的状态"></a>定义所需要的状态</h2><p>首先定义一个 react 组件，作为整个按钮组的最外层，控制页码显示的 state 全部放在这里，对于按钮组我们只需要两个状态就可以控制，分别是总页数 totalPage 和当前页数 curPage，在实际使用时可以根据后端返回的数据以及页码实际展示情况进行初始化，或者在这里添加新的 state 进行控制（比如页面是一个列表情况）。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> PageButtonGroup = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> [totalPage, setTotalPage] = useState(<span class="number">9</span>)</span><br><span class="line">    <span class="keyword">const</span> [curPage, setCurPage] = useState(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27; &#125;&#125;&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加按钮样式"><a href="#添加按钮样式" class="headerlink" title="添加按钮样式"></a>添加按钮样式</h2><ul>
+<li>  使用一个函数，来为当前页码添加特殊样式</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pageIdxBtnStyle = <span class="function">(<span class="params">isCurPage: boolean</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> isCurPage</span><br><span class="line">        ? (&#123; <span class="attr">color</span>: <span class="string">&#x27;#FFFFFF&#x27;</span>, <span class="attr">border</span>: <span class="string">&#x27;1px solid #3ABDCF&#x27;</span>, <span class="attr">background</span>: <span class="string">&#x27;#3ABDCF&#x27;</span> &#125; <span class="keyword">as</span> React.CSSProperties)</span><br><span class="line">        : (&#123; <span class="attr">color</span>: <span class="string">&#x27;#DCDCDC&#x27;</span>, <span class="attr">border</span>: <span class="string">&#x27;1px solid #DCDCDC&#x27;</span> &#125; <span class="keyword">as</span> React.CSSProperties)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加页面按钮组"><a href="#添加页面按钮组" class="headerlink" title="添加页面按钮组"></a>添加页面按钮组</h2><p>创建一个子组件 CreatePage，在子组件中创建一个列表 pages，列表中的元素是 JSX.Element，设想中我们将会根据当前页 i 的变化动态地创建这个数组来达到我们想要的结果。</p>
+<ul>
+<li>  首先我们考虑总页数小于 7 页的情况，这时不需要省略显示任何按钮，直接返回数组即可</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">const CreatePage = () =&gt; &#123;</span><br><span class="line">    const pages = [] as JSX.Element[]</span><br><span class="line">    /* 页码按钮最多7个，省略号中间最多显示5个 */</span><br><span class="line">    const groupCount = 5</span><br><span class="line"></span><br><span class="line">    const handleClickPage = (idx: number) =&gt; &#123;</span><br><span class="line">        setCurPage(idx)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (totalPage &lt;= 7) &#123;</span><br><span class="line">        for (let i = 0; i &lt; totalPage; i++) &#123;</span><br><span class="line">            pages.push(</span><br><span class="line">                &lt;li</span><br><span class="line">                    key=&#123;i.toString()&#125;</span><br><span class="line">                    className=&quot;pageButton&quot;</span><br><span class="line">                    style=&#123;pageIdxBtnStyle(i === curPage)&#125;</span><br><span class="line">                    onClick=&#123;() =&gt; handleClickPage(i)&#125;</span><br><span class="line">                &gt;</span><br><span class="line">                    &#123;i + 1&#125;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        /**</span><br><span class="line">         * 页码总数大于七个时？</span><br><span class="line">         */</span><br><span class="line">    &#125;</span><br><span class="line">    return pages</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>若当页面总数大于 7 个时，就需要对当前页码进行判断<ul>
+<li>  首先首尾的按钮是必定会显示的，先将页码 1 的元素 push 进数组中</li>
+<li>  再根据页码 i 计算出中间需要显示的 5 个页码的头和尾</li>
+<li>  如果头大于 1 或者尾小于 total-1，则需要添加省略号</li>
+<li>  在中间使用 for 循环将页码组的元素 push 进数组中</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">if (totalPage &lt;= 7) &#123;</span><br><span class="line">    // ...</span><br><span class="line">    // ...</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    pages.push(</span><br><span class="line">        &lt;li key=&#123;&#x27;0&#x27;&#125; className=&quot;pageButton&quot; style=&#123;pageIdxBtnStyle(curPage === 0)&#125; onClick=&#123;() =&gt; handleClickPage(0)&#125;&gt;</span><br><span class="line">            1</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    )</span><br><span class="line">    const pageGroupStart = curPage &lt;= 3 ? 1 : totalPage - curPage &gt; 4 ? curPage - 2 : totalPage - groupCount - 1</span><br><span class="line">    const pageGroupEnd = groupCount + pageGroupStart &gt;= totalPage ? totalPage - 1 : groupCount + pageGroupStart</span><br><span class="line">    if (pageGroupStart &gt; 1)</span><br><span class="line">        pages.push(</span><br><span class="line">            &lt;li key=&#123;&#x27;-1&#x27;&#125;&gt;</span><br><span class="line">                &lt;p&gt;···&lt;/p&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">        )</span><br><span class="line">    for (let i = pageGroupStart; i &lt; pageGroupEnd; i++) &#123;</span><br><span class="line">        if (i &lt; totalPage &amp;&amp; i &gt; 0)</span><br><span class="line">            pages.push(</span><br><span class="line">                &lt;li</span><br><span class="line">                    key=&#123;`$&#123;i&#125;-group`&#125;</span><br><span class="line">                    className=&quot;pageButton&quot;</span><br><span class="line">                    style=&#123;pageIdxBtnStyle(i === curPage)&#125;</span><br><span class="line">                    onClick=&#123;() =&gt; handleClickPage(i)&#125;</span><br><span class="line">                &gt;</span><br><span class="line">                    &#123;i + 1&#125;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">            )</span><br><span class="line">    &#125;</span><br><span class="line">    if (pageGroupEnd &lt; totalPage - 1)</span><br><span class="line">        pages.push(</span><br><span class="line">            &lt;li key=&#123;&#x27;-2&#x27;&#125;&gt;</span><br><span class="line">                &lt;p&gt;···&lt;/p&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">        )</span><br><span class="line">    pages.push(</span><br><span class="line">        &lt;li</span><br><span class="line">            key=&#123;totalPage.toString()&#125;</span><br><span class="line">            className=&quot;pageButton&quot;</span><br><span class="line">            style=&#123;pageIdxBtnStyle(curPage === totalPage - 1)&#125;</span><br><span class="line">            onClick=&#123;() =&gt; handleClickPage(totalPage - 1)&#125;</span><br><span class="line">        &gt;</span><br><span class="line">            &#123;totalPage&#125;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后添加翻页按钮"><a href="#最后添加翻页按钮" class="headerlink" title="最后添加翻页按钮"></a>最后添加翻页按钮</h2><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> PageButtonGroup = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> [totalPage, setTotalPage] = useState(<span class="number">9</span>)</span><br><span class="line">    <span class="keyword">const</span> [curPage, setCurPage] = useState(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> CreatePage = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> pages = [] <span class="keyword">as</span> JSX.Element[]</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">return</span> pages</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        <span class="xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27; &#125;&#125;&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">button</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">className</span>=<span class="string">&quot;nextPreButton&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="xml">                    setCurPage((pre) =&gt; pre - 1)</span></span><br><span class="line"><span class="xml">                &#125;&#125;</span></span><br><span class="line"><span class="xml">            &gt;</span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;require(</span>&#x27;<span class="attr">.</span>/<span class="attr">Style</span>/<span class="attr">Image</span>/<span class="attr">chevronLeft.png</span>&#x27;)&#125; <span class="attr">alt</span>=<span class="string">&quot;leftArrow&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">listStyle:</span> &#x27;<span class="attr">none</span>&#x27;, <span class="attr">display:</span> &#x27;<span class="attr">flex</span>&#x27;, <span class="attr">padding:</span> <span class="attr">0</span> &#125;&#125;&gt;</span>&#123;CreatePage()&#125;<span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">button</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">className</span>=<span class="string">&quot;nextPreButton&quot;</span></span></span></span><br><span class="line"><span class="tag"><span class="xml">                <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="xml">                    setCurPage((pre) =&gt; pre + 1)</span></span><br><span class="line"><span class="xml">                &#125;&#125;</span></span><br><span class="line"><span class="xml">            &gt;</span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#123;require(</span>&#x27;<span class="attr">component</span>/<span class="attr">Style</span>/<span class="attr">Image</span>/<span class="attr">chevronRight.png</span>&#x27;)&#125; <span class="attr">alt</span>=<span class="string">&quot;rightArrow&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/08/JavaScript%EF%BC%9A%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%8B%B7%E8%B4%9D/" rel="prev" title="JavaScript：对象的拷贝">
+      <i class="fa fa-chevron-left"></i> JavaScript：对象的拷贝
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/21/JavaScript%EF%BC%9Adelete%E7%9A%84%E6%9C%AC%E8%B4%A8/" rel="next" title="JavaScript: 运算符">
+      JavaScript: 运算符 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="nav-number">1.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%89%80%E9%9C%80%E8%A6%81%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">3.1.</span> <span class="nav-text">定义所需要的状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%92%AE%E6%A0%B7%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">添加按钮样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%A1%B5%E9%9D%A2%E6%8C%89%E9%92%AE%E7%BB%84"><span class="nav-number">3.3.</span> <span class="nav-text">添加页面按钮组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%E6%B7%BB%E5%8A%A0%E7%BF%BB%E9%A1%B5%E6%8C%89%E9%92%AE"><span class="nav-number">3.4.</span> <span class="nav-text">最后添加翻页按钮</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
