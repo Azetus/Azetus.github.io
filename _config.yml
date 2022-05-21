@@ -108,3 +108,10 @@ deploy:
   type: git
   repo: git@github.com:Azetus/Azetus.github.io.git
   branch: gh-pages
+
+# auto excerpt
+excerpt:
+  depth: 5
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true
