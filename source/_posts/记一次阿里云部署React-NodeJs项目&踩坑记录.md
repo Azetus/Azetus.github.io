@@ -2,10 +2,12 @@
 title: 记一次阿里云部署React+NodeJs项目&踩坑记录
 date: 2021-12-17 16:14:24
 tags:
-  - 踩坑
-  - 阿里云
-  - React
-  - NodeJs
+    - 踩坑
+    - 阿里云
+    - React
+    - NodeJs
+categories:
+    - 随笔
 ---
 
 # 前言
@@ -160,26 +162,26 @@ Emitted 'error' event on Connection instance at:
 之前使用的是`mysql.createConnection()`的方法创建的连接，改用使用`mysql.createPool()`这个 API 创建连接池。
 
 ```javascript
-const con = mysql.createPool(MYSQL_CONF);
+const con = mysql.createPool(MYSQL_CONF)
 
 function exec(sql) {
-  const promise = new Promise((resolve, reject) => {
-    con.getConnection(function (err, connection) {
-      if (err) {
-        reject(err);
-      } else {
-        connection.query(sql, (err, result) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(result);
-        });
-        // 在 query 执行完毕后加上 connection.release() 释放连接
-        connection.release();
-      }
-    });
-  });
-  return promise;
+    const promise = new Promise((resolve, reject) => {
+        con.getConnection(function (err, connection) {
+            if (err) {
+                reject(err)
+            } else {
+                connection.query(sql, (err, result) => {
+                    if (err) {
+                        reject(err)
+                        return
+                    }
+                    resolve(result)
+                })
+                // 在 query 执行完毕后加上 connection.release() 释放连接
+                connection.release()
+            }
+        })
+    })
+    return promise
 }
 ```
