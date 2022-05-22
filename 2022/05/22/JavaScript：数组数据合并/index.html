@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="假设业务场景现在需要一个两个数组的高效合并方案   第一次请求返回一个列表信息 第二次请求根据列表信息中的每一个发送一次请求，返回第二个列表数据  模拟场景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript：数组数据合并">
+<meta property="og:url" content="http://example.com/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/index.html">
+<meta property="og:site_name" content="Azetus的随笔">
+<meta property="og:description" content="假设业务场景现在需要一个两个数组的高效合并方案   第一次请求返回一个列表信息 第二次请求根据列表信息中的每一个发送一次请求，返回第二个列表数据  模拟场景">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/5-8-1.png">
+<meta property="article:published_time" content="2022-05-22T11:47:01.000Z">
+<meta property="article:modified_time" content="2022-05-22T11:49:47.316Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="数组">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/5-8-1.png">
+
+<link rel="canonical" href="http://example.com/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript：数组数据合并 | Azetus的随笔</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azetus的随笔</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript：数组数据合并
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-22 19:47:01" itemprop="dateCreated datePublished" datetime="2022-05-22T19:47:01+08:00">2022-05-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript%E8%BF%9B%E9%98%B6/" itemprop="url" rel="index"><span itemprop="name">JavaScript进阶</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="假设业务场景"><a href="#假设业务场景" class="headerlink" title="假设业务场景"></a>假设业务场景</h1><p>现在需要一个两个数组的高效合并方案</p>
+<p><img src="/2022/05/22/JavaScript%EF%BC%9A%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6/5-8-1.png" alt="5-8-1"></p>
+<ul>
+<li>第一次请求返回一个列表信息</li>
+<li>第二次请求根据列表信息中的每一个发送一次请求，返回第二个列表数据</li>
+</ul>
+<h1 id="模拟场景"><a href="#模拟场景" class="headerlink" title="模拟场景"></a>模拟场景</h1><ul>
+<li>将第二组数据根据 uid 合并至第一组数据</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> usersInfo = <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: <span class="number">200</span> &#125;, <span class="function">(<span class="params">val, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">uid</span>: <span class="string">`<span class="subst">$&#123;index + <span class="number">1</span>&#125;</span>`</span>,</span><br><span class="line">        <span class="attr">name</span>: <span class="string">`user-name-<span class="subst">$&#123;index&#125;</span>`</span>,</span><br><span class="line">        <span class="attr">age</span>: index + <span class="number">10</span>,</span><br><span class="line">        <span class="attr">avatar</span>: <span class="string">`http://www.my-avatar.com/<span class="subst">$&#123;index + <span class="number">1</span>&#125;</span>`</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> scoresInfo = <span class="title class_">Array</span>.<span class="title function_">from</span>(&#123; <span class="attr">length</span>: <span class="number">180</span> &#125;, <span class="function">(<span class="params">val, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">uid</span>: <span class="string">`<span class="subst">$&#123;index + <span class="number">191</span>&#125;</span>`</span>,</span><br><span class="line">        <span class="attr">score</span>: ~~(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10000</span>),</span><br><span class="line">        <span class="attr">comments</span>: ~~(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">10000</span>),</span><br><span class="line">        <span class="attr">stars</span>: ~~(<span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据合并-基础版本"><a href="#数据合并-基础版本" class="headerlink" title="数据合并 - 基础版本"></a>数据合并 - 基础版本</h1><ul>
+<li>方案：两层 for 循环，通过 key 关联</li>
+<li>耗时：&gt; 3.8ms</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> data <span class="keyword">from</span> <span class="string">&#x27;./data.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; usersInfo, scoresInfo &#125; = data</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; usersInfo.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="attr">user</span>: any = usersInfo[i]</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; scoresInfo.<span class="property">length</span>; j++) &#123;</span><br><span class="line">        <span class="keyword">var</span> score = scoresInfo[j]</span><br><span class="line">        <span class="keyword">if</span> (user.<span class="property">uid</span> == score.<span class="property">uid</span>) &#123;</span><br><span class="line">            user.<span class="property">score</span> = score.<span class="property">score</span></span><br><span class="line">            user.<span class="property">comments</span> = score.<span class="property">comments</span></span><br><span class="line">            user.<span class="property">stars</span> = score.<span class="property">stars</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据合并-对象基础版"><a href="#数据合并-对象基础版" class="headerlink" title="数据合并 - 对象基础版"></a>数据合并 - 对象基础版</h1><ul>
+<li>方案：数组转换为对象，数组查找变为属性查找</li>
+<li>耗时：0.1ms - 0.7ms</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> data <span class="keyword">from</span> <span class="string">&#x27;./data.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; usersInfo, scoresInfo &#125; = data</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scoreMap = scoresInfo.<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    obj[cur.<span class="property">uid</span>] = cur</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">&#125;, <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; usersInfo.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">user</span>: any = usersInfo[i]</span><br><span class="line">    <span class="keyword">const</span> score = scoreMap[user.<span class="property">uid</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (score != <span class="literal">null</span>) &#123;</span><br><span class="line">        user.<span class="property">score</span> = score.<span class="property">score</span></span><br><span class="line">        user.<span class="property">comments</span> = score.<span class="property">comments</span></span><br><span class="line">        user.<span class="property">stars</span> = score.<span class="property">stars</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数据合并-跳出"><a href="#数据合并-跳出" class="headerlink" title="数据合并 - 跳出"></a>数据合并 - 跳出</h1><ul>
+<li>统计已被合并的数据条数，当已合并条数大于等于需要被合并的数据总条数时进行跳出</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> data <span class="keyword">from</span> <span class="string">&#x27;./data.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; usersInfo, scoresInfo &#125; = data</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scoreMap = scoresInfo.<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    obj[cur.<span class="property">uid</span>] = cur</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">&#125;, <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 被合并数据的条数</span></span><br><span class="line"><span class="keyword">const</span> len = scoresInfo.<span class="property">length</span></span><br><span class="line"><span class="comment">// 已合并的条数</span></span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line"><span class="comment">// 已遍历的次数</span></span><br><span class="line"><span class="keyword">let</span> walkCount = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; usersInfo.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">user</span>: any = usersInfo[i]</span><br><span class="line">    <span class="keyword">const</span> score = scoreMap[user.<span class="property">uid</span>]</span><br><span class="line"></span><br><span class="line">    walkCount++</span><br><span class="line">    <span class="keyword">if</span> (score != <span class="literal">null</span>) &#123;</span><br><span class="line">        count++</span><br><span class="line">        user.<span class="property">score</span> = score.<span class="property">score</span></span><br><span class="line">        user.<span class="property">comments</span> = score.<span class="property">comments</span></span><br><span class="line">        user.<span class="property">stars</span> = score.<span class="property">stars</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (count &gt;= len) &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="合并数据-倒序合并"><a href="#合并数据-倒序合并" class="headerlink" title="合并数据 - 倒序合并"></a>合并数据 - 倒序合并</h1><ul>
+<li>方案：在跳出版的基础上，一个是从前向后，一个是从后向前</li>
+<li>适用场景：分页拉取数据，先数组添加在最后，倒序更快</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> data <span class="keyword">from</span> <span class="string">&#x27;./data.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; usersInfo, scoresInfo &#125; = data</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scoreMap = scoresInfo.<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj, cur</span>) =&gt;</span> &#123;</span><br><span class="line">    obj[cur.<span class="property">uid</span>] = cur</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">&#125;, <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> len = scoresInfo.<span class="property">length</span></span><br><span class="line"><span class="keyword">let</span> count = <span class="number">0</span></span><br><span class="line"><span class="keyword">let</span> walkCount = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = usersInfo.<span class="property">length</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="attr">user</span>: any = usersInfo[i]</span><br><span class="line">    <span class="keyword">const</span> score = scoreMap[user.<span class="property">uid</span>]</span><br><span class="line"></span><br><span class="line">    walkCount++</span><br><span class="line">    <span class="keyword">if</span> (score != <span class="literal">null</span>) &#123;</span><br><span class="line">        count++</span><br><span class="line">        user.<span class="property">score</span> = score.<span class="property">score</span></span><br><span class="line">        user.<span class="property">comments</span> = score.<span class="property">comments</span></span><br><span class="line">        user.<span class="property">stars</span> = score.<span class="property">stars</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (count &gt;= len) &#123;</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="数组合并-通用方案"><a href="#数组合并-通用方案" class="headerlink" title="数组合并 - 通用方案"></a>数组合并 - 通用方案</h1><ul>
+<li>顺序问题<ul>
+<li>倒序遍历</li>
+<li>顺序遍历</li>
+</ul>
+</li>
+<li>合并多级属性</li>
+<li>学习优秀开源库的解决方法， 例如 underscore 和 lodash</li>
+</ul>
+<h2 id="多级属性合并"><a href="#多级属性合并" class="headerlink" title="多级属性合并"></a>多级属性合并</h2><blockquote>
+<p>来自 lodash</p>
+</blockquote>
+<ul>
+<li>stringToPath：路径转换成数组</li>
+<li>getProperty：读属性</li>
+<li>setProperty：设属性</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://github.com/lodash/lodash/blob/master/.internal/stringToPath.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> charCodeOfDot = <span class="string">&#x27;.&#x27;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">const</span> reEscapeChar = <span class="regexp">/\\(\\)?/g</span>;</span><br><span class="line"><span class="keyword">const</span> rePropName = <span class="title class_">RegExp</span>(</span><br><span class="line">    <span class="comment">// Match anything that isn&#x27;t a dot or bracket.</span></span><br><span class="line">    <span class="string">&#x27;[^.[\\]]+&#x27;</span> + <span class="string">&#x27;|&#x27;</span> +</span><br><span class="line">    <span class="comment">// Or match property names within brackets.</span></span><br><span class="line">    <span class="string">&#x27;\\[(?:&#x27;</span> +</span><br><span class="line">    <span class="comment">// Match a non-string expression.</span></span><br><span class="line">    <span class="string">&#x27;([^&quot;\&#x27;][^[]*)&#x27;</span> + <span class="string">&#x27;|&#x27;</span> +</span><br><span class="line">    <span class="comment">// Or match strings (supports escaping characters).</span></span><br><span class="line">    <span class="string">&#x27;([&quot;\&#x27;])((?:(?!\\2)[^\\\\]|\\\\.)*?)\\2&#x27;</span> +</span><br><span class="line">    <span class="string">&#x27;)\\]&#x27;</span> + <span class="string">&#x27;|&#x27;</span> +</span><br><span class="line">    <span class="comment">// Or match &quot;&quot; as the space between consecutive dots or empty brackets.</span></span><br><span class="line">    <span class="string">&#x27;(?=(?:\\.|\\[\\])(?:\\.|\\[\\]|$))&#x27;</span></span><br><span class="line">    , <span class="string">&#x27;g&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Converts `string` to a property path array.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@private</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">string</span>&#125; string The string to convert.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Array</span>&#125; Returns the property path array.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">stringToPath</span> = (<span class="params">string: string</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> result = [];</span><br><span class="line">    <span class="keyword">if</span> (string.<span class="title function_">charCodeAt</span>(<span class="number">0</span>) === charCodeOfDot) &#123;</span><br><span class="line">        result.<span class="title function_">push</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    string.<span class="title function_">replace</span>(rePropName, (<span class="function">(<span class="params">match, expression, quote, subString</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> key = match;</span><br><span class="line">        <span class="keyword">if</span> (quote) &#123;</span><br><span class="line">            key = subString.<span class="title function_">replace</span>(reEscapeChar, <span class="string">&#x27;$1&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (expression) &#123;</span><br><span class="line">            key = expression.<span class="title function_">trim</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        result.<span class="title function_">push</span>(key);</span><br><span class="line">    &#125;) <span class="keyword">as</span> any);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取对象属性</span></span><br><span class="line"><span class="comment"> * https://github.com/lodash/lodash/blob/master/.internal/baseGet.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">obj</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">key</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">defaultValue</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getProperty</span>(<span class="params">obj: <span class="built_in">Object</span>, key: string, defaultValue: any = <span class="literal">undefined</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_">isObject</span>(obj)) &#123;</span><br><span class="line">        <span class="keyword">return</span> defaultValue</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> path = <span class="title function_">stringToPath</span>(key)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">const</span> length = path.<span class="property">length</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (obj != <span class="literal">null</span> &amp;&amp; index &lt; length) &#123;</span><br><span class="line">        obj = obj[path[index++]]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> index &amp;&amp; index == length ? obj : <span class="literal">undefined</span> || defaultValue</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 设置属性值</span></span><br><span class="line"><span class="comment"> * https://github.com/lodash/lodash/blob/master/.internal/baseSet.js</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">obj</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">path</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">value</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">setProperty</span>(<span class="params">obj: <span class="built_in">Object</span>, path: string, value: any = <span class="literal">undefined</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_">isObject</span>(obj)) &#123;</span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> keys = <span class="title function_">stringToPath</span>(path)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> length = keys.<span class="property">length</span></span><br><span class="line">    <span class="keyword">const</span> lastIndex = length - <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> index = -<span class="number">1</span></span><br><span class="line">    <span class="keyword">let</span> nested = obj</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (nested != <span class="literal">null</span> &amp;&amp; ++index &lt; length) &#123;</span><br><span class="line">        <span class="keyword">const</span> key = keys[index]</span><br><span class="line">        <span class="keyword">let</span> newValue = value</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (index != lastIndex) &#123;</span><br><span class="line">            <span class="keyword">const</span> objValue = nested[key]</span><br><span class="line">            newValue = <span class="literal">undefined</span></span><br><span class="line">            <span class="keyword">if</span> (newValue === <span class="literal">undefined</span>) &#123;</span><br><span class="line">                newValue = <span class="title function_">isObject</span>(objValue) ? objValue : isIndexLike[keys[index + <span class="number">1</span>]] ? [] : &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        nested[key] = newValue</span><br><span class="line">        nested = nested[key]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="正序和倒序（迭代器）"><a href="#正序和倒序（迭代器）" class="headerlink" title="正序和倒序（迭代器）"></a>正序和倒序（迭代器）</h2><ul>
+<li>传统方式：if&#x2F;else + 两个 for，while，数组的 forEach，reduce 等</li>
+<li>弊端：逻辑判断倒序和逆序，可读性差</li>
+<li>解决方案：实现迭代器：hasNext 和 current</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 循环迭代器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">TODO:</span>: 对象形式</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">min</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">max</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">desc</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getStepIter</span>(<span class="params">min: number, max: number, desc: boolean</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> [start, end, step] = desc ? [max, min, -<span class="number">1</span>] : [min, max, <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">const</span> <span class="title function_">hasNext</span> = (<span class="params"></span>) =&gt; (desc ? start &gt;= end : end &gt;= start)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="title function_">hasNext</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_">hasNext</span>()</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="keyword">get</span> <span class="title function_">current</span>() &#123;</span><br><span class="line">            <span class="keyword">return</span> start</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">next</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> (start += step)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="对象合并"><a href="#对象合并" class="headerlink" title="对象合并"></a>对象合并</h2><ul>
+<li>创建空对象</li>
+<li>将被合并和需要合并的两个对象的属性抽离处理添加到新的空对象上</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 合并对象生成新的对象</span></span><br><span class="line"><span class="comment"> * // <span class="doctag">TODO:</span>: 无限合并</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">obj1</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">obj2</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">ob1KMap</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> <span class="variable">ob2KMap</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> mergeObject&lt;T = any, S = any, R = any&gt;(</span><br><span class="line">    <span class="attr">obj1</span>: T,</span><br><span class="line">    <span class="attr">obj2</span>: S,</span><br><span class="line">    <span class="attr">ob1KMap</span>: <span class="title class_">Record</span>&lt;string, string&gt; = <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">ob2KMap</span>: <span class="title class_">Record</span>&lt;string, string&gt; = <span class="literal">null</span></span><br><span class="line">): R &#123;</span><br><span class="line">    <span class="keyword">const</span> ret = <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">assign</span>(ret, <span class="title function_">extractObject</span>(obj1, ob1KMap))</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">assign</span>(ret, <span class="title function_">extractObject</span>(obj2, ob2KMap))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="通用方案"><a href="#通用方案" class="headerlink" title="通用方案"></a>通用方案</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 合并数组生成新的数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetArr 目标数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> sourceArr 需要被合并的数组</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> options.desc  是否是从后往前遍历</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> options.soureKey  源数组对象的key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> options.targetKey  目标数组对象的key</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> options.sKMap  源复制map关系</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> mergeArray&lt;S = any, T = any, R = any&gt;(<span class="attr">targetArr</span>: T[] = [], <span class="attr">sourceArr</span>: S[] = [], <span class="attr">options</span>: <span class="title class_">MergeOptions</span>&lt;S, T&gt; = <span class="variable constant_">DEFAULT_MERGE_OPTIONS</span>): R[] &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 有一个不是数组</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Array</span>.<span class="title function_">isArray</span>(sourceArr) || !<span class="title class_">Array</span>.<span class="title function_">isArray</span>(targetArr)) &#123;</span><br><span class="line">        <span class="comment">// return [...targetArr] as any[];</span></span><br><span class="line">        <span class="keyword">return</span> targetArr <span class="keyword">as</span> any;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="attr">opt</span>: <span class="title class_">MergeOptions</span> = &#123; ...<span class="variable constant_">DEFAULT_MERGE_OPTIONS</span>, ...options &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 判断sourceKey和sourceProperties</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> opt.<span class="property">sourceKey</span> !== <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;无效的soureKey&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> targetArr <span class="keyword">as</span> any[];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> wTypes = [<span class="string">&quot;string&quot;</span>, <span class="string">&quot;number&quot;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span>: 更安全的检查</span></span><br><span class="line">    <span class="keyword">const</span> getSKeyFn = <span class="keyword">typeof</span> opt.<span class="property">sourceKey</span> === <span class="string">&quot;function&quot;</span> ? opt.<span class="property">sourceKey</span> : <span class="function">(<span class="params">s: S</span>) =&gt;</span> s[opt.<span class="property">sourceKey</span> <span class="keyword">as</span> string];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> &#123; targetKey &#125; = opt;</span><br><span class="line">    <span class="keyword">if</span> (targetKey == <span class="literal">null</span>) &#123;</span><br><span class="line">        targetKey = opt.<span class="property">sourceKey</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> getTKeyFn = <span class="keyword">typeof</span> targetKey === <span class="string">&quot;function&quot;</span> ? targetKey : <span class="function">(<span class="params">t: T</span>) =&gt;</span> t[opt.<span class="property">targetKey</span> <span class="keyword">as</span> string];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="attr">objMap</span>: <span class="title class_">Record</span>&lt;string, S&gt; = sourceArr.<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj: Record&lt;string, S&gt;, cur: S</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> key = <span class="title function_">getSKeyFn</span>(cur);</span><br><span class="line">        <span class="keyword">if</span> (wTypes.<span class="title function_">includes</span>(<span class="keyword">typeof</span> key)) &#123;</span><br><span class="line">            obj[cur[key]] = cur</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;, <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> &#123; desc, sourceKey, sKMap = <span class="literal">null</span> &#125; = opt;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> sourceLen = sourceArr.<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">let</span> hitCounts = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> walkCounts = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> resultArr = <span class="title class_">Array</span>.<span class="title function_">from</span>(targetArr);</span><br><span class="line">    <span class="keyword">const</span> targetLen = targetArr.<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">let</span> tempTObj, keyValue, tempSObj;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> stepIter = <span class="title function_">getStepIter</span>(<span class="number">0</span>, targetLen - <span class="number">1</span>, desc);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (stepIter.<span class="title function_">hasNext</span>()) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> index = stepIter.<span class="property">current</span>;</span><br><span class="line"></span><br><span class="line">        walkCounts++</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (walkCounts &gt; <span class="variable constant_">MAX_WLAK_COUNT</span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`mergeArray 遍历次数超过最大遍历次数 <span class="subst">$&#123;MAX_WLAK_COUNT&#125;</span>, 终止遍历，请检查程序逻辑`</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tempTObj = resultArr[index];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 目标比对的键值</span></span><br><span class="line">        keyValue = tempTObj[<span class="title function_">getTKeyFn</span>(tempTObj)];</span><br><span class="line">        <span class="keyword">if</span> (keyValue == <span class="literal">null</span> || (tempSObj = objMap[keyValue]) == <span class="literal">null</span> || tempSObj[sourceKey] != keyValue) &#123;</span><br><span class="line">            stepIter.<span class="title function_">next</span>()</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        resultArr[index] = <span class="title function_">mergeObject</span>(tempTObj, tempSObj, <span class="literal">undefined</span>, sKMap);</span><br><span class="line">        hitCounts++</span><br><span class="line">        <span class="keyword">if</span> (hitCounts &gt;= sourceLen) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stepIter.<span class="title function_">next</span>()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`mergeArray:: sourceArr(<span class="subst">$&#123;sourceLen&#125;</span>), 统计：遍历次数<span class="subst">$&#123;walkCounts&#125;</span>, 命中次数<span class="subst">$&#123;hitCounts&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> resultArr <span class="keyword">as</span> any[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = <span class="title function_">mergeArray</span>(usersInfo, scoresInfo, &#123;</span><br><span class="line">    <span class="attr">sourceKey</span>: <span class="string">&#x27;uid&#x27;</span>,</span><br><span class="line">    <span class="attr">targetKey</span>: <span class="string">&#x27;uid&#x27;</span>,</span><br><span class="line">    <span class="attr">sKMap</span>: &#123;</span><br><span class="line">        <span class="attr">score</span>: <span class="string">&#x27;score.score&#x27;</span>,</span><br><span class="line">        <span class="attr">comments</span>: <span class="string">&#x27;score.comments&#x27;</span>,</span><br><span class="line">        <span class="attr">stars</span>: <span class="string">&#x27;stars&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E6%95%B0%E7%BB%84/" rel="tag"># 数组</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/22/JavaScript%EF%BC%9A%E6%89%8B%E5%86%99%E6%95%B0%E7%BB%84%E7%9A%84%E5%A4%9A%E4%B8%AA%E6%96%B9%E6%B3%95/" rel="prev" title="JavaScript：手写数组的多个方法">
+      <i class="fa fa-chevron-left"></i> JavaScript：手写数组的多个方法
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E4%B8%9A%E5%8A%A1%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">假设业务场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F%E5%9C%BA%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">模拟场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6-%E5%9F%BA%E7%A1%80%E7%89%88%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">数据合并 - 基础版本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6-%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80%E7%89%88"><span class="nav-number">4.</span> <span class="nav-text">数据合并 - 对象基础版</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%90%88%E5%B9%B6-%E8%B7%B3%E5%87%BA"><span class="nav-number">5.</span> <span class="nav-text">数据合并 - 跳出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E6%95%B0%E6%8D%AE-%E5%80%92%E5%BA%8F%E5%90%88%E5%B9%B6"><span class="nav-number">6.</span> <span class="nav-text">合并数据 - 倒序合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%90%88%E5%B9%B6-%E9%80%9A%E7%94%A8%E6%96%B9%E6%A1%88"><span class="nav-number">7.</span> <span class="nav-text">数组合并 - 通用方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7%E5%B1%9E%E6%80%A7%E5%90%88%E5%B9%B6"><span class="nav-number">7.1.</span> <span class="nav-text">多级属性合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%BA%8F%E5%92%8C%E5%80%92%E5%BA%8F%EF%BC%88%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%89"><span class="nav-number">7.2.</span> <span class="nav-text">正序和倒序（迭代器）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%90%88%E5%B9%B6"><span class="nav-number">7.3.</span> <span class="nav-text">对象合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%96%B9%E6%A1%88"><span class="nav-number">7.4.</span> <span class="nav-text">通用方案</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
