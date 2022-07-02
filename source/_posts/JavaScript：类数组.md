@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 类数组
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 深入浅出类数组

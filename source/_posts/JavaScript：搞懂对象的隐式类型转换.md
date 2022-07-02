@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 对象
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 显式类型转换

@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 对象
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 属性的类型

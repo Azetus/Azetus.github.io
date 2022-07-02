@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 数组
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 先看 2 小个问题

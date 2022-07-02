@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 对象
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 1 对象的普通属性、排序属性和隐藏类

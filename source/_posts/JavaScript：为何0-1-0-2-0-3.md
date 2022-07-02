@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 二进制
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # JavaScript 是怎样进行数字相加的

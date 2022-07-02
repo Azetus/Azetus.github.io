@@ -6,7 +6,7 @@ tags:
     - 对象
     - JSON
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # JSON 对象

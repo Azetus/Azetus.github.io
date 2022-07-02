@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 位运算符
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 位运算符的妙用：奇偶数，色值换算，换值， 编码等

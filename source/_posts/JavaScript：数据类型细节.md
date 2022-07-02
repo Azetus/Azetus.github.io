@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 数据类型
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 1 数据类型的陷阱

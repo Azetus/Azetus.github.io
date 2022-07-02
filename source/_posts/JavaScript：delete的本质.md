@@ -5,7 +5,7 @@ tags:
     - JavaScript
     - 运算符
 categories:
-    - JavaScript进阶
+    - JavaScript
 ---
 
 # 关于赋值
