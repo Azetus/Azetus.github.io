@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="神奇的 call.call, call.call.call12345678function a() &amp;#123;    console.log(this, &amp;#x27;a&amp;#x27;)&amp;#125;function b() &amp;#123;    console.log(this, &amp;#x27;b&amp;#x27;)&amp;#125;a.call(b)  a 被调用，this 指向 b 123456789funct">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript: call">
+<meta property="og:url" content="http://example.com/2022/07/02/JavaScript-call/index.html">
+<meta property="og:site_name" content="Azetus的随笔">
+<meta property="og:description" content="神奇的 call.call, call.call.call12345678function a() &amp;#123;    console.log(this, &amp;#x27;a&amp;#x27;)&amp;#125;function b() &amp;#123;    console.log(this, &amp;#x27;b&amp;#x27;)&amp;#125;a.call(b)  a 被调用，this 指向 b 123456789funct">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/07/02/JavaScript-call/6-11-1.png">
+<meta property="article:published_time" content="2022-07-02T07:30:45.000Z">
+<meta property="article:modified_time" content="2022-07-02T07:32:42.739Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="call">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/07/02/JavaScript-call/6-11-1.png">
+
+<link rel="canonical" href="http://example.com/2022/07/02/JavaScript-call/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript: call | Azetus的随笔</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azetus的随笔</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/02/JavaScript-call/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript: call
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-02 15:30:45" itemprop="dateCreated datePublished" datetime="2022-07-02T15:30:45+08:00">2022-07-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="神奇的-call-call-call-call-call"><a href="#神奇的-call-call-call-call-call" class="headerlink" title="神奇的 call.call, call.call.call"></a>神奇的 call.call, call.call.call</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">a</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">b</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>, <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a.<span class="title function_">call</span>(b)</span><br></pre></td></tr></table></figure>
+
+<p>a 被调用，this 指向 b</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">a</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>, <span class="keyword">typeof</span> <span class="variable language_">this</span>, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">b</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>, <span class="keyword">typeof</span> <span class="variable language_">this</span>, <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">a.<span class="property">call</span>.<span class="title function_">call</span>(b, <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">a.<span class="property">call</span>.<span class="property">call</span>.<span class="title function_">call</span>(b, <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line">a.<span class="property">call</span>.<span class="property">call</span>.<span class="property">call</span>.<span class="title function_">call</span>(b, <span class="string">&#x27;b&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[String: &#x27;b&#x27;] object b</span><br><span class="line">[String: &#x27;b&#x27;] object b</span><br><span class="line">[String: &#x27;b&#x27;] object b</span><br></pre></td></tr></table></figure>
+
+<p>三个问题</p>
+<ul>
+<li>为什么被调用的是 b 函数</li>
+<li>为什么 this 指向&#96;String{“b”}</li>
+<li>为什么 3 个 call 的结果都一样</li>
+</ul>
+<h2 id="简单回顾-call-和-this"><a href="#简单回顾-call-和-this" class="headerlink" title="简单回顾 call 和 this"></a>简单回顾 call 和 this</h2><ul>
+<li>call：使用一个指定的 this 值和单独给出的一个或多个参数来调用一个函数。</li>
+<li>this：执行上下文的一个变量</li>
+<li>this：另外一种不严谨的说法，this 指向调用者</li>
+</ul>
+<h3 id="call-的一种虚拟语法"><a href="#call-的一种虚拟语法" class="headerlink" title="call 的一种虚拟语法"></a>call 的一种虚拟语法</h3><p><code>func.call(obj, ...args) === (obj.func = func; obj.func(...args))</code></p>
+<h2 id="为什么-3-个-call-的结果都一样"><a href="#为什么-3-个-call-的结果都一样" class="headerlink" title="为什么 3 个 call 的结果都一样"></a>为什么 3 个 call 的结果都一样</h2><ul>
+<li>a.call(b)：a 被调用</li>
+<li>a.call.call(b)：a.call 被调用</li>
+<li>a.call.call.call(b)：a.call.call 被调用</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a.<span class="property">call</span> === <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> <span class="comment">// true</span></span><br><span class="line">a.<span class="property">call</span> === a.<span class="property">call</span>.<span class="property">call</span> <span class="comment">// true</span></span><br><span class="line">a.<span class="property">call</span> === a.<span class="property">call</span>.<span class="property">call</span>.<span class="property">call</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么被调用的是-b-函数"><a href="#为什么被调用的是-b-函数" class="headerlink" title="为什么被调用的是 b 函数"></a>为什么被调用的是 b 函数</h2><pre><code>a.call.call(b, &#39;b&#39;)
+(a.call).call(b, &#39;b&#39;)
+</code></pre>
+<ol>
+<li>一个函数进行 call 调用，等同于在一个对象上执行该函数<blockquote>
+<p>等于在 b 对象上调用 a.call 函数</p>
+</blockquote>
+</li>
+<li>a.call &#x3D;&#x3D;&#x3D; Function.prototype.call<blockquote>
+<p>Function.prototype.call.call(b,’b’)</p>
+</blockquote>
+</li>
+<li>等同于在 b 调用 call 函数，this 参数为’b’<blockquote>
+<p>b.call(‘b’)</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="为什么-this-指向-96-String-“b”"><a href="#为什么-this-指向-96-String-“b”" class="headerlink" title="为什么 this 指向&#96;String{“b”}"></a>为什么 this 指向&#96;String{“b”}</h2><ul>
+<li>this：非严格模式下会使用 Object 包装</li>
+<li>this：严格模式下是任意值</li>
+</ul>
+<h2 id="万能的函数调用方法"><a href="#万能的函数调用方法" class="headerlink" title="万能的函数调用方法"></a>万能的函数调用方法</h2><ul>
+<li><code>var call = Function.prototype.call.call.bind(Function.prototype.call); </code></li>
+</ul>
+<hr>
+<h1 id="2-手写-call"><a href="#2-手写-call" class="headerlink" title="2 手写 call"></a>2 手写 call</h1><ul>
+<li>某个方法进行 call 调用时，等同于吧方法作为 call 的第一个参数的某个属性，并进行调用</li>
+<li>func.call(obj, …args) &#x3D;&#x3D;&#x3D; (obj.func &#x3D; func; obj.func(…args))</li>
+</ul>
+<h2 id="版本-1"><a href="#版本-1" class="headerlink" title="版本 1"></a>版本 1</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> = <span class="keyword">function</span> (<span class="params">context</span>) &#123;</span><br><span class="line">    context = context || <span class="variable language_">window</span></span><br><span class="line">    context[<span class="string">&#x27;fn&#x27;</span>] = <span class="variable language_">this</span></span><br><span class="line">    <span class="keyword">let</span> arg = [...<span class="variable language_">arguments</span>].<span class="title function_">slice</span>(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">const</span> r = context[<span class="string">&#x27;fn&#x27;</span>](...arg)</span><br><span class="line">    <span class="keyword">delete</span> context[<span class="string">&#x27;fn&#x27;</span>]</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="版本-2"><a href="#版本-2" class="headerlink" title="版本 2"></a>版本 2</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> = <span class="keyword">function</span> (<span class="params">context</span>) &#123;</span><br><span class="line">    context = context == <span class="literal">null</span> || context == <span class="literal">undefined</span> ? <span class="variable language_">window</span> : <span class="keyword">new</span> <span class="title class_">Object</span>(context)</span><br><span class="line">    context.<span class="property">fn</span> = <span class="variable language_">this</span></span><br><span class="line">    <span class="keyword">var</span> arr = []</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="variable language_">arguments</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        arr.<span class="title function_">push</span>(<span class="string">&#x27;arguments[&#x27;</span> + i + <span class="string">&#x27;]&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> r = <span class="built_in">eval</span>(<span class="string">&#x27;context.fn(&#x27;</span> + arr + <span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">    <span class="keyword">delete</span> context.<span class="property">fn</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><ul>
+<li>this 是不是可以被调用<blockquote>
+<p>var obj &#x3D; Object.create(Function.prototype)<br>obj.call({})</p>
+</blockquote>
+</li>
+<li>undefined 是否安全<blockquote>
+<p>undefined 有可能会被改写<br>void 0 更安全</p>
+</blockquote>
+</li>
+<li>window 作为默认上下文过于武断（node 环境中？）</li>
+<li>eval 一定会被允许执行吗</li>
+<li>delete context.fn 是否有副作用</li>
+</ul>
+<h3 id="补充：void-的其他用法"><a href="#补充：void-的其他用法" class="headerlink" title="补充：void 的其他用法"></a>补充：void 的其他用法</h3><ol>
+<li>href</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;javascript:void(0)&quot;</span>&gt;</span>不要点击我<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>立即执行函数</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void function (msg) &#123;</span><br><span class="line">    console.log(msg)</span><br><span class="line">&#125;(&#x27;立即执行&#x27;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="环境识别"><a href="#环境识别" class="headerlink" title="环境识别"></a>环境识别</h2><ul>
+<li>浏览器环境</li>
+<li>nodejs 环境</li>
+<li>综合判断</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getGlobal = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> self !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> self <span class="comment">// 浏览器中</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">window</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">window</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">global</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">global</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;unable to locate global object&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="严格模式"><a href="#严格模式" class="headerlink" title="严格模式"></a>严格模式</h2><ul>
+<li>是否支持严格模式<ul>
+<li>全局上下文调用函数 this 指向 undefined</li>
+</ul>
+</li>
+<li>是否处于严格模式</li>
+</ul>
+<h3 id="是否支持严格模式"><a href="#是否支持严格模式" class="headerlink" title="是否支持严格模式"></a>是否支持严格模式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasStrictMode = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> == <span class="literal">undefined</span></span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(hasStrictMode)</span><br></pre></td></tr></table></figure>
+
+<h3 id="是否处于严格模式"><a href="#是否处于严格模式" class="headerlink" title="是否处于严格模式"></a>是否处于严格模式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isStrict = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> === <span class="literal">undefined</span></span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;isStrict:&#x27;</span>, isStrict)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">arguments</span>.<span class="property">callee</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(test.<span class="title function_">toString</span>())</span><br></pre></td></tr></table></figure>
+
+<h2 id="函数副作用"><a href="#函数副作用" class="headerlink" title="函数副作用"></a>函数副作用</h2><ul>
+<li>函数调用后，破坏了原对象</li>
+</ul>
+<h2 id="基于-eval-实现"><a href="#基于-eval-实现" class="headerlink" title="基于 eval 实现"></a>基于 eval 实现</h2><p><img src="/2022/07/02/JavaScript-call/6-11-1.png" alt="6-11-1"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasStrictMode = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> == <span class="literal">undefined</span></span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> isStrictMode = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> === <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getGlobal = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> self !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">window</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">window</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">global</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">global</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;unable to locate global object&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isFunction</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> fn === <span class="string">&#x27;function&#x27;</span> || <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(fn) === <span class="string">&#x27;[object Function]&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getContext</span>(<span class="params">context</span>) &#123;</span><br><span class="line">    <span class="comment">// 是否是严格模式</span></span><br><span class="line">    <span class="keyword">var</span> isStrict = <span class="title function_">isStrictMode</span>()</span><br><span class="line">    <span class="comment">// 没有严格模式，或者有严格模式但不处于严格模式</span></span><br><span class="line">    <span class="keyword">if</span> (!hasStrictMode || (hasStrictMode &amp;&amp; !isStrict)) &#123;</span><br><span class="line">        <span class="keyword">return</span> context === <span class="literal">null</span> || context === <span class="keyword">void</span> <span class="number">0</span> ? <span class="title function_">getGlobal</span>() : <span class="title class_">Object</span>(context)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 严格模式下, 妥协方案</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>(context)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> = <span class="keyword">function</span> (<span class="params">context</span>) &#123;</span><br><span class="line">    <span class="comment">// 不可以被调用</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_">isFunction</span>(<span class="variable language_">this</span>)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable language_">this</span> + <span class="string">&#x27; is not a function&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取上下文</span></span><br><span class="line">    <span class="keyword">var</span> ctx = <span class="title function_">getContext</span>(context)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更为稳妥的是创建唯一ID, 以及检查是否有重名</span></span><br><span class="line">    <span class="keyword">var</span> propertyName = <span class="string">&#x27;__fn__&#x27;</span> + <span class="title class_">Math</span>.<span class="title function_">random</span>() + <span class="string">&#x27;_&#x27;</span> + <span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">getTime</span>()</span><br><span class="line">    <span class="keyword">var</span> originVal</span><br><span class="line">    <span class="keyword">var</span> hasOriginVal = <span class="title function_">isFunction</span>(ctx.<span class="property">hasOwnProperty</span>) ? ctx.<span class="title function_">hasOwnProperty</span>(propertyName) : <span class="literal">false</span></span><br><span class="line">    <span class="keyword">if</span> (hasOriginVal) &#123;</span><br><span class="line">        originVal = ctx[propertyName]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ctx[propertyName] = <span class="variable language_">this</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 采用string拼接</span></span><br><span class="line">    <span class="keyword">var</span> argStr = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">var</span> len = <span class="variable language_">arguments</span>.<span class="property">length</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">        argStr += i === len - <span class="number">1</span> ? <span class="string">&#x27;arguments[&#x27;</span> + i + <span class="string">&#x27;]&#x27;</span> : <span class="string">&#x27;arguments[&#x27;</span> + i + <span class="string">&#x27;],&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> r = <span class="built_in">eval</span>(<span class="string">&#x27;ctx[&quot;&#x27;</span> + propertyName + <span class="string">&#x27;&quot;](&#x27;</span> + argStr + <span class="string">&#x27;)&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 还原现场</span></span><br><span class="line">    <span class="keyword">if</span> (hasOriginVal) &#123;</span><br><span class="line">        ctx[propertyName] = originVal</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">delete</span> ctx[propertyName]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">log</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;name:&#x27;</span>, <span class="variable language_">this</span>.<span class="property">name</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">log.<span class="title function_">call</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;name&#x27;</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于-new-Function-的实现"><a href="#基于-new-Function-的实现" class="headerlink" title="基于 new Function 的实现"></a>基于 new Function 的实现</h2><p>思路</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createFun</span>(<span class="params">argsLength</span>) &#123;</span><br><span class="line">    <span class="comment">// return ctx[propertyName](arg1, arg2, arg3,...)</span></span><br><span class="line">    <span class="comment">// 拼接函数</span></span><br><span class="line">    <span class="keyword">var</span> code = <span class="string">&#x27;return ctx[propertyName](&#x27;</span></span><br><span class="line">    <span class="comment">// 拼接参数, 第二个起是参数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; argsLength; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            code += <span class="string">&#x27;,&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        code += <span class="string">&#x27;args[&#x27;</span> + i + <span class="string">&#x27;]&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    code += <span class="string">&#x27;)&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Function</span>(<span class="string">&#x27;ctx&#x27;</span>, <span class="string">&#x27;propertyName&#x27;</span>, <span class="string">&#x27;args&#x27;</span>, code)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">console.log(createFun(3).toString())</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">ƒ anonymous(ctx,propertyName,args</span><br><span class="line">) &#123;</span><br><span class="line">return ctx[propertyName](args[0],args[1],args[2])</span><br><span class="line">&#125;</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+
+<h3 id="最终实现"><a href="#最终实现" class="headerlink" title="最终实现"></a>最终实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hasStrictMode = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="string">&#x27;use strict&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> == <span class="literal">undefined</span></span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> isStrictMode = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span> === <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getGlobal = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> self !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">window</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">window</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">global</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">global</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;unable to locate global object&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isFunction</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> fn === <span class="string">&#x27;function&#x27;</span> || <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(fn) === <span class="string">&#x27;[object Function]&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getContext</span>(<span class="params">context</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> isStrict = <span class="title function_">isStrictMode</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!hasStrictMode || (hasStrictMode &amp;&amp; !isStrict)) &#123;</span><br><span class="line">        <span class="keyword">return</span> context === <span class="literal">null</span> || context === <span class="keyword">void</span> <span class="number">0</span> ? <span class="title function_">getGlobal</span>() : <span class="title class_">Object</span>(context)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 严格模式下, 妥协方案</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>(context)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createFun</span>(<span class="params">argsLength</span>) &#123;</span><br><span class="line">    <span class="comment">// return ctx[propertyName](arg1, arg2, arg3,...)</span></span><br><span class="line">    <span class="comment">// 拼接函数</span></span><br><span class="line">    <span class="keyword">var</span> code = <span class="string">&#x27;return ctx[propertyName](&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拼接参数, 第二个起是参数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; argsLength; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            code += <span class="string">&#x27;,&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        code += <span class="string">&#x27;args[&#x27;</span> + i + <span class="string">&#x27;]&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    code += <span class="string">&#x27;)&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Function</span>(<span class="string">&#x27;ctx&#x27;</span>, <span class="string">&#x27;propertyName&#x27;</span>, <span class="string">&#x27;args&#x27;</span>, code)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span> = <span class="keyword">function</span> (<span class="params">context</span>) &#123;</span><br><span class="line">    <span class="comment">// 不可以被调用</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="variable language_">this</span> !== <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="variable language_">this</span> + <span class="string">&#x27; is not a function&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取上下文</span></span><br><span class="line">    <span class="keyword">var</span> ctx = <span class="title function_">getContext</span>(context)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更为稳妥的是创建唯一ID, 以及检查是否有重名</span></span><br><span class="line">    <span class="keyword">var</span> propertyName = <span class="string">&#x27;__fn__&#x27;</span> + <span class="title class_">Math</span>.<span class="title function_">random</span>() + <span class="string">&#x27;_&#x27;</span> + <span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">getTime</span>()</span><br><span class="line">    <span class="keyword">var</span> originVal</span><br><span class="line">    <span class="keyword">var</span> hasOriginVal = <span class="title function_">isFunction</span>(ctx.<span class="property">hasOwnProperty</span>) ? ctx.<span class="title function_">hasOwnProperty</span>(propertyName) : <span class="literal">false</span></span><br><span class="line">    <span class="keyword">if</span> (hasOriginVal) &#123;</span><br><span class="line">        originVal = ctx[propertyName]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ctx[propertyName] = <span class="variable language_">this</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> argArr = []</span><br><span class="line">    <span class="keyword">var</span> len = <span class="variable language_">arguments</span>.<span class="property">length</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">        argArr[i - <span class="number">1</span>] = <span class="variable language_">arguments</span>[i]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> r = <span class="title function_">createFun</span>(len - <span class="number">1</span>)(ctx, propertyName, argArr)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 还原现场</span></span><br><span class="line">    <span class="keyword">if</span> (hasOriginVal) &#123;</span><br><span class="line">        ctx[propertyName] = originVal</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">delete</span> ctx[propertyName]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/call/" rel="tag"># call</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/02/JavaScript-this/" rel="prev" title="JavaScript: this">
+      <i class="fa fa-chevron-left"></i> JavaScript: this
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/02/JavaScript-%E7%BB%84%E5%90%88%E4%B8%8E%E7%BB%A7%E6%89%BF/" rel="next" title="JavaScript: 组合与继承">
+      JavaScript: 组合与继承 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A5%9E%E5%A5%87%E7%9A%84-call-call-call-call-call"><span class="nav-number">1.</span> <span class="nav-text">神奇的 call.call, call.call.call</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%9B%9E%E9%A1%BE-call-%E5%92%8C-this"><span class="nav-number">1.1.</span> <span class="nav-text">简单回顾 call 和 this</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#call-%E7%9A%84%E4%B8%80%E7%A7%8D%E8%99%9A%E6%8B%9F%E8%AF%AD%E6%B3%95"><span class="nav-number">1.1.1.</span> <span class="nav-text">call 的一种虚拟语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-3-%E4%B8%AA-call-%E7%9A%84%E7%BB%93%E6%9E%9C%E9%83%BD%E4%B8%80%E6%A0%B7"><span class="nav-number">1.2.</span> <span class="nav-text">为什么 3 个 call 的结果都一样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A2%AB%E8%B0%83%E7%94%A8%E7%9A%84%E6%98%AF-b-%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">为什么被调用的是 b 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-this-%E6%8C%87%E5%90%91-96-String-%E2%80%9Cb%E2%80%9D"><span class="nav-number">1.4.</span> <span class="nav-text">为什么 this 指向&#96;String{“b”}</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%87%E8%83%BD%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.5.</span> <span class="nav-text">万能的函数调用方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%89%8B%E5%86%99-call"><span class="nav-number">2.</span> <span class="nav-text">2 手写 call</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC-1"><span class="nav-number">2.1.</span> <span class="nav-text">版本 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC-2"><span class="nav-number">2.2.</span> <span class="nav-text">版本 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">存在的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9Avoid-%E7%9A%84%E5%85%B6%E4%BB%96%E7%94%A8%E6%B3%95"><span class="nav-number">2.3.1.</span> <span class="nav-text">补充：void 的其他用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%AF%86%E5%88%AB"><span class="nav-number">2.4.</span> <span class="nav-text">环境识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.</span> <span class="nav-text">严格模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.1.</span> <span class="nav-text">是否支持严格模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E5%A4%84%E4%BA%8E%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.5.2.</span> <span class="nav-text">是否处于严格模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%89%AF%E4%BD%9C%E7%94%A8"><span class="nav-number">2.6.</span> <span class="nav-text">函数副作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-eval-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.7.</span> <span class="nav-text">基于 eval 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-new-Function-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.8.</span> <span class="nav-text">基于 new Function 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.8.1.</span> <span class="nav-text">最终实现</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

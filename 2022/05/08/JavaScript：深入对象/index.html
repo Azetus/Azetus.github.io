@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/3-3-1.png">
 <meta property="og:image" content="http://example.com/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/3-3-2.png">
 <meta property="article:published_time" content="2022-05-08T09:47:12.000Z">
-<meta property="article:modified_time" content="2022-05-08T10:55:09.946Z">
+<meta property="article:modified_time" content="2022-07-02T07:25:34.169Z">
 <meta property="article:author" content="Azem">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="对象">
@@ -199,7 +199,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript%E8%BF%9B%E9%98%B6/" itemprop="url" rel="index"><span itemprop="name">JavaScript进阶</span></a>
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
                 </span>
             </span>
 
@@ -214,41 +214,41 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="1-对象的普通属性、排序属性和隐藏类"><a href="#1-对象的普通属性、排序属性和隐藏类" class="headerlink" title="1 对象的普通属性、排序属性和隐藏类"></a>1 对象的普通属性、排序属性和隐藏类</h1><h2 id="属性遍历"><a href="#属性遍历" class="headerlink" title="属性遍历"></a>属性遍历</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">obj.p1 = <span class="string">&quot;str1&quot;</span>;</span><br><span class="line">obj.p6 = <span class="string">&quot;str6&quot;</span>;</span><br><span class="line">obj.p2 = <span class="string">&quot;str2&quot;</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="number">1</span>] = <span class="string">&#x27;num1&#x27;</span>;</span><br><span class="line">obj[<span class="number">6</span>] = <span class="string">&#x27;num6&#x27;</span>;</span><br><span class="line">obj[<span class="number">2</span>] = <span class="string">&#x27;num2&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;property:&quot;</span>, obj[p])</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    property: num1</span></span><br><span class="line"><span class="comment">    property: num2</span></span><br><span class="line"><span class="comment">    property: num6</span></span><br><span class="line"><span class="comment">    property: str1</span></span><br><span class="line"><span class="comment">    property: str6</span></span><br><span class="line"><span class="comment">    property: str2</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+        <h1 id="1-对象的普通属性、排序属性和隐藏类"><a href="#1-对象的普通属性、排序属性和隐藏类" class="headerlink" title="1 对象的普通属性、排序属性和隐藏类"></a>1 对象的普通属性、排序属性和隐藏类</h1><h2 id="属性遍历"><a href="#属性遍历" class="headerlink" title="属性遍历"></a>属性遍历</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">obj.<span class="property">p1</span> = <span class="string">&quot;str1&quot;</span>;</span><br><span class="line">obj.<span class="property">p6</span> = <span class="string">&quot;str6&quot;</span>;</span><br><span class="line">obj.<span class="property">p2</span> = <span class="string">&quot;str2&quot;</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="number">1</span>] = <span class="string">&#x27;num1&#x27;</span>;</span><br><span class="line">obj[<span class="number">6</span>] = <span class="string">&#x27;num6&#x27;</span>;</span><br><span class="line">obj[<span class="number">2</span>] = <span class="string">&#x27;num2&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;property:&quot;</span>, obj[p])</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    property: num1</span></span><br><span class="line"><span class="comment">    property: num2</span></span><br><span class="line"><span class="comment">    property: num6</span></span><br><span class="line"><span class="comment">    property: str1</span></span><br><span class="line"><span class="comment">    property: str6</span></span><br><span class="line"><span class="comment">    property: str2</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <p>我们能发现什么？</p>
 <ul>
-<li>  两种属性：字符串作为键和数字作为键的属性</li>
-<li>  键被遍历的顺序似乎是有规律的</li>
+<li>两种属性：字符串作为键和数字作为键的属性</li>
+<li>键被遍历的顺序似乎是有规律的</li>
 </ul>
 <h3 id="常规属性"><a href="#常规属性" class="headerlink" title="常规属性"></a>常规属性</h3><ul>
-<li>  键位字符串的属性</li>
-<li>  特点：<font color=red><strong>根据创建时的顺序排序</strong></font></li>
+<li>键位字符串的属性</li>
+<li>特点：<font color=red><strong>根据创建时的顺序排序</strong></font></li>
 </ul>
 <h3 id="排序属性"><a href="#排序属性" class="headerlink" title="排序属性"></a>排序属性</h3><ul>
-<li>  属性键值为数字的属性</li>
-<li>  特点： <font color=red><strong>按照索引值大小升序排序</strong></font></li>
+<li>属性键值为数字的属性</li>
+<li>特点： <font color=red><strong>按照索引值大小升序排序</strong></font></li>
 </ul>
-<h3 id="数字字符串属性是排序属性"><a href="#数字字符串属性是排序属性" class="headerlink" title="数字字符串属性是排序属性"></a>数字字符串属性是排序属性</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">&#x27;1&#x27;</span>] = <span class="string">&#x27;p1&#x27;</span>;</span><br><span class="line">obj[<span class="string">&#x27;6&#x27;</span>] = <span class="string">&#x27;p6&#x27;</span>;</span><br><span class="line">obj[<span class="string">&#x27;2&#x27;</span>] = <span class="string">&#x27;p2&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;property:&quot;</span>, p)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    property: 1</span></span><br><span class="line"><span class="comment">    property: 2</span></span><br><span class="line"><span class="comment">    property: 6</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="数字字符串属性是排序属性"><a href="#数字字符串属性是排序属性" class="headerlink" title="数字字符串属性是排序属性"></a>数字字符串属性是排序属性</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">&#x27;1&#x27;</span>] = <span class="string">&#x27;p1&#x27;</span>;</span><br><span class="line">obj[<span class="string">&#x27;6&#x27;</span>] = <span class="string">&#x27;p6&#x27;</span>;</span><br><span class="line">obj[<span class="string">&#x27;2&#x27;</span>] = <span class="string">&#x27;p2&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> p <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;property:&quot;</span>, p)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    property: 1</span></span><br><span class="line"><span class="comment">    property: 2</span></span><br><span class="line"><span class="comment">    property: 6</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <p>可以类比字符串索引数组：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="string">&quot;2&quot;</span>]);</span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="string">&quot;3&quot;</span>]);</span><br><span class="line"><span class="built_in">console</span>.log(arr[<span class="string">&quot;4&quot;</span>]);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr[<span class="string">&quot;2&quot;</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr[<span class="string">&quot;3&quot;</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr[<span class="string">&quot;4&quot;</span>]);</span><br></pre></td></tr></table></figure>
 
 <h3 id="为何设计常规属性和排序属性"><a href="#为何设计常规属性和排序属性" class="headerlink" title="为何设计常规属性和排序属性"></a>为何设计常规属性和排序属性</h3><ul>
-<li><p>  提升属性的访问速度</p>
+<li><p>提升属性的访问速度</p>
 </li>
-<li><p>两种线性数据结构保存<br>  <img src="/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/20220505203944.png" alt="20220505203944"></p>
+<li><p>两种线性数据结构保存<br><img src="/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/20220505203944.png" alt="20220505203944"></p>
 </li>
-<li><p>  elements -&gt; 排序属性</p>
+<li><p>elements -&gt; 排序属性</p>
 </li>
-<li><p>  properties -&gt; 常规属性</p>
+<li><p>properties -&gt; 常规属性</p>
 </li>
 </ul>
 <p>V8 遍历对象时会先遍历<strong>排序属性</strong>，然后遍历<strong>常规属性</strong>。</p>
 <h3 id="对象内属性"><a href="#对象内属性" class="headerlink" title="对象内属性"></a>对象内属性</h3><ul>
-<li>  何为对象内属性：被保存到对象自身的<font color=red>常规属性</font></li>
-<li>  内属性的数量（10 个左右）</li>
-<li>  如何知道哪些属性时内属性？</li>
+<li>何为对象内属性：被保存到对象自身的<font color=red>常规属性</font></li>
+<li>内属性的数量（10 个左右）</li>
+<li>如何知道哪些属性时内属性？</li>
 </ul>
 <ol>
 <li>优先将常规属性转变为内属性</li>
@@ -262,29 +262,29 @@
 <p><img src="/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/20220505212514.png" alt="20220505212514"></p>
 <h2 id="隐藏类"><a href="#隐藏类" class="headerlink" title="隐藏类"></a>隐藏类</h2><ul>
 <li>什么是隐藏类<ul>
-<li>  描述了对象的属性布局</li>
-<li>  属性名和对应的偏移量</li>
+<li>描述了对象的属性布局</li>
+<li>属性名和对应的偏移量</li>
 </ul>
 </li>
 <li>隐藏类的作用<ul>
-<li>  从时间和空间两个维度提升速度</li>
+<li>从时间和空间两个维度提升速度</li>
 </ul>
 </li>
 </ul>
 <p>大多数的 Javascript 引擎会采用哈希表的方式来存取属性和寻找方法。而为了加快对象属性和方法在内存中的查找速度，V8 引擎引入了隐藏类(Hidden Class)的机制，起到给对象分组的作用。在初始化对象的时候，V8 引擎会创建一个隐藏类，随后在程序运行过程中每次增减属性，就会创建一个新的隐藏类或者查找之前已经创建好的隐藏类。每个隐藏类都会记录对应属性在内存中的偏移量，从而在后续再次调用的时候能更快地定位到其位置。</p>
 <p><strong>动态添加和删除属性会导致隐藏类变动。</strong></p>
 <h3 id="如何保护隐藏类"><a href="#如何保护隐藏类" class="headerlink" title="如何保护隐藏类"></a>如何保护隐藏类</h3><ul>
-<li>  初始化时保持属性顺序一致</li>
-<li>  一次性初始化完毕所有属性</li>
-<li>  谨慎使用<code>delete</code></li>
+<li>初始化时保持属性顺序一致</li>
+<li>一次性初始化完毕所有属性</li>
+<li>谨慎使用<code>delete</code></li>
 </ul>
 <h3 id="赋值-vs-delete-排序属性和普通属性"><a href="#赋值-vs-delete-排序属性和普通属性" class="headerlink" title="赋值 vs delete - 排序属性和普通属性"></a>赋值 vs delete - 排序属性和普通属性</h3><ul>
 <li>100000 个对象，25 个普通属性。delete 还是赋值快？<ul>
-<li>  赋值比 del 快一个数量级</li>
+<li>赋值比 del 快一个数量级</li>
 </ul>
 </li>
 <li>100000 个对象，25 个排序属性。delete 还是赋值快？<ul>
-<li>  赋值比 del 快一倍左右</li>
+<li>赋值比 del 快一倍左右</li>
 </ul>
 </li>
 </ul>
@@ -292,12 +292,12 @@
 <p>这是因为排序属性的访问比普通属性快。 一个可以通过偏移量计算访问，一个要 hash 计算访问。而每一次 delete 操作都会改变隐藏类，导致性能下降。</p>
 </blockquote>
 <h3 id="对象字面量"><a href="#对象字面量" class="headerlink" title="对象字面量"></a>对象字面量</h3><ul>
-<li>  是创建对象的一种快捷方式（object literal)</li>
+<li>是创建对象的一种快捷方式（object literal)</li>
 </ul>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;myObject&#x27;</span>,</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>  对应的还有：函数字面量、数组字面量等</li>
+<li>对应的还有：函数字面量、数组字面量等</li>
 <li><strong>字面量的性能优于使用 new 构建</strong><blockquote>
 <p>隐藏类：字面量创建对象会一次性构建隐藏类，而<code>new Object</code>创建时，需要通过<code>this.a = xxx; this.b = yyy</code>的形式创建，而每一次的动态赋值都会导致隐藏类变动。</p>
 </blockquote>
@@ -305,45 +305,45 @@
 </ul>
 <hr>
 <h1 id="2-属性来源，属性访问控制，属性冻结"><a href="#2-属性来源，属性访问控制，属性冻结" class="headerlink" title="2 属性来源，属性访问控制，属性冻结"></a>2 属性来源，属性访问控制，属性冻结</h1><h2 id="属性来源"><a href="#属性来源" class="headerlink" title="属性来源"></a>属性来源</h2><ul>
-<li>  静态属性，例如：<code>Object.assign()</code> （不需要实例化即可使用）</li>
-<li>  原型属性，例如：<code>Object.prototype.toString()</code> （来自于原型链，不来自实例本身）</li>
-<li>  实例属性，例如：<code>function Person (name)&#123; this.name = name &#125;</code></li>
+<li>静态属性，例如：<code>Object.assign()</code> （不需要实例化即可使用）</li>
+<li>原型属性，例如：<code>Object.prototype.toString()</code> （来自于原型链，不来自实例本身）</li>
+<li>实例属性，例如：<code>function Person (name)&#123; this.name = name &#125;</code></li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 原型属性</span></span><br><span class="line">    <span class="built_in">this</span>.name = name</span><br><span class="line">    <span class="built_in">this</span>.age = age</span><br><span class="line">    <span class="built_in">this</span>.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 实例属性</span></span><br><span class="line">Person.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.age</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person()</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">    <span class="comment">// 原型属性</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">getName</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> name</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 实例属性</span></span><br><span class="line"><span class="title class_">Person</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">getAge</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">age</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>()</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params">name, age</span>)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name</span><br><span class="line">        <span class="built_in">this</span>.age = age</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 实例属性</span></span><br><span class="line">    getName = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.name</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 原型属性</span></span><br><span class="line">    <span class="function"><span class="title">getAge</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.age</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> hasOwn = <span class="built_in">Object</span>.hasOwnProperty</span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person()</span><br><span class="line">print(<span class="string">&#x27;getName:&#x27;</span>, hasOwn.call(person, <span class="string">&#x27;getName&#x27;</span>)) <span class="comment">// true</span></span><br><span class="line">print(<span class="string">&#x27;getAge:&#x27;</span>, hasOwn.call(person, <span class="string">&#x27;getAge&#x27;</span>)) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">name</span> = name</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">age</span> = age</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 实例属性</span></span><br><span class="line">    getName = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">name</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 原型属性</span></span><br><span class="line">    <span class="title function_">getAge</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">age</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> hasOwn = <span class="title class_">Object</span>.<span class="property">hasOwnProperty</span></span><br><span class="line"><span class="keyword">const</span> print = <span class="variable language_">console</span>.<span class="property">log</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>()</span><br><span class="line"><span class="title function_">print</span>(<span class="string">&#x27;getName:&#x27;</span>, hasOwn.<span class="title function_">call</span>(person, <span class="string">&#x27;getName&#x27;</span>)) <span class="comment">// true</span></span><br><span class="line"><span class="title function_">print</span>(<span class="string">&#x27;getAge:&#x27;</span>, hasOwn.<span class="title function_">call</span>(person, <span class="string">&#x27;getAge&#x27;</span>)) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">value</span>: <span class="string">&#x27;Azetus&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> des = <span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;name&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;name:&#x27;</span>, des)</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    name: &#123;</span></span><br><span class="line"><span class="comment">    value: &#x27;Azetus&#x27;,</span></span><br><span class="line"><span class="comment">    writable: false,</span></span><br><span class="line"><span class="comment">    enumerable: false,</span></span><br><span class="line"><span class="comment">    configurable: false</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h2 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">value</span>: <span class="string">&#x27;Azetus&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> des = <span class="title class_">Object</span>.<span class="title function_">getOwnPropertyDescriptor</span>(obj, <span class="string">&#x27;name&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;name:&#x27;</span>, des)</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    name: &#123;</span></span><br><span class="line"><span class="comment">    value: &#x27;Azetus&#x27;,</span></span><br><span class="line"><span class="comment">    writable: false,</span></span><br><span class="line"><span class="comment">    enumerable: false,</span></span><br><span class="line"><span class="comment">    configurable: false</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <p>设置属性 <code>Object.defineProperty</code> <code>Object.defineProperties</code></p>
 <p>读取属性描述符 <code>Object.getOwnPropertyDescriptor</code> <code>Object.getOwnPropertyDescriptors</code></p>
 <ul>
-<li><p>  configurable：可配置（是否可以删除，属性描述是否可以更改）</p>
+<li><p>configurable：可配置（是否可以删除，属性描述是否可以更改）</p>
 </li>
-<li><p>  enumerable：是否可枚举（是否会出现在 for…in）</p>
+<li><p>enumerable：是否可枚举（是否会出现在 for…in）</p>
 </li>
-<li><p>  value：值</p>
+<li><p>value：值</p>
 </li>
-<li><p>  writable：是否可以被更改</p>
+<li><p>writable：是否可以被更改</p>
 </li>
 <li><p>get, set：访问器函数</p>
 <blockquote>
 <p>大体可以分为两种：</p>
 </blockquote>
 </li>
-<li><p>  数据属性：value, writable, configurable, enumerable</p>
+<li><p>数据属性：value, writable, configurable, enumerable</p>
 </li>
-<li><p>  访问器属性：get, set, configurable, enumerable</p>
+<li><p>访问器属性：get, set, configurable, enumerable</p>
 </li>
 </ul>
 <h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><p>先看一下代码</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;&#125;)</span><br><span class="line"></span><br><span class="line">obj.name = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(obj.name) <span class="comment">// undefind</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;name&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;&#125;)</span><br><span class="line"></span><br><span class="line">obj.<span class="property">name</span> = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj.<span class="property">name</span>) <span class="comment">// undefind</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="title function_">getOwnPropertyDescriptor</span>(obj, <span class="string">&#x27;name&#x27;</span>))</span><br></pre></td></tr></table></figure>
 
 <p><code>Object.defineProperty</code> 第三个参数传入空对象时，其默认值为</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">value</span>: <span class="literal">undefined</span>,</span><br><span class="line">  <span class="attr">writable</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">enumerable</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">configurable</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>假如我们尝试修改描述符</p>
-<h4 id="case-01"><a href="#case-01" class="headerlink" title="case 01"></a>case 01</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试修改描述符信息</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取信息</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;name&#x27;</span>))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">    value: undefined,</span></span><br><span class="line"><span class="comment">    writable: false,</span></span><br><span class="line"><span class="comment">    enumerable: false,</span></span><br><span class="line"><span class="comment">    configurable: false</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h4 id="case-01"><a href="#case-01" class="headerlink" title="case 01"></a>case 01</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试修改描述符信息</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取信息</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="title function_">getOwnPropertyDescriptor</span>(obj, <span class="string">&#x27;name&#x27;</span>))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">    value: undefined,</span></span><br><span class="line"><span class="comment">    writable: false,</span></span><br><span class="line"><span class="comment">    enumerable: false,</span></span><br><span class="line"><span class="comment">    configurable: false</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <p>可以看到，在 configurable 为 false 时，我们成功的将 name 属性的 writable 从 true 修改成了 false。</p>
 <blockquote>
@@ -352,23 +352,23 @@
 <p>如果为 false，尝试删除属性、将数据属性变为访问器属性或反之、以及对该属性描述符做任何更改将会报错。<font color=red>(除了变更属性的 value 或将 Writable 改为 false 之外)</font></p>
 <p>如果一个描述符不具有 value, writable, get 和 set 中的任意一个键，那么它将被认为是一个数据描述符。如果一个描述符同时拥有 value 或 writable 和 get 或 set 键，则会产生一个异常。</p>
 <h4 id="case-02"><a href="#case-02" class="headerlink" title="case 02"></a>case 02</h4><p>以下代码会报错</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试修改描述符信息</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 会报错</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取信息</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;name&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">configurable</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">false</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试修改描述符信息</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">writable</span>: <span class="literal">true</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 会报错</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取信息</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="title function_">getOwnPropertyDescriptor</span>(obj, <span class="string">&#x27;name&#x27;</span>))</span><br></pre></td></tr></table></figure>
 
 <h3 id="Object-defineProperty-的缺点"><a href="#Object-defineProperty-的缺点" class="headerlink" title="Object.defineProperty 的缺点"></a>Object.defineProperty 的缺点</h3><ul>
-<li>  无法监听数组变化</li>
-<li>  只能劫持对象的属性，如果属性也是一个对象，需要进行递归操作</li>
+<li>无法监听数组变化</li>
+<li>只能劫持对象的属性，如果属性也是一个对象，需要进行递归操作</li>
 </ul>
 <h3 id="对象的可扩展-Object-preventExtensions"><a href="#对象的可扩展-Object-preventExtensions" class="headerlink" title="对象的可扩展 - Object.preventExtensions"></a>对象的可扩展 - Object.preventExtensions</h3><ul>
-<li>  Object.preventExtensions：对象变得不可扩展，也就是永远不能再添加新的属性</li>
-<li>  Object.isExtensible：判断一个对象是否可以扩展</li>
+<li>Object.preventExtensions：对象变得不可扩展，也就是永远不能再添加新的属性</li>
+<li>Object.isExtensible：判断一个对象是否可以扩展</li>
 </ul>
 <h3 id="对象的封闭-Object-seal"><a href="#对象的封闭-Object-seal" class="headerlink" title="对象的封闭 - Object.seal"></a>对象的封闭 - Object.seal</h3><ul>
-<li>  Object.seal：阻止添加新的属性 + <font color=red>属性标记为不可配置</font></li>
-<li>  Object.isSealed：判断一个对象是否被封闭</li>
+<li>Object.seal：阻止添加新的属性 + <font color=red>属性标记为不可配置</font></li>
+<li>Object.isSealed：判断一个对象是否被封闭</li>
 </ul>
 <h3 id="对象的冻结-Object-freeze"><a href="#对象的冻结-Object-freeze" class="headerlink" title="对象的冻结 - Object.freeze"></a>对象的冻结 - Object.freeze</h3><ul>
-<li>  Object.freeze：不能添加新属性 + 不可配置 + 不能修改值</li>
-<li>  Object.isFrozen：判断一个对象是否被冻结</li>
+<li>Object.freeze：不能添加新属性 + 不可配置 + 不能修改值</li>
+<li>Object.isFrozen：判断一个对象是否被冻结</li>
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
 <thead>
@@ -404,79 +404,79 @@
 </tbody></table>
 <hr>
 <h1 id="3-访问对象的原型"><a href="#3-访问对象的原型" class="headerlink" title="3 访问对象的原型"></a>3 访问对象的原型</h1><h2 id="1-prototype"><a href="#1-prototype" class="headerlink" title="1. prototype"></a>1. prototype</h2><ul>
-<li>  prototype 是一个对象</li>
-<li>  原型会形成原型链，原型链上查找属性比较耗时，访问不存在的属性会访问整个原型链</li>
+<li>prototype 是一个对象</li>
+<li>原型会形成原型链，原型链上查找属性比较耗时，访问不存在的属性会访问整个原型链</li>
 </ul>
 <h3 id="两个问题"><a href="#两个问题" class="headerlink" title="两个问题"></a>两个问题</h3><ul>
-<li>  class 的 ES5 实现？</li>
+<li>class 的 ES5 实现？</li>
 </ul>
 <p><img src="/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/3-3-1.png" alt="img01"></p>
 <ul>
-<li>  toString 的怪异现象</li>
+<li>toString 的怪异现象</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proto = <span class="built_in">Boolean</span>.prototype</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> proto)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(proto))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    object</span></span><br><span class="line"><span class="comment">    [object Boolean]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proto = <span class="title class_">Boolean</span>.<span class="property"><span class="keyword">prototype</span></span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> proto)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(proto))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    object</span></span><br><span class="line"><span class="comment">    [object Boolean]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>Else if O has a [[BooleanData]] internal slot, let builtinTag be “Boolean”.</p>
 </blockquote>
 <h2 id="2-proto"><a href="#2-proto" class="headerlink" title="2. __proto__"></a>2. __proto__</h2><ul>
-<li>  构造函数的原型</li>
-<li>  null 以外的对象均有__proto__属性</li>
-<li>  Function，class 的实例有 prototype 以及__proto__属性</li>
-<li>  <strong>普通函数祖上三代必为 null</strong></li>
+<li>构造函数的原型</li>
+<li>null 以外的对象均有__proto__属性</li>
+<li>Function，class 的实例有 prototype 以及__proto__属性</li>
+<li><strong>普通函数祖上三代必为 null</strong></li>
 </ul>
 <h3 id="两个问题-1"><a href="#两个问题-1" class="headerlink" title="两个问题"></a>两个问题</h3><ul>
 <li>__proto__是实例对象的自身属性还是原型上的属性？<ul>
-<li>  <strong>原型上的</strong></li>
+<li><strong>原型上的</strong></li>
 </ul>
 </li>
 <li>普通对象祖上第几代__proto__为 null<ul>
-<li>  <strong>两代</strong></li>
+<li><strong>两代</strong></li>
 </ul>
 </li>
 </ul>
 <h2 id="3-instanceof"><a href="#3-instanceof" class="headerlink" title="3. instanceof"></a>3. instanceof</h2><ul>
-<li>  检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上</li>
-<li>  手写 instanceof</li>
-<li>  <code>Object instanceof Function</code>, <code>Function instanceof Object</code></li>
+<li>检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上</li>
+<li>手写 instanceof</li>
+<li><code>Object instanceof Function</code>, <code>Function instanceof Object</code></li>
 </ul>
-<h3 id="手写一个简单的-instanceof"><a href="#手写一个简单的-instanceof" class="headerlink" title="手写一个简单的 instanceof"></a>手写一个简单的 instanceof</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">instanceOf</span>(<span class="params">instance, cclass</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> proto = instance.__proto__</span><br><span class="line">    <span class="keyword">let</span> prototype = cclass.prototype</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (proto) &#123;</span><br><span class="line">        <span class="keyword">if</span> (proto === prototype) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        proto = proto.__proto__</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CChild</span> <span class="keyword">extends</span> <span class="title">Child</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Luren</span> </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> cchild = <span class="keyword">new</span> CChild()</span><br></pre></td></tr></table></figure>
+<h3 id="手写一个简单的-instanceof"><a href="#手写一个简单的-instanceof" class="headerlink" title="手写一个简单的 instanceof"></a>手写一个简单的 instanceof</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">instanceOf</span>(<span class="params">instance, cclass</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> proto = instance.<span class="property">__proto__</span></span><br><span class="line">    <span class="keyword">let</span> prototype = cclass.<span class="property"><span class="keyword">prototype</span></span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (proto) &#123;</span><br><span class="line">        <span class="keyword">if</span> (proto === prototype) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        proto = proto.<span class="property">__proto__</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span> &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Parent</span> &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CChild</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Child</span> &#123;&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Luren</span> &#123;&#125;</span><br><span class="line"><span class="keyword">var</span> cchild = <span class="keyword">new</span> <span class="title class_">CChild</span>()</span><br></pre></td></tr></table></figure>
 
 <h3 id="Object-instanceof-Function-Function-instanceof-Object"><a href="#Object-instanceof-Function-Function-instanceof-Object" class="headerlink" title="Object instanceof Function, Function instanceof Object"></a><code>Object instanceof Function</code>, <code>Function instanceof Object</code></h3><p>二者均为 True</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getType = <span class="function">(<span class="params">val</span>) =&gt;</span> <span class="built_in">Object</span>.prototype.toString.call(val)</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getPrototypeChains</span>(<span class="params">instance</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> chains = []</span><br><span class="line">    <span class="keyword">let</span> proto = instance.__proto__</span><br><span class="line">    chains.push(getType(proto))</span><br><span class="line">    <span class="keyword">while</span> (proto) &#123;</span><br><span class="line">        proto = proto.__proto__</span><br><span class="line">        chains.push(getType(proto))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> chains</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="built_in">console</span>.log</span><br><span class="line">print(getPrototypeChains(<span class="built_in">Function</span>))</span><br><span class="line">print(getPrototypeChains(<span class="built_in">Object</span>))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    [ &#x27;[object Function]&#x27;, &#x27;[object Object]&#x27;, &#x27;[object Null]&#x27; ]</span></span><br><span class="line"><span class="comment">    [ &#x27;[object Function]&#x27;, &#x27;[object Object]&#x27;, &#x27;[object Null]&#x27; ]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">getType</span> = (<span class="params">val</span>) =&gt; <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(val)</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getPrototypeChains</span>(<span class="params">instance</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> chains = []</span><br><span class="line">    <span class="keyword">let</span> proto = instance.<span class="property">__proto__</span></span><br><span class="line">    chains.<span class="title function_">push</span>(<span class="title function_">getType</span>(proto))</span><br><span class="line">    <span class="keyword">while</span> (proto) &#123;</span><br><span class="line">        proto = proto.<span class="property">__proto__</span></span><br><span class="line">        chains.<span class="title function_">push</span>(<span class="title function_">getType</span>(proto))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> chains</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> print = <span class="variable language_">console</span>.<span class="property">log</span></span><br><span class="line"><span class="title function_">print</span>(<span class="title function_">getPrototypeChains</span>(<span class="title class_">Function</span>))</span><br><span class="line"><span class="title function_">print</span>(<span class="title function_">getPrototypeChains</span>(<span class="title class_">Object</span>))</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    [ &#x27;[object Function]&#x27;, &#x27;[object Object]&#x27;, &#x27;[object Null]&#x27; ]</span></span><br><span class="line"><span class="comment">    [ &#x27;[object Function]&#x27;, &#x27;[object Object]&#x27;, &#x27;[object Null]&#x27; ]</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="4-getPrototypeOf"><a href="#4-getPrototypeOf" class="headerlink" title="4. getPrototypeOf"></a>4. getPrototypeOf</h2><ul>
-<li>  返回对象的原型</li>
-<li>  <code>Object.getPrototypeOf</code>, <code>Reflect.getPrototypeOf</code></li>
-<li>  内部先 toObject 转换，注意 null 和 undefined</li>
+<li>返回对象的原型</li>
+<li><code>Object.getPrototypeOf</code>, <code>Reflect.getPrototypeOf</code></li>
+<li>内部先 toObject 转换，注意 null 和 undefined</li>
 </ul>
 <h2 id="5-setPrototypeOf"><a href="#5-setPrototypeOf" class="headerlink" title="5. setPrototypeOf"></a>5. setPrototypeOf</h2><ul>
-<li>  指定对象的原型</li>
-<li>  <code>Object.setPrototypeOf</code>, <code>Reflect.setPrototypeOf</code></li>
-<li>  原型的尽头是 null</li>
+<li>指定对象的原型</li>
+<li><code>Object.setPrototypeOf</code>, <code>Reflect.setPrototypeOf</code></li>
+<li>原型的尽头是 null</li>
 </ul>
 <h2 id="6-isPrototypeOf"><a href="#6-isPrototypeOf" class="headerlink" title="6. isPrototypeOf"></a>6. isPrototypeOf</h2><ul>
-<li>  一个对象是否存在于另一个对象的原型链上</li>
-<li>  <code>Object.isPrototypeOf</code>, <code>Object.prototype.isPrototypeOf</code>, <code>Function.isPrototypeOf</code>, <code>Reflect.isPrototypeOf</code></li>
+<li>一个对象是否存在于另一个对象的原型链上</li>
+<li><code>Object.isPrototypeOf</code>, <code>Object.prototype.isPrototypeOf</code>, <code>Function.isPrototypeOf</code>, <code>Reflect.isPrototypeOf</code></li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.isPrototypeOf(&#123;&#125;) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.isPrototypeOf(&#123;&#125;) <span class="comment">// true</span></span><br><span class="line"><span class="built_in">Reflect</span>.isPrototypeOf(&#123;&#125;) <span class="comment">// false</span></span><br><span class="line"><span class="built_in">Function</span>.isPrototypeOf(&#123;&#125;) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="title function_">isPrototypeOf</span>(&#123;&#125;) <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="title function_">isPrototypeOf</span>(&#123;&#125;) <span class="comment">// true</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">isPrototypeOf</span>(&#123;&#125;) <span class="comment">// false</span></span><br><span class="line"><span class="title class_">Function</span>.<span class="title function_">isPrototypeOf</span>(&#123;&#125;) <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
-<li>  <code>Object.create</code></li>
+<li><code>Object.create</code></li>
 </ul>
 <h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p><img src="/2022/05/08/JavaScript%EF%BC%9A%E6%B7%B1%E5%85%A5%E5%AF%B9%E8%B1%A1/3-3-2.png" alt="img02"></p>
-<h1 id="栗子"><a href="#栗子" class="headerlink" title="栗子"></a>栗子</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;</span><br><span class="line">a.x = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求a.x</span></span><br><span class="line"><span class="built_in">console</span>.log(a.x)</span><br></pre></td></tr></table></figure>
+<h1 id="栗子"><a href="#栗子" class="headerlink" title="栗子"></a>栗子</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;</span><br><span class="line">a.<span class="property">x</span> = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 求a.x</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">x</span>)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;</span><br><span class="line"><span class="keyword">let</span> b = a</span><br><span class="line">a.x = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;</span><br><span class="line"><span class="built_in">console</span>.log(a.x)</span><br><span class="line"><span class="built_in">console</span>.log(b)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;</span><br><span class="line"><span class="keyword">let</span> b = a</span><br><span class="line">a.<span class="property">x</span> = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a.<span class="property">x</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">undefined</span><br><span class="line">&#123; n: 1, x: &#123; n: 2 &#125; &#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>  JavaScript 连续赋值时从右向左执行</li>
-<li>  <code>.</code>的优先级比<code>=</code>高</li>
-<li>  对象属于引用类型</li>
+<li>JavaScript 连续赋值时从右向左执行</li>
+<li><code>.</code>的优先级比<code>=</code>高</li>
+<li>对象属于引用类型</li>
 </ul>
 <p>对于<code>a.x = a = &#123; n: 2 &#125;</code></p>
 <ol>
@@ -586,20 +586,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-count">59</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

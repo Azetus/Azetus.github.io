@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="eval new Function  eval 功能：会将传入的字符串当做 JavaScript 代码进行执行 语法：eval(string) 基本使用eval(&#39;2+2&#39;)  使用场景 系统内部的 setTimeout 或者 setInterval JSON 字符串转对象 前端模板 动态生成函数或者变量 有需要跳出严格模式的场景 其他场景">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript: 动态解析和执行函数">
+<meta property="og:url" content="http://example.com/2022/07/02/JavaScript-%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90%E5%92%8C%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Azetus的随笔">
+<meta property="og:description" content="eval new Function  eval 功能：会将传入的字符串当做 JavaScript 代码进行执行 语法：eval(string) 基本使用eval(&#39;2+2&#39;)  使用场景 系统内部的 setTimeout 或者 setInterval JSON 字符串转对象 前端模板 动态生成函数或者变量 有需要跳出严格模式的场景 其他场景">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-02T07:37:39.000Z">
+<meta property="article:modified_time" content="2022-07-02T07:38:30.976Z">
+<meta property="article:author" content="Azem">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="动态解析和执行函数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/07/02/JavaScript-%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90%E5%92%8C%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JavaScript: 动态解析和执行函数 | Azetus的随笔</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Azetus的随笔</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/02/JavaScript-%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90%E5%92%8C%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/azem.png">
+      <meta itemprop="name" content="Azem">
+      <meta itemprop="description" content="记录些学习笔记，随便写写。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Azetus的随笔">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript: 动态解析和执行函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-02 15:37:39" itemprop="dateCreated datePublished" datetime="2022-07-02T15:37:39+08:00">2022-07-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>eval</li>
+<li>new Function</li>
+</ul>
+<h1 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h1><ul>
+<li>功能：会将传入的字符串当做 JavaScript 代码进行执行</li>
+<li>语法：eval(string)</li>
+<li>基本使用<code>eval(&#39;2+2&#39;)</code></li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>系统内部的 setTimeout 或者 setInterval</li>
+<li>JSON 字符串转对象</li>
+<li>前端模板</li>
+<li>动态生成函数或者变量</li>
+<li>有需要跳出严格模式的场景</li>
+<li>其他场景</li>
+</ul>
+<h2 id="setTimeout-和-setInterval"><a href="#setTimeout-和-setInterval" class="headerlink" title="setTimeout 和 setInterval"></a>setTimeout 和 setInterval</h2><ul>
+<li>若参数为字符串则会尝试放入 eval 中执行</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="string">&#x27;console.log(&quot;setTimeout:&quot;, Date.now())&#x27;</span>, <span class="number">1000</span>)</span><br><span class="line"><span class="built_in">setInterval</span>(<span class="string">&#x27;console.log(&quot;setInterval&quot;, Date.now())&#x27;</span>, <span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="JSON-字符串转对象"><a href="#JSON-字符串转对象" class="headerlink" title="JSON 字符串转对象"></a>JSON 字符串转对象</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jsonStr = <span class="string">`&#123;a:1, b:1&#125;`</span>;</span><br><span class="line"><span class="keyword">var</span> obj = <span class="built_in">eval</span>(<span class="string">&#x27;(&#x27;</span> + jsonStr + <span class="string">&#x27;)&#x27;</span> );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;eval json:&quot;</span>, obj, <span class="keyword">typeof</span> obj);</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成函数"><a href="#生成函数" class="headerlink" title="生成函数"></a>生成函数</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sumAdd = <span class="built_in">eval</span>(<span class="string">`(function add(num1, num2)&#123;</span></span><br><span class="line"><span class="string">    return num1 + num2</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">)`</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;sumAdd:&#x27;</span>, <span class="title function_">sumAdd</span>(<span class="number">10</span>,<span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="数字数组相加"><a href="#数字数组相加" class="headerlink" title="数字数组相加"></a>数字数组相加</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">9</span>];</span><br><span class="line"><span class="keyword">var</span> r = <span class="built_in">eval</span>(arr.<span class="title function_">join</span>(<span class="string">&#x27;+&#x27;</span>))</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;数组相加:&quot;</span>, r);</span><br></pre></td></tr></table></figure>
+
+<h2 id="获取全局对象"><a href="#获取全局对象" class="headerlink" title="获取全局对象"></a>获取全局对象</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取全局对象</span></span><br><span class="line"><span class="comment">// 逗号运算符 + 间接调用 =&gt; return eval(&quot;this&quot;)</span></span><br><span class="line"><span class="keyword">var</span> globalThis = (<span class="keyword">function</span>(<span class="params"></span>)&#123; <span class="keyword">return</span> (<span class="keyword">void</span> <span class="number">0</span>,<span class="built_in">eval</span>)(<span class="string">&quot;this&quot;</span>)&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;globalThis:&quot;</span>, globalThis)</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>安全性（XSS 攻击）</li>
+<li>调试困难（配合 debugger 关键字）</li>
+<li>性能低<ul>
+<li>如果一定要使用 eval，尽量提前将函数创建出来，然后再调用，而不是反复进行创建</li>
+</ul>
+</li>
+<li>不好把握</li>
+<li>可读性维护性差</li>
+</ul>
+<h2 id="eval-的直接调用和间接调用"><a href="#eval-的直接调用和间接调用" class="headerlink" title="eval 的直接调用和间接调用"></a>eval 的直接调用和间接调用</h2><p>直接调用</p>
+<ul>
+<li>eval</li>
+<li>(eval)</li>
+<li>eval &#x3D; window.eval <font color=red>（不能改名）</font></li>
+<li>{eval} &#x3D; window</li>
+<li>with({eval})</li>
+</ul>
+<p>间接调用</p>
+<ul>
+<li>除直接调用外的任何调用方式<ul>
+<li><code>(0, eval)(&#39;name&#39;)</code> 分组运算符</li>
+<li><code>var eval2 = window.eval</code> 改名</li>
+<li><code>&#123; eval: eval2 &#125; = window</code> 解构改名</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>调用方式</th>
+<th>作用域</th>
+<th>是否严格模式</th>
+<th>this</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>直接调用</td>
+<td>正常的作用域链</td>
+<td>继承当前</td>
+<td>当前作用域</td>
+</tr>
+<tr>
+<td>间接调用</td>
+<td>只有全局作用域</td>
+<td>非严格模式</td>
+<td>全局</td>
+</tr>
+</tbody></table>
+<h3 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">&quot;全局的name&quot;</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> name = <span class="string">&quot;local的name&quot;</span></span><br><span class="line">    <span class="comment">// 直接调用</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="built_in">eval</span>(<span class="string">`name; debugger`</span>));</span><br><span class="line">    <span class="comment">// 间接调用</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">window</span>.<span class="built_in">eval</span>(<span class="string">`name`</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local的name</span><br><span class="line">全局的name</span><br></pre></td></tr></table></figure>
+
+<h3 id="this-指向"><a href="#this-指向" class="headerlink" title="this 指向"></a>this 指向</h3><p>直接调用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = &#123;</span><br><span class="line">    <span class="attr">show</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="built_in">eval</span>(<span class="string">&#x27;console.log(this)&#x27;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">a.<span class="title function_">show</span>();    <span class="comment">//&#123;show: ƒ&#125;对象</span></span><br></pre></td></tr></table></figure>
+
+<p>间接调用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = &#123;</span><br><span class="line">    <span class="attr">show</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="keyword">var</span> test = <span class="built_in">eval</span>;</span><br><span class="line">      <span class="title function_">test</span>(<span class="string">&#x27;console.log(this)&#x27;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">a.<span class="title function_">show</span>();    <span class="comment">//Window 对象</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="new-Function"><a href="#new-Function" class="headerlink" title="new Function"></a>new Function</h1><ul>
+<li>作用：创建一个新的 Function</li>
+<li>语法：<code>new Function([arg1 [, arg2[, ...argN]],] functionBody)</code></li>
+<li>基本使用：<code>new Function(&quot;a&quot;, &quot;b&quot;, &quot;return a + b&quot;)(10, 20)</code></li>
+</ul>
+<h2 id="经典案例"><a href="#经典案例" class="headerlink" title="经典案例"></a>经典案例</h2><ul>
+<li>webpack 的事件通知系统 tapable</li>
+<li>fast-json-stringify</li>
+</ul>
+<h3 id="tapable"><a href="#tapable" class="headerlink" title="tapable"></a>tapable</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/webpack/tapable/blob/master/lib/HookCodeFactory.js">https://github.com/webpack/tapable/blob/master/lib/HookCodeFactory.js</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ......</span></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;sync&quot;</span>:</span><br><span class="line">    fn = <span class="keyword">new</span> <span class="title class_">Function</span>(</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">args</span>(),</span><br><span class="line">        <span class="string">&#x27;&quot;use strict&quot;;\n&#x27;</span> +</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">header</span>() +</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">contentWithInterceptors</span>(&#123;</span><br><span class="line">                <span class="attr">onError</span>: <span class="function"><span class="params">err</span> =&gt;</span> <span class="string">`throw <span class="subst">$&#123;err&#125;</span>;\n`</span>,</span><br><span class="line">                <span class="attr">onResult</span>: <span class="function"><span class="params">result</span> =&gt;</span> <span class="string">`return <span class="subst">$&#123;result&#125;</span>;\n`</span>,</span><br><span class="line">                <span class="attr">resultReturns</span>: <span class="literal">true</span>,</span><br><span class="line">                <span class="attr">onDone</span>: <span class="function">() =&gt;</span> <span class="string">&quot;&quot;</span>,</span><br><span class="line">                <span class="attr">rethrowIfPossible</span>: <span class="literal">true</span></span><br><span class="line">            &#125;)</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;async&quot;</span>:</span><br><span class="line">    fn = <span class="keyword">new</span> <span class="title class_">Function</span>(</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">args</span>(&#123;</span><br><span class="line">            <span class="attr">after</span>: <span class="string">&quot;_callback&quot;</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="string">&#x27;&quot;use strict&quot;;\n&#x27;</span> +</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">header</span>() +</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">contentWithInterceptors</span>(&#123;</span><br><span class="line">                <span class="attr">onError</span>: <span class="function"><span class="params">err</span> =&gt;</span> <span class="string">`_callback(<span class="subst">$&#123;err&#125;</span>);\n`</span>,</span><br><span class="line">                <span class="attr">onResult</span>: <span class="function"><span class="params">result</span> =&gt;</span> <span class="string">`_callback(null, <span class="subst">$&#123;result&#125;</span>);\n`</span>,</span><br><span class="line">                <span class="attr">onDone</span>: <span class="function">() =&gt;</span> <span class="string">&quot;_callback();\n&quot;</span></span><br><span class="line">            &#125;)</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="comment">// ......</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="fast-json-stringify"><a href="#fast-json-stringify" class="headerlink" title="fast-json-stringify"></a>fast-json-stringify</h3><ul>
+<li>需要使用者提前设置好 options</li>
+<li>根据设置生成预设好的函数并调用</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = (<span class="keyword">new</span> <span class="title class_">Function</span>(<span class="string">&#x27;schema&#x27;</span>, code))(root)</span><br></pre></td></tr></table></figure>
+
+<h2 id="注意事项-1"><a href="#注意事项-1" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>new Function 基于全局环境创建<ul>
+<li>this 默认也指向全局但可以改变</li>
+</ul>
+</li>
+<li>方法的 name 属性是’anonymous’</li>
+</ul>
+<h2 id="经典应用"><a href="#经典应用" class="headerlink" title="经典应用"></a>经典应用</h2><ul>
+<li>获取全局 this<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> globalObj = <span class="keyword">new</span> <span class="title class_">Function</span>(<span class="string">&#x27;return this&#x27;</span>)();</span><br></pre></td></tr></table></figure></li>
+<li>在线代码运行器</li>
+<li>模板引擎</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;template&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>名字:$&#123;name&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>年龄:$&#123;age&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>性别:$&#123;sex&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>性别:$&#123;c.b&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>商品:$&#123;products.join(&quot;,&quot;)&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">function</span> <span class="title function_">parse</span>(<span class="params">source, data</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Function</span>(</span></span><br><span class="line"><span class="language-javascript">                <span class="string">&#x27;data&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                with(data)&#123;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                    return \`<span class="subst">$&#123;source&#125;</span>\`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                &#125;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                `</span></span></span><br><span class="line"><span class="language-javascript">            )(data)</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> result = <span class="title function_">parse</span>(template.<span class="property">innerHTML</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">name</span>: <span class="string">&#x27;帅哥&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">age</span>: <span class="number">18</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">sex</span>: <span class="string">&#x27;男&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">products</span>: [<span class="string">&#x27;杯子&#x27;</span>, <span class="string">&#x27;瓜子&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">c</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">b</span>: <span class="string">&#x27;哈哈&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;)</span></span><br><span class="line"><span class="language-javascript">        template.<span class="property">innerHTML</span> = result</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="eval-VS-new-Function"><a href="#eval-VS-new-Function" class="headerlink" title="eval VS new Function"></a>eval VS new Function</h1><table>
+    <tr>
+        <th></th>
+        <th>相同点</th>
+        <th>不同点</th>
+    </tr>
+    <tr>
+        <td>eval</td>
+        <td rowspan="2">
+        1. 动态编译和执行<br>
+        2. 调试困难<br>
+        3. 可读性可维护性差<br>
+        4. 可以被禁用
+        </td>
+        <td>
+        1. 直接调用和间接调用运行环境不同<br>
+        2. 安全性低<br>
+        3. 不仅仅局限于创建函数
+        </td>
+    </tr>
+    <tr>
+        <td>new Function</td>
+        <td>1. 被创建于全局环境</td>
+    </tr>
+</table>
+
+<h1 id="补充：创建一个函数，动态执行异步代码"><a href="#补充：创建一个函数，动态执行异步代码" class="headerlink" title="补充：创建一个函数，动态执行异步代码"></a>补充：创建一个函数，动态执行异步代码</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">AsyncFunction</span> = <span class="title class_">Object</span>.<span class="title function_">getPrototypeOf</span>(<span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;).<span class="property">constructor</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createAsyncFun</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AsyncFunction</span>(...args);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fn = <span class="title function_">createAsyncFun</span>(<span class="string">`</span></span><br><span class="line"><span class="string">    const res = await fetch(&quot;/&quot;);</span></span><br><span class="line"><span class="string">    console.log(&quot;res:&quot;);</span></span><br><span class="line"><span class="string">    return res.text();</span></span><br><span class="line"><span class="string">`</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;res:&quot;</span>, res);</span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;err:&quot;</span>, err);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90%E5%92%8C%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0/" rel="tag"># 动态解析和执行函数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/02/JavaScript-%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8/" rel="prev" title="JavaScript: 链式调用">
+      <i class="fa fa-chevron-left"></i> JavaScript: 链式调用
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#eval"><span class="nav-number">1.</span> <span class="nav-text">eval</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setTimeout-%E5%92%8C-setInterval"><span class="nav-number">1.2.</span> <span class="nav-text">setTimeout 和 setInterval</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSON-%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.</span> <span class="nav-text">JSON 字符串转对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">生成函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E6%95%B0%E7%BB%84%E7%9B%B8%E5%8A%A0"><span class="nav-number">1.5.</span> <span class="nav-text">数字数组相加</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%85%A8%E5%B1%80%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.6.</span> <span class="nav-text">获取全局对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.7.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-%E7%9A%84%E7%9B%B4%E6%8E%A5%E8%B0%83%E7%94%A8%E5%92%8C%E9%97%B4%E6%8E%A5%E8%B0%83%E7%94%A8"><span class="nav-number">1.8.</span> <span class="nav-text">eval 的直接调用和间接调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE"><span class="nav-number">1.8.1.</span> <span class="nav-text">作用域链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-%E6%8C%87%E5%90%91"><span class="nav-number">1.8.2.</span> <span class="nav-text">this 指向</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#new-Function"><span class="nav-number">2.</span> <span class="nav-text">new Function</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B"><span class="nav-number">2.1.</span> <span class="nav-text">经典案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tapable"><span class="nav-number">2.1.1.</span> <span class="nav-text">tapable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fast-json-stringify"><span class="nav-number">2.1.2.</span> <span class="nav-text">fast-json-stringify</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-1"><span class="nav-number">2.2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E5%BA%94%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">经典应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#eval-VS-new-Function"><span class="nav-number">3.</span> <span class="nav-text">eval VS new Function</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%EF%BC%8C%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8C%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">补充：创建一个函数，动态执行异步代码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Azem"
+      src="/uploads/azem.png">
+  <p class="site-author-name" itemprop="name">Azem</p>
+  <div class="site-description" itemprop="description">记录些学习笔记，随便写写。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Azem</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
